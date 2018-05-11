@@ -1,6 +1,7 @@
 import { empty } from '../utils/check.js';
 
-const url = window.API_URL;
+//TODO : ATTENTION
+const url = 'to.change.now';
 
 /**
  * Méthode permettant de se connecter à l'API
