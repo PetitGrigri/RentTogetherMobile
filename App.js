@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import logger from 'redux-logger';
 import { createStore, applyMiddleware } from 'redux';
 import mainReducer from './reducers/mainReducer';
-import styles from './styles/styles';
+import { NativeRouter, Route, Link } from 'react-router-native'
+import Login from './screens/Login';
 
 //création du store redux
 const store = createStore(
@@ -17,17 +17,15 @@ const store = createStore(
 );
 
 class App extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <SafeAreaView style={styles.safeContainer}>
-          <View style={styles.container}>
-            <Text>Hello World!</Text>
-          </View>
-        </SafeAreaView>
-      </Provider>
-    );
-  }
+    render() {
+        return (
+            <Provider store={store}>
+                <NativeRouter>
+                    <Route path="/" component={Login}/>
+                </NativeRouter>
+            </Provider>
+        );
+    }
 }
 
 

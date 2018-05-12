@@ -1,5 +1,6 @@
 import { empty } from '../utils/check.js';
 import * as config from '../config.js';
+import base64 from 'base-64';
 
 const url = config.REACT_APP_API_URL;
 
@@ -15,7 +16,7 @@ export const connectionAPI =  (login, password, callBackOk, callBackError) => {
     var options = {
         mode: 'cors',
         headers : {
-            'Authorization': 'Basic ' +  btoa(login+':'+password)
+            'Authorization': 'Basic ' +  base64.encode(login+':'+password)
         }
     }
 
