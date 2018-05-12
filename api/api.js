@@ -1,7 +1,7 @@
 import { empty } from '../utils/check.js';
+import * as config from '../config.js';
 
-//TODO : ATTENTION
-const url = 'to.change.now';
+const url = config.REACT_APP_API_URL;
 
 /**
  * Méthode permettant de se connecter à l'API
