@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ImageBackground, Image, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View, ImageBackground, Image, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, Toucha } from 'react-native';
 import { connect } from 'react-redux'
 import { handleSignIn, handleHideError } from '../actions/connection.js'
+import { Font } from 'expo';
+import { Link } from 'react-router-native';
+import InputText from '../Components/InputText';
+import ButtonSubmit from '../Components/ButtonSubmit';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -12,15 +16,23 @@ class Login extends Component {
 
         this.state = {
             login:'',
-            password:''
+            password:'',
+            fontLoaded:false,
         }
         this.handleSignIn = this.handleSignIn.bind(this);
 
     }
+    componentDidMount() {
+        Font.loadAsync({
+            'open-sans-light': require('../assets/fonts/Open_Sans/OpenSans-Light.ttf'),
+            'open-sans-regular': require('../assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
+        }).then(() => {
+            this.setState({fontLoaded: true});
+        });
+    }
 
     //Méthode destinée à la gestion de la connexion
     handleSignIn() {
-        console.log(this.state.login, this.state.password);
         //TODO vérifier données du formulaire
         this.props.hangleSignIn(this.state.login, this.state.password);
     }
@@ -28,58 +40,48 @@ class Login extends Component {
   render() {
 
     return (
-        <View style={styles.container}>
-            
-            <ImageBackground
-                source={require('../assets/login-screen-mobile.jpg')}
-                style={styles.bgImage}
-                >
-                <KeyboardAvoidingView behavior="padding">
-                    <View style={{alignItems: 'center', justifyContent:'center',  flex:1}}>
-                        <Image source={require('../assets/logo.png')} style={styles.logo} />
-                    </View>
-                    
-                    <View style={{width: '80%', alignItems: 'center', flex:1}}>
-                        <View style={styles.form}>
-                            <View style={styles.formInputContainer}>
-                                <TextInput
-                                    keyboardType='email-address'
-                                    placeholder='Email'
-                                    style={styles.formInput}
-                                    underlineColorAndroid="transparent"
-                                    onChangeText={(text) => this.setState({login:text})}
-                                    value={this.state.login ||''}
-                                    />
-                            </View>
-                        </View>
-                        <View style={styles.form}>
-                            <View style={styles.formInputContainer}>
-                                <TextInput
-                                    placeholder='Mot de passe'
-                                    style={styles.formInput}
-                                    underlineColorAndroid="transparent"
-                                    secureTextEntry
-                                    onChangeText={(text) => this.setState({password:text})}
-                                    value={this.state.password ||''}
-                                    />
-                            </View>
-                        </View>
-                        <TouchableOpacity
-                            activeOpacity={0.9}
-                            style={{marginTop:50}}
-                            onPress={this.handleSignIn}
-                            >
-                            <View style={styles.formSubmitButton}>
-                                <Text style={styles.formSubmitButtonText}>
-                                    Login
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
+        this.state.fontLoaded 
+            ?   <View style={styles.container}>
+                    <ImageBackground
+                        source={require('../assets/login-screen-mobile.jpg')}
+                        style={styles.bgImage}
+                        >
 
-                    </View>
-                </KeyboardAvoidingView>
-            </ImageBackground>
-        </View>
+                        <View style={{alignItems: 'center', justifyContent:'flex-end',  flex:2}}>
+                            <Image source={require('../assets/logo.png')} style={styles.logo} />
+                        </View>
+
+                        <View style={{alignItems: 'center', justifyContent:'center',  flex:2}}>
+                            <Text style={styles.loginTitle}>Rent Together</Text>
+                        </View>
+
+                        <KeyboardAvoidingView behavior="padding" style={{flex:3}}>
+                            <View style={styles.form}>
+                                
+                                <InputText 
+                                    onChangeText={(text) => this.setState({login:text}) } 
+                                    placeholder='Email' />
+
+                                <InputText 
+                                    onChangeText={(text) => this.setState({password:text}) } 
+                                    placeholder='Mot de passe'
+                                    secureTextEntry />
+
+                                <ButtonSubmit 
+                                    text='Login'
+                                    loading={ this.props.loadingSignIn }
+                                    onPress={ this.handleSignIn } />
+                            </View>
+                        </KeyboardAvoidingView>
+                        
+                        <View style={{alignItems: 'center', justifyContent:'center',  flex:1}}>
+                            <Link to='/register' component={TouchableOpacity}>
+                                <Text style={styles.footerText}>Créer un nouveau compte</Text>
+                            </Link>
+                        </View>
+                    </ImageBackground>
+                </View>
+            :   null
     );
   }
 }
@@ -120,69 +122,17 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH/4,
     height: SCREEN_WIDTH/4,
   },
-  loginView: {
-    marginTop: 150,
-    backgroundColor: 'transparent',
-    width: 250,
-    height: 400,
-  },
   loginTitle: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    fontFamily: 'open-sans-light', 
+    fontSize: 44,
+    color: '#fff'
   },
-  travelText: {
-    color: 'white',
-    fontSize: 30,
-    fontFamily: 'bold'
-  },
-  plusText: {
-    color: 'white',
-    fontSize: 30,
-    fontFamily: 'regular'
-  },
-  loginInput: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  footerView: {
-    marginTop: 20,
-    flex: 0.5,
-    justifyContent: 'center',
-    alignItems: 'center',
+  footerText: {
+    fontFamily: 'open-sans-regular', 
+    fontSize: 12,
+    color: '#fff'
   },
   form: {
     width: SCREEN_WIDTH*0.80, 
   },
-  formInputContainer: {
-    height: 40, 
-    borderWidth: 1,
-    borderColor: '#fff',
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.50)',
-    marginBottom:5,
-    marginTop:5,
-    elevation:2
-  },
-  formInput:{
-    marginLeft: 20,
-    marginRight: 20,
-    height: 40,
-    color:'#ff6D00',
-  }, 
-  formSubmitButtonText: {
-    color: '#fff'
-  },
-  formSubmitButton: {
-    height: 40, 
-    width: SCREEN_WIDTH*0.80,
-    borderColor: 'gray', 
-    borderWidth: 0,
-    borderRadius: 20,
-    backgroundColor: '#ff8f00',
-    elevation: 0,
-    alignItems:'center',
-    justifyContent: 'center'
-  }
 });

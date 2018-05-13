@@ -4,8 +4,9 @@ import { Provider } from 'react-redux';
 import logger from 'redux-logger';
 import { createStore, applyMiddleware } from 'redux';
 import mainReducer from './reducers/mainReducer';
-import { NativeRouter, Route, Link } from 'react-router-native'
+import { NativeRouter, Route, Link, Switch, BackButton} from 'react-router-native'
 import Login from './screens/Login';
+import Register from './screens/Register';
 
 //création du store redux
 const store = createStore(
@@ -21,7 +22,12 @@ class App extends React.Component {
         return (
             <Provider store={store}>
                 <NativeRouter>
-                    <Route path="/" component={Login}/>
+                    <BackButton>
+                        <Switch>
+                            <Route path="/" exact component={Login}/>
+                            <Route path="/register" component={Register}/>
+                        </Switch>
+                    </BackButton>
                 </NativeRouter>
             </Provider>
         );

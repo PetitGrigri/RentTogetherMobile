@@ -1,9 +1,10 @@
 import { combineReducers } from "redux";
 import connection from "./connection";
+import utilisateurs from "./utilisateurs";
 
 const mainReducer = combineReducers({
-    connection
-    //TODO ajouter les autres reducers
+    connection,
+    utilisateurs
 });
 
 export default mainReducer;

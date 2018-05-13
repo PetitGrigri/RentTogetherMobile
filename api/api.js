@@ -78,7 +78,6 @@ export const createUtilisateur= function(user,  callBackOk, callBackError) {
                 return response.json().catch(error => {
                     throw Error("Erreur de l'API.");
                 });
-                //TODO ici ajouter utilisateur
             } else {
                 throw Error(response.statusText);
             }
