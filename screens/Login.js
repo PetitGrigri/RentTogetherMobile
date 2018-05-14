@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View, ImageBackground, Image, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, Toucha } from 'react-native';
+import { ScrollView, ActivityIndicator, StyleSheet, Text, View, ImageBackground, Image, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, Toucha } from 'react-native';
 import { connect } from 'react-redux'
 import { handleSignIn, handleHideError } from '../actions/connection.js'
 import { Font } from 'expo';
@@ -41,47 +41,50 @@ class Login extends Component {
 
     return (
         this.state.fontLoaded 
-            ?   <View style={styles.container}>
-                    <ImageBackground
-                        source={require('../assets/login-screen-mobile.jpg')}
-                        style={styles.bgImage}
-                        >
+          ? <ImageBackground
+                source={require('../assets/login-screen-mobile.jpg')}
+                style={styles.bgImage}
+                >
+                <ScrollView
+                    scrollEnabled={false}
+                    keyboardShouldPersistTaps="handled"
+                    contentContainerStyle={styles.container}
+                    >
+                    <KeyboardAvoidingView behavior="position" style={{flex:6, justifyContent: 'center', alignItems: 'center'}}>
 
-                        <View style={{alignItems: 'center', justifyContent:'flex-end',  flex:2}}>
+                        <View style={{flex:4, justifyContent: 'center', alignItems: 'center'}}>  
                             <Image source={require('../assets/logo.png')} style={styles.logo} />
-                        </View>
-
-                        <View style={{alignItems: 'center', justifyContent:'center',  flex:2}}>
                             <Text style={styles.loginTitle}>Rent Together</Text>
                         </View>
 
-                        <KeyboardAvoidingView behavior="padding" style={{flex:3}}>
-                            <View style={styles.form}>
-                                
-                                <InputText 
-                                    onChangeText={(text) => this.setState({login:text}) } 
-                                    placeholder='Email' />
+                        <View style={styles.form}>
+                            
+                            <InputText 
+                                onChangeText={(text) => this.setState({login:text}) } 
+                                placeholder='Email' />
 
-                                <InputText 
-                                    onChangeText={(text) => this.setState({password:text}) } 
-                                    placeholder='Mot de passe'
-                                    secureTextEntry />
+                            <InputText 
+                                onChangeText={(text) => this.setState({password:text}) } 
+                                placeholder='Mot de passe'
+                                secureTextEntry />
 
-                                <ButtonSubmit 
-                                    text='Login'
-                                    loading={ this.props.loadingSignIn }
-                                    onPress={ this.handleSignIn } />
-                            </View>
-                        </KeyboardAvoidingView>
-                        
-                        <View style={{alignItems: 'center', justifyContent:'center',  flex:1}}>
-                            <Link to='/register' component={TouchableOpacity}>
-                                <Text style={styles.footerText}>Créer un nouveau compte</Text>
-                            </Link>
+                            <ButtonSubmit 
+                                text='Login'
+                                style={{marginTop:40}}
+                                loading={ this.props.loadingSignIn }
+                                onPress={ this.handleSignIn } />
                         </View>
-                    </ImageBackground>
-                </View>
-            :   null
+                    </KeyboardAvoidingView>
+
+                    <View style={{flex:1}} />
+                    <View style={{alignItems: 'center', justifyContent:'center',  flex:1}}>
+                        <Link to='/register' component={TouchableOpacity}>
+                            <Text style={styles.footerText}>Créer un nouveau compte</Text>
+                        </Link>
+                    </View>
+                </ScrollView>
+            </ImageBackground>
+          : null
     );
   }
 }
@@ -107,7 +110,7 @@ export default connect(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   bgImage: {
     flex: 1,
@@ -115,8 +118,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
-    justifyContent: 'center',
-    alignItems: 'center'
+
   },
   logo:{
     width: SCREEN_WIDTH/4,
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
   loginTitle: {
     fontFamily: 'open-sans-light', 
     fontSize: 44,
-    color: '#fff'
+    color: '#e65100'
   },
   footerText: {
     fontFamily: 'open-sans-regular', 
@@ -133,6 +135,7 @@ const styles = StyleSheet.create({
     color: '#fff'
   },
   form: {
+    flex:2,
     width: SCREEN_WIDTH*0.80, 
   },
 });

@@ -12,8 +12,8 @@ class ButtonSubmit extends Component {
         return (
             <TouchableOpacity
                 activeOpacity={0.9}
-                style={{marginTop:50}}
                 onPress={this.onPress}
+                style={this.props.style}
                 >
                 <View style={inputButtonStyle.button}>
                     { this.props.loading 
@@ -39,8 +39,9 @@ const inputButtonStyle = StyleSheet.create({
         borderWidth: 0,
         borderRadius: 20,
         backgroundColor: '#ff8f00',
-        elevation: 0,
         alignItems:'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginBottom:5,
+        marginTop:5,
     }
 });

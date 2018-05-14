@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableWithoutFeedback, Animated, StyleSheet, Text, View, ImageBackground, Image, Dimensions, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { ScrollView, TouchableWithoutFeedback, TouchableOpacity, Animated, StyleSheet, Text, View, ImageBackground, Image, Dimensions, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { connect } from 'react-redux'
 import { handleCreateUser } from '../actions/utilisateurs'
 import { Font } from 'expo';
@@ -27,8 +27,8 @@ class Register extends Component {
             isOwner:false,
         }
 
-        this.roomerTypeStyle = new Animated.Value(SCREEN_WIDTH/4);
-        this.ownerTypeStyle = new Animated.Value(SCREEN_WIDTH/6);
+        this.roomerTypeStyle = new Animated.Value(SCREEN_WIDTH/6);
+        this.ownerTypeStyle = new Animated.Value(SCREEN_WIDTH/8);
     }
     componentDidMount() {
         Font.loadAsync({
@@ -68,12 +68,12 @@ class Register extends Component {
 
         Animated.timing(this.roomerTypeStyle, {
             duration: 300,
-            toValue: SCREEN_WIDTH/4,
+            toValue: SCREEN_WIDTH/6,
         }).start();
 
         Animated.timing(this.ownerTypeStyle, {
             duration: 300,
-            toValue: SCREEN_WIDTH/6,
+            toValue: SCREEN_WIDTH/8,
         }).start();
     }
 
@@ -86,12 +86,12 @@ class Register extends Component {
 
         Animated.timing(this.ownerTypeStyle, {
             duration: 300,
-            toValue: SCREEN_WIDTH/4,
+            toValue: SCREEN_WIDTH/6,
         }).start();
 
         Animated.timing(this.roomerTypeStyle, {
             duration: 300,
-            toValue: SCREEN_WIDTH/6,
+            toValue: SCREEN_WIDTH/8,
         }).start();
     }
 
@@ -113,45 +113,47 @@ class Register extends Component {
 
     return (
         this.state.fontLoaded 
-            ?   <View style={styles.container}>
-                    <ImageBackground
-                        source={require('../assets/login-screen-mobile.jpg')}
-                        style={styles.bgImage}
+          ? <View style={styles.container}>
+                <ImageBackground
+                    source={require('../assets/login-screen-mobile.jpg')}
+                    style={styles.bgImage}
+                    >
+                    <ScrollView
+                        scrollEnabled={false}
+                        keyboardShouldPersistTaps="handled"
+                        contentContainerStyle={styles.container}
                         >
-                        
-                        { this.state.displayTitle 
-                            ?   <View style={{alignItems: 'center', justifyContent:'center', flex:1 }}>
-                                    <Text style={styles.loginTitle}>Inscription</Text>
+                        <KeyboardAvoidingView behavior="position" style={{alignItems: 'center', justifyContent:'center',flex:8}}>
+                            <View style={{alignItems: 'center', justifyContent:'flex-end', flex:1 }}>
+                                <Text style={styles.loginTitle}>Inscription</Text>
+                                <Text style={styles.loginSubTitle}>Qui êtes vous ? </Text>
+                            </View>
+
+                            <View style={{alignItems: 'center', justifyContent:'space-around', flexDirection:'row', flex:1 }}>
+                                <View style={{alignItems: 'center'}}>
+                                    <Text style={styles.typeText}>Un locataire</Text> 
+                                    <TouchableWithoutFeedback onPress={this.handleClickLocataire}>
+                                        <Animated.Image source={require('../assets/locataire.png')} style={{width:this.roomerTypeStyle, height:this.roomerTypeStyle}} />
+                                    </TouchableWithoutFeedback>
+                                    
                                 </View>
-                            : null }
-
-                        <View style={{alignItems: 'center', justifyContent:'center', flex:1 }}>
-                            <Text style={styles.loginSubTitle}>Qui êtes vous ? </Text>
-                        </View>
-
-                        <View style={{alignItems: 'center', justifyContent:'space-evenly', flexDirection:'row', flex:1 }}>
-                            <View style={{alignItems: 'center'}}>
-                                <TouchableWithoutFeedback onPress={this.handleClickLocataire}>
-                                    <Animated.Image source={require('../assets/locataire.png')} style={{width:this.roomerTypeStyle, height:this.roomerTypeStyle}} />
-                                </TouchableWithoutFeedback>
-                                <Text style={styles.typeText}>Un Propriétaire</Text>
+                                <View style={{alignItems: 'center'}}>
+                                    <Text style={styles.typeText}>Un propriétaire</Text>
+                                    <TouchableWithoutFeedback onPress={this.handleClickProprietaire}>
+                                        <Animated.Image source={require('../assets/proprietaire.png')} style={{width:this.ownerTypeStyle, height:this.ownerTypeStyle}} />
+                                    </TouchableWithoutFeedback>
+                                    
+                                </View>
                             </View>
-                            <View style={{alignItems: 'center'}}>
-                                <TouchableWithoutFeedback onPress={this.handleClickProprietaire}>
-                                    <Animated.Image source={require('../assets/proprietaire.png')} style={{width:this.ownerTypeStyle, height:this.ownerTypeStyle}} />
-                                </TouchableWithoutFeedback>
-                                <Text style={styles.typeText}>Un Locataire</Text>
-                            </View>
-                        </View>
 
-                        <KeyboardAvoidingView behavior="padding" style={{alignItems: 'center', justifyContent:'center',flex:3}}>
+                        
                             <View style={styles.form}>
 
                                 <InputText 
                                     onChangeText={(text) => this.setState({email:text}) } 
                                     placeholder='Email' />
 
-                                 <InputText 
+                                    <InputText 
                                     onChangeText={(text) => this.setState({lastName:text}) } 
                                     placeholder='Nom' />
 
@@ -170,14 +172,22 @@ class Register extends Component {
 
                                 <ButtonSubmit 
                                     text="S'inscrire"
+                                    style={{marginTop:40}}
                                     loading={ this.props.loadingAdd }
                                     onPress={ this.handleRegister }
                                     />
                             </View>
                         </KeyboardAvoidingView>
-                    </ImageBackground>
-                </View>
-            :   null
+
+                        <View style={{alignItems: 'center', justifyContent:'center',  flex:1}}>
+                            <Link to='/' component={TouchableOpacity}>
+                                <Text style={styles.footerText}>Se connecter</Text>
+                            </Link>
+                        </View>
+                    </ScrollView>
+                </ImageBackground>
+            </View>
+          : null
     );
   }
 }
@@ -214,12 +224,12 @@ const styles = StyleSheet.create({
   loginTitle: {
     fontFamily: 'open-sans-light', 
     fontSize: 44,
-    color: '#fff'
+    color: '#e65100'
   },
   loginSubTitle: {
     fontFamily: 'open-sans-regular', 
     fontSize: 22,
-    color: '#ef6c00'
+    color: '#fff'
   },
 
   typeIcon:{
@@ -228,11 +238,16 @@ const styles = StyleSheet.create({
   },
   typeText:{
     fontFamily: 'open-sans-regular', 
-    fontSize: 14,
+    fontSize: 12,
     marginTop:10,
-    color: '#ef6c00', 
+    color: '#e65100', 
   },
   form: {
     width: SCREEN_WIDTH*0.80, 
+  },
+  footerText: {
+    fontFamily: 'open-sans-regular', 
+    fontSize: 12,
+    color: '#fff'
   },
 });
