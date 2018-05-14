@@ -6,6 +6,7 @@ import { Font } from 'expo';
 import { Link } from 'react-router-native'
 import InputText from '../Components/InputText';
 import ButtonSubmit from '../Components/ButtonSubmit';
+import Login from './Login';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -19,6 +20,7 @@ class Register extends Component {
             firstName: '',
             lastName: '',
             password:'',
+            phoneNumber:'',
             fontLoaded:false,
             displayTitle:true,
             isRoomer:true,
@@ -101,9 +103,9 @@ class Register extends Component {
             email:      this.state.email,
             firstName:  this.state.firstName,
             lastName:   this.state.lastName,
-            password:   this.state.password,
-            isRoomer:   this.state.isRoomer,
-            isOwner:    this.state.isOwner,
+            password:   this.state.password ? 1 : 0,
+            isRoomer:   this.state.isRoomer ? 1 : 0,
+            isOwner:    this.state.isOwner ? 1 : 0
         })
     }
 
@@ -156,6 +158,10 @@ class Register extends Component {
                                 <InputText 
                                     onChangeText={(text) => this.setState({firstName:text}) } 
                                     placeholder='Prénom' />
+
+                                <InputText 
+                                    onChangeText={(text) => this.setState({phoneNumber:text}) } 
+                                    placeholder='Téléphone' />
 
                                 <InputText 
                                     onChangeText={(text) => this.setState({password:text}) } 
