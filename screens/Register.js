@@ -12,6 +12,13 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class Register extends Component {
+    static navigationOptions = {
+        headerStyle: {
+            backgroundColor: 'rgba(255,255,255,0.5)',
+        },
+        headerTransparent: true
+    }
+    
     constructor(props) {
         super(props);
 
@@ -180,9 +187,9 @@ class Register extends Component {
                         </KeyboardAvoidingView>
 
                         <View style={{alignItems: 'center', justifyContent:'center',  flex:1}}>
-                            <Link to='/' component={TouchableOpacity}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('login')}>
                                 <Text style={styles.footerText}>Se connecter</Text>
-                            </Link>
+                            </TouchableOpacity>
                         </View>
                     </ScrollView>
                 </ImageBackground>

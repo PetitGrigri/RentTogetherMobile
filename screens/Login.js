@@ -6,11 +6,15 @@ import { Font } from 'expo';
 import { Link } from 'react-router-native';
 import InputText from '../Components/InputText';
 import ButtonSubmit from '../Components/ButtonSubmit';
+import { empty } from '../utils/check';
+import {Alert} from 'react-native';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class Login extends Component {
+    static navigationOptions = { title: 'Bienvenue', header: null };
+
     constructor(props) {
         super(props);
 
@@ -19,10 +23,9 @@ class Login extends Component {
             password:'',
             fontLoaded:false,
         }
-        this.handleSignIn = this.handleSignIn.bind(this);
-
     }
     componentDidMount() {
+        //chargement de la font open-sans
         Font.loadAsync({
             'open-sans-light': require('../assets/fonts/Open_Sans/OpenSans-Light.ttf'),
             'open-sans-regular': require('../assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
@@ -30,9 +33,25 @@ class Login extends Component {
             this.setState({fontLoaded: true});
         });
     }
+    
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
+        if ((prevProps.message != this.props.message) && (!empty(this.props.message))) {
+            Alert.alert(
+                'Erreur',
+                this.props.message,
+                [
+                    {text: 'OK'},
+                ],
+                { cancelable: true }
+            )
+        }
+        //on supprimer le message d'erreur dans le state redux
+        this.props.handleHideError();
+    }
 
     //Méthode destinée à la gestion de la connexion
-    handleSignIn() {
+    handleSignIn = () => {
         //TODO vérifier données du formulaire
         this.props.hangleSignIn(this.state.login, this.state.password);
     }
@@ -78,9 +97,9 @@ class Login extends Component {
 
                     <View style={{flex:1}} />
                     <View style={{alignItems: 'center', justifyContent:'center',  flex:1}}>
-                        <Link to='/register' component={TouchableOpacity}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('register')}>
                             <Text style={styles.footerText}>Créer un nouveau compte</Text>
-                        </Link>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -89,6 +108,8 @@ class Login extends Component {
   }
 }
 
+/*          
+            */
 
 
 const mapStateToProps = state => ({

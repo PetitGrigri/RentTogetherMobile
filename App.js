@@ -7,6 +7,7 @@ import mainReducer from './reducers/mainReducer';
 import { NativeRouter, Route, Link, Switch, BackButton} from 'react-router-native'
 import Login from './screens/Login';
 import Register from './screens/Register';
+import MainNavigator from './navigation/MainNavigator';
 
 //création du store redux
 const store = createStore(
@@ -21,14 +22,7 @@ class App extends React.Component {
     render() {
         return (
             <Provider store={store}>
-                <NativeRouter>
-                    <BackButton>
-                        <Switch>
-                            <Route path="/" exact component={Login}/>
-                            <Route path="/register" component={Register}/>
-                        </Switch>
-                    </BackButton>
-                </NativeRouter>
+                <MainNavigator />
             </Provider>
         );
     }

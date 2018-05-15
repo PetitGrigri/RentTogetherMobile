@@ -39,15 +39,15 @@ const connection = (state = initialConnectionState, action) => {
 
         //erreur lors de la connexion
         case  SIGN_IN_ERROR : 
-            return Object.assign({}, {
+            return Object.assign({}, state, {
                 loadingSignIn : false,
                 isAuthenticated: false,
-                message: action.message,
+                message: action.message||"Erreur de connexion",
             });
 
         //erreur lors de la connexion
         case  SIGN_IN_HIDE_ERROR : 
-            return Object.assign({}, {
+            return Object.assign({}, state, {
                 message: ""
             });
 
