@@ -12,13 +12,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class Register extends Component {
-    static navigationOptions = {
-        headerStyle: {
-            backgroundColor: 'rgba(255,255,255,0.5)',
-        },
-        headerTransparent: true
-    }
-    
+
     constructor(props) {
         super(props);
 

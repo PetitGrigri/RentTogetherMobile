@@ -9,6 +9,13 @@ const LoginNavigator = createStackNavigator({
     },
     register: {
         screen: Register,
+        
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: 'rgba(255,255,255,0.5)',
+            },
+            headerTransparent: true
+        }
     }
 });
 

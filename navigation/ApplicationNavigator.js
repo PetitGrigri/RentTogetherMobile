@@ -1,35 +1,33 @@
 import React from 'react';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-import Test from '../screens/Test';
+import TabNavigator from './TabNavigator';
+import Chat from '../screens/Chat';
 
 const ApplicationNavigator = createStackNavigator({
-    home: createBottomTabNavigator({
-        Profile: {
-            screen: Test,
-            navigationOptions: {
-                tabBarLabel: 'Profile',
-                header: null
+    home: {
+        screen: TabNavigator,
+        navigationOptions: {
+            header: null
+        },
+    },
+    chat: {
+        screen: Chat, 
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: 'rgba(255,255,255,0.5)',
             },
-        },
-        Home: {
-            screen: Test,
-            navigationOptions: {
-                tabBarLabel: 'Home',
-                header: null
-            }
-        },
-        Matches: {
-            screen: Test,
-            navigationOptions: {
-                tabBarLabel: 'Matches',
-                header: null
-            },
-        },
-    }, {
-
-    }, {
-        //TODO
-    })
+            headerTransparent: true
+        }
+        /*
+        navigationOptions: {
+            tabBarLabel: 'Messages',
+            headerMode: 'float'
+        },*/
+    }
+}, {
+    navigationOptions: {
+        //header: null
+    },
 });
 
 export default ApplicationNavigator;

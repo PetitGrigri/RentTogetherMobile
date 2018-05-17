@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { ImageBackground } from 'react-native';
+import { ImageBackground, Text} from 'react-native';
 
-class Test extends Component {
+class Matches extends Component {
     render() {
         return (
             <ImageBackground
                 source={require('../assets/login-screen-mobile.jpg')}
                 style={{flex:1}}
-                />
+                >
+                <Text>Matches</Text>
+            </ImageBackground>
         );
     }
 }
 
-export default Test;
+export default Matches;
