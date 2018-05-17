@@ -18,38 +18,22 @@ const TabNavigator = createBottomTabNavigator({
         navigationOptions: {
             tabBarLabel: 'Profil',
           },
-        /*
-        navigationOptions: {
-            tabBarLabel: 'Votre profil',
-            headerMode: null
-        },*/
     },
     Matches: {
         screen: Matches,
         navigationOptions: {
             tabBarLabel: 'Matches',
           },
-        /*
-        navigationOptions: {
-            tabBarLabel: 'Vos Matches',
-            headerMode: null
-        },*/
     },
     Messages: {
         screen: Messages,
         navigationOptions: {
             tabBarLabel: 'Messages',
           },
-        /*
-        navigationOptions: {
-            tabBarLabel: 'Messages',
-            headerMode: null
-        },
-        */
     },
 },{
     tabBarOptions: {
-        //TODO
+
     }
 })
 

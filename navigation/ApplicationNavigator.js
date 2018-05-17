@@ -7,8 +7,12 @@ const ApplicationNavigator = createStackNavigator({
     home: {
         screen: TabNavigator,
         navigationOptions: {
-            header: null
-        },
+            headerMode:'none',
+            headerStyle: {
+                height: 0
+            },
+            headerTransparent: true
+        }
     },
     chat: {
         screen: Chat, 
