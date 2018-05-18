@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
-import { ImageBackground, Text, SafeAreaView, View} from 'react-native';
+import { ImageBackground, Text, SafeAreaView, View, StatusBar} from 'react-native';
+import TabContent from '../Components/TabContent';
 
-class Profile extends Component {
+class Home extends Component {
     render() {
         return (
-            <ImageBackground
-                source={require('../assets/login-screen-mobile.jpg')}
-                style={{flex:1}}
-                >
-                <SafeAreaView style={{flex: 1}}>
-                    <View style={{flex: 1}}>
-                        <Text>Hello Accueil</Text>
-                    </View>
-                </SafeAreaView>
-            </ImageBackground>
+            <TabContent>
+                <Text style={[{ flex:1,color: '#000' }]}>
+                    Home
+                </Text>
+            </TabContent>
         );
     }
 }
 
-export default Profile;
+export default Home;

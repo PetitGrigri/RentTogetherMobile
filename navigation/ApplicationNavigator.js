@@ -7,9 +7,9 @@ const ApplicationNavigator = createStackNavigator({
     home: {
         screen: TabNavigator,
         navigationOptions: {
-            headerMode:'none',
             headerStyle: {
-                height: 0
+                height: 0,
+                backgroundColor: '#fff',
             },
             headerTransparent: true
         }

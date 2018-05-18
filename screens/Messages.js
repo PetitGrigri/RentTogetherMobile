@@ -8,8 +8,10 @@ import {
     View,
     Image,
     SafeAreaView,
-    StyleSheet
+    StyleSheet,
 } from 'react-native';
+
+import TabContent from '../Components/TabContent';
 import * as datesUtils from '../utils/dates';
 
 const listeConversations = [
@@ -55,7 +57,146 @@ const listeConversations = [
         lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
         dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
     }, 
-
+    {
+        id: 33,
+        users:
+        [
+            {
+                id: 2,
+                firstName: "Charles",
+                lastName: "Xavier",
+                photoUrl: "",
+            },
+        ],
+        lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
+        dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    }, 
+    {
+        id: 34,
+        users:
+        [
+            {
+                id: 2,
+                firstName: "Charles",
+                lastName: "Xavier",
+                photoUrl: "",
+            },
+        ],
+        lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
+        dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    }, 
+    {
+        id: 35,
+        users:
+        [
+            {
+                id: 2,
+                firstName: "Charles",
+                lastName: "Xavier",
+                photoUrl: "",
+            },
+        ],
+        lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
+        dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    }, 
+    {
+        id: 36,
+        users:
+        [
+            {
+                id: 2,
+                firstName: "Charles",
+                lastName: "Xavier",
+                photoUrl: "",
+            },
+        ],
+        lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
+        dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    }, 
+    {
+        id: 37,
+        users:
+        [
+            {
+                id: 2,
+                firstName: "Charles",
+                lastName: "Xavier",
+                photoUrl: "",
+            },
+        ],
+        lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
+        dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    }, 
+    {
+        id: 38,
+        users:
+        [
+            {
+                id: 2,
+                firstName: "Charles",
+                lastName: "Xavier",
+                photoUrl: "",
+            },
+        ],
+        lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
+        dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    }, 
+    {
+        id: 39,
+        users:
+        [
+            {
+                id: 2,
+                firstName: "Charles",
+                lastName: "Xavier",
+                photoUrl: "",
+            },
+        ],
+        lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
+        dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    }, 
+    {
+        id: 40,
+        users:
+        [
+            {
+                id: 2,
+                firstName: "Charles",
+                lastName: "Xavier",
+                photoUrl: "",
+            },
+        ],
+        lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
+        dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    }, 
+    {
+        id: 41,
+        users:
+        [
+            {
+                id: 2,
+                firstName: "Charles",
+                lastName: "Xavier",
+                photoUrl: "",
+            },
+        ],
+        lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
+        dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    }, 
+    {
+        id:42,
+        users:
+        [
+            {
+                id: 2,
+                firstName: "Charles",
+                lastName: "Xavier",
+                photoUrl: "",
+            },
+        ],
+        lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
+        dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    }, 
 ]
 
 const Conversation = props => {
@@ -95,14 +236,14 @@ class Messages extends Component {
 
     render() {
         return (
-            <SafeAreaView style={{flex:1}}>
+            <TabContent>
                 <FlatList
                     data={listeConversations}
                     keyExtractor={item => `${item.id}`}
                     ItemSeparatorComponent={ () => <View style={{ height: 1, backgroundColor: '#ccc', marginLeft:20,marginRight:20 }} /> }
                     renderItem={(conversation) => <Conversation key={conversation.id} {...conversation} handlePress={ this.handlePress }/> }
                 />
-            </SafeAreaView>
+            </TabContent>
         );
     }
 }

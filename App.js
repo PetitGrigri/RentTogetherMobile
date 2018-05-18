@@ -8,6 +8,8 @@ import { NativeRouter, Route, Link, Switch, BackButton} from 'react-router-nativ
 import Login from './screens/Login';
 import Register from './screens/Register';
 import MainNavigator from './navigation/MainNavigator';
+import 'intl';
+import 'intl/locale-data/jsonp/fr';
 
 //création du store redux
 const store = createStore(
