@@ -137,11 +137,6 @@ const styles = StyleSheet.create({
   },
   bgImage: {
     flex: 1,
-    top: 0,
-    left: 0,
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
-
   },
   logo:{
     width: SCREEN_WIDTH/4,

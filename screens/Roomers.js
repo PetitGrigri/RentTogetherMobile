@@ -33,34 +33,32 @@ class Home extends Component {
         return (
             <TabContent>
                 <View style={ styles.card }>
-                    <View style={ styles.cardTop }>
-                       
-                        <Image  
-                            style={ [styles.avatar,{borderRadius: this.state.avatarRadius} ] } 
-                            source={require('../assets/tests/deadpool.jpg')} 
-                            onLayout={(event) => this.changeRadius(event.nativeEvent)}    />
+                    <View style={styles.cardTop} />
+                    <Image  
+                        style={ [styles.avatar,{borderRadius: this.state.avatarRadius} ] } 
+                        source={require('../assets/tests/deadpool.jpg')} 
+                        onLayout={(event) => this.changeRadius(event.nativeEvent)}    />
 
-                        <View style={ styles.cardTopInformation}>
-                            <ImageBackground
-                                blurRadius={ 10 } 
-                                style={styles.backgroundAvatar } 
-                                source={require('../assets/tests/deadpool.jpg')}>
+                    <View style={ styles.cardTopInformation}>
+                        <ImageBackground
+                            blurRadius={ 10 } 
+                            style={styles.backgroundAvatar } 
+                            source={require('../assets/tests/deadpool.jpg')}>
 
-                                <View style={{width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.2)'}}>
-                                    <View style={{flex:1, alignItems:'flex-start', justifyContent: 'space-between', flexDirection:  'row',}}>
-                                         <View style={{width:'25%', padding: 5}}>
-                                            <Text h2 style={styles.textWhite}>34 ans</Text>
-                                        </View>
-                                        <View style={{width:'25%', padding: 5, alignItems: 'flex-end'}}>
-                                            <Text h2 style={styles.textWhite}>87%</Text>
-                                        </View>
+                            <View style={{width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.2)'}}>
+                                <View style={{flex:1, alignItems:'flex-start', justifyContent: 'space-between', flexDirection:  'row',}}>
+                                        <View style={{width:'25%', padding: 5}}>
+                                        <Text h2 style={styles.textWhite}>34 ans</Text>
                                     </View>
-                                    <View style={{flex:1, alignItems:'center', justifyContent: 'center'}}>
-                                        <Text h1 style= {styles.textWhite}>DEAD POOL</Text>
+                                    <View style={{width:'25%', padding: 5, alignItems: 'flex-end'}}>
+                                        <Text h2 style={styles.textWhite}>87%</Text>
                                     </View>
                                 </View>
-                            </ImageBackground>
-                        </View>
+                                <View style={{flex:1, alignItems:'center', justifyContent: 'center'}}>
+                                    <Text h1 style= {styles.textWhite}>DEAD POOL</Text>
+                                </View>
+                            </View>
+                        </ImageBackground>
                     </View>
                     <View style={ styles.cardBottom }>
                         <Text style={ styles.textDescription }>
@@ -85,21 +83,21 @@ const styles = StyleSheet.create({
         flex:           1,
         margin:         20,
         flexDirection:  'column',
-        elevation:      2,
-    },
-    cardTop: {
-        flex:               1,
-        justifyContent:     'center',
+        elevation:          2,
         alignItems:         'center',
     },
 
     avatar: { 
+        width:          '44%',
+        height:         undefined,
         aspectRatio:    1,
-        zIndex:         100,
+        zIndex:         2,
         borderWidth:    4,
         borderColor:    '#fff',
         flex:           1,
-        top:           '25%',
+        position:       'absolute',
+        top:'0%',
+        
 
     },
     /*
@@ -120,8 +118,11 @@ const styles = StyleSheet.create({
 
     },
     */
+   cardTop: {
+       flex:    12.5,
+   },
     cardTopInformation: {
-        flex:               1, 
+        flex:               25, 
         flexDirection:      'row',
         justifyContent:     'center',
         alignItems:         'center',
@@ -129,7 +130,6 @@ const styles = StyleSheet.create({
         borderWidth:        1,
         borderColor:        '#ccc',
         borderBottomWidth:  0,
-
     },
     backgroundAvatar: {
         width:          '100%',
@@ -147,12 +147,6 @@ const styles = StyleSheet.create({
         margin:         8
     },
 
-
-
-
-
-
-
     /*
         cardTopDescription: {
         justifyContent:     'center',
@@ -168,8 +162,7 @@ const styles = StyleSheet.create({
     cardTopInfosElement: {
         borderWidth:        1,
         flex:               1,
-        justifyContent:     'center',
-        alignItems:         'center',
+
     },
     cardTopInfosElement: {
         color:              '#fff',
@@ -177,10 +170,13 @@ const styles = StyleSheet.create({
         fontSize:           30,
     },*/
     cardBottom: {
-        flex:               1,
+        flex:               62.5,
+        
         backgroundColor:    '#fff',
         borderWidth:        1,
         borderColor:        '#ccc',
         borderTopWidth: 0,
+        justifyContent:     'flex-start',
+        alignItems:         'flex-start',
     }
   });
