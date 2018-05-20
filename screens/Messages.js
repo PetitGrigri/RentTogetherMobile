@@ -10,7 +10,7 @@ import {
     SafeAreaView,
     StyleSheet,
 } from 'react-native';
-
+import { Font } from 'expo';
 import TabContent from '../Components/TabContent';
 import * as datesUtils from '../utils/dates';
 
@@ -209,7 +209,7 @@ const Conversation = props => {
     return (
         <TouchableOpacity onPress={props.handlePress}>
             <View style={ styles.row }>
-                <Image style={ styles.avatar } source={require('../assets/proprietaire.png')}  />
+                <Image style={ styles.avatar } source={require('../assets/tests/iron_man.jpg')}  />
                 <View style={styles.right}>
                     <View style={styles.rightTop}>
                         <Text style={ styles.users }>
@@ -229,21 +229,39 @@ const Conversation = props => {
 
 class Messages extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            fontLoaded:false,
+        }
+    }
+    componentDidMount() {
+        //chargement de la font open-sans
+        Font.loadAsync({
+            'open-sans-light': require('../assets/fonts/Open_Sans/OpenSans-Light.ttf'),
+            'open-sans-regular': require('../assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
+        }).then(() => {
+            this.setState({fontLoaded: true});
+        });
+    }
+
     handlePress = () => {
-        console.log('test');
         this.props.navigation.push('chat');
     }
 
     render() {
         return (
-            <TabContent>
-                <FlatList
-                    data={listeConversations}
-                    keyExtractor={item => `${item.id}`}
-                    ItemSeparatorComponent={ () => <View style={{ height: 1, backgroundColor: '#ccc', marginLeft:20,marginRight:20 }} /> }
-                    renderItem={(conversation) => <Conversation key={conversation.id} {...conversation} handlePress={ this.handlePress }/> }
-                />
-            </TabContent>
+            this.state.fontLoaded 
+              ? <TabContent>
+                    <FlatList
+                        data={listeConversations}
+                        keyExtractor={item => `${item.id}`}
+                        ItemSeparatorComponent={ () => <View style={{ height: 1, backgroundColor: '#ccc', marginLeft:20,marginRight:20 }} /> }
+                        renderItem={(conversation) => <Conversation key={conversation.id} {...conversation} handlePress={ this.handlePress }/> }
+                    />
+                </TabContent>
+              : null
         );
     }
 }
@@ -259,10 +277,12 @@ const styles = StyleSheet.create({
         flex:1
     },
     avatar: { 
-        width: 50, 
-        height: 50, 
-        borderRadius: 25, 
-        marginRight: 8 
+        width:          50, 
+        height:         50, 
+        borderRadius:   25, 
+        marginRight:    8 , 
+        borderWidth:    2,
+        borderColor:    '#ccc',
     },
     right: {
         marginRight: 8, 
@@ -274,18 +294,20 @@ const styles = StyleSheet.create({
         flex:1,
     },
     users: {
-        fontWeight: "bold",
-        fontSize: 14,
+        fontFamily: 'open-sans-regular', 
+        fontSize: 16,
         color: '#000',
         marginBottom: 4
     },
     date: {
-        fontSize: 13,
-        color: '#666',
+        fontFamily: 'open-sans-light', 
+        fontSize: 14,
+        color: '#333',
         marginBottom: 4
     },
     secondaryText: { 
-        color: '#666',
-        fontSize: 12,
+        color: '#333',
+        fontFamily: 'open-sans-light', 
+        fontSize: 14,
     }
   });

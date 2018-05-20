@@ -17,6 +17,7 @@ class TabContent extends Component {
                 <StatusBar
                     barStyle="light-content"
                     backgroundColor="#fff"
+                    translucent
                     barStyle={ Platform.OS === 'ios'? 'dark-content' : 'light-content' }
                 />
                 <View style={[styles.container, this.props.styles]}>

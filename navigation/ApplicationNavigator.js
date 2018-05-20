@@ -22,16 +22,7 @@ const ApplicationNavigator = createStackNavigator({
             },
             headerTransparent: true
         }
-        /*
-        navigationOptions: {
-            tabBarLabel: 'Messages',
-            headerMode: 'float'
-        },*/
     }
-}, {
-    navigationOptions: {
-        //header: null
-    },
 });
 
 export default ApplicationNavigator;

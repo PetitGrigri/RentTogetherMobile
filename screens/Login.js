@@ -45,9 +45,11 @@ class Login extends Component {
                 ],
                 { cancelable: true }
             )
+        } else if ( !empty(this.props.message)) {
+            //on supprime le message d'erreur dans le state redux
+            this.props.handleHideError();
         }
-        //on supprimer le message d'erreur dans le state redux
-        this.props.handleHideError();
+
     }
 
     //Méthode destinée à la gestion de la connexion
