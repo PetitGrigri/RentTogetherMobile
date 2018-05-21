@@ -34,7 +34,8 @@ export default TabContent;
 const styles = StyleSheet.create({
     container: { 
         flex:               1,
-        backgroundColor:    '#fff',
+        backgroundColor:    '#eee',
+        elevation: 5,
     },
     
   });

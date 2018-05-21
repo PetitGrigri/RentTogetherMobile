@@ -3,15 +3,38 @@ import { ImageBackground, StyleSheet, View, Image } from 'react-native';
 import Text from '../Components/Text';
 import TabContent from '../Components/TabContent';
 import { Font } from 'expo';
+import RoomerCard from '../Components/RoomerCard';
 
-class Home extends Component {
+import SwipeCards from 'react-native-swipe-cards'
+
+const roomers = [{
+    name: "DEADPOOL",
+    pourcentage: 84,
+    age: 30,
+    description: "Deadpool est un psychopathe et un mégalomane, complètement imprévisible et très arrogant. Il est également capable d'une grande cruauté physique et mentale. Pendant un temps, il n'hésita pas à séquestrer une vieille aveugle dans sa maison, Al, pour qu'elle lui serve d'esclave, de confidente, d'oreille attentive (et inoffensive) à ses tourments, ainsi qu'à son goût pour les blagues douteuses.",
+    image: require("../assets/tests/deadpool.jpg"),
+}, {
+    name: "IRON MAN",
+    pourcentage: 95,
+    age: 53,
+    description: "Tony Stark, playboy, milliardaire, n'est pas seulement l'héritier des usines d'armement de son père (la Stark Industries), c'est également un inventeur de génie. Alors qu'il est en déplacement en Afghanistan afin de présenter sa dernière création, le missile Jéricho, il est enlevé par des terroristes de l'organisation « Les Dix Anneaux ». Gravement blessé lors de l'attaque, il ne survit que grâce à l'aide d'un scientifique, le professeur Yinsen, qui lui greffe à la poitrine un électro-aimant alimenté par une batterie de voiture afin d’empêcher des éclats d’obus d’atteindre son cœur.",
+    image: require("../assets/tests/iron_man.jpg"),
+}, {
+    name: "DOCTEUR STRANGE ",
+    pourcentage: 95,
+    age: 54,
+    description: "Diplômé en médecine et en chirurgie, Stephen Strange est un médecin hors-pair, même si son accident de voiture l’empêche de mener à bien une opération chirurgicale. Grâce à son serviteur et ami Wong (en), il s’est aussi entrainé aux arts martiaux et sait se défendre sans utiliser sa magie. C’est aussi quelqu’un de très intelligent, de très sage et un excellent leader et stratège, en témoigne son rôle de chef au sein des Défenseurs.",
+    image: require("../assets/tests/docteur_strange.jpg"),
+}, 
+];
+
+class Roomers extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
             fontLoaded:false,
-            avatarRadius: 0,
         }
     }
     
@@ -24,159 +47,35 @@ class Home extends Component {
             this.setState({fontLoaded: true});
         });
     }
-    changeRadius = (nativeEvent) => {
-        this.setState({avatarRadius: nativeEvent.layout.width / 2 })
+
+    handleYup = () => {
+        console.log('OUI');
+    }
+
+    handleNope = () => {
+        console.log('NON');
     }
 
     render() {
-
         return (
             <TabContent>
-                <View style={ styles.card }>
-                    <View style={styles.cardTop} />
-                    <Image  
-                        style={ [styles.avatar,{borderRadius: this.state.avatarRadius} ] } 
-                        source={require('../assets/tests/deadpool.jpg')} 
-                        onLayout={(event) => this.changeRadius(event.nativeEvent)}    />
-
-                    <View style={ styles.cardTopInformation}>
-                        <ImageBackground
-                            blurRadius={ 10 } 
-                            style={styles.backgroundAvatar } 
-                            source={require('../assets/tests/deadpool.jpg')}>
-
-                            <View style={{width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.2)'}}>
-                                <View style={{flex:1, alignItems:'flex-start', justifyContent: 'space-between', flexDirection:  'row',}}>
-                                        <View style={{width:'25%', padding: 5}}>
-                                        <Text h2 style={styles.textWhite}>34 ans</Text>
-                                    </View>
-                                    <View style={{width:'25%', padding: 5, alignItems: 'flex-end'}}>
-                                        <Text h2 style={styles.textWhite}>87%</Text>
-                                    </View>
-                                </View>
-                                <View style={{flex:1, alignItems:'center', justifyContent: 'center'}}>
-                                    <Text h1 style= {styles.textWhite}>DEAD POOL</Text>
-                                </View>
-                            </View>
-                        </ImageBackground>
-                    </View>
-                    <View style={ styles.cardBottom }>
-                        <Text style={ styles.textDescription }>
-                            Deadpool est un psychopathe et un mégalomane, complètement imprévisible et très arrogant. Il est également capable d'une grande cruauté physique et mentale. Pendant un temps, il n'hésita pas à séquestrer une vieille aveugle dans sa maison, Al, pour qu'elle lui serve d'esclave, de confidente, d'oreille attentive (et inoffensive) à ses tourments, ainsi qu'à son goût pour les blagues douteuses.
-                        </Text>
-
-                        <Text>//TODO Caractéristiques</Text>
-                    </View>
-                </View>
+                { (this.state.fontLoaded) 
+                  ? <SwipeCards
+                        cards={ roomers }
+                        stack={false}
+                        renderCard={(roomer) => <RoomerCard {...roomer} />}
+                        renderNoMoreCards={() => <View style={{flex:1}}><Text>Terminé</Text></View>}
+                        showYup={true}
+                        showNope={true}
+                        yupText='Je te veux !'
+                        nopeText='Mmmm non...'
+                        handleYup={this.handleYup}
+                        handleNope={this.handleNope}
+                        hasMaybeAction={false}/> 
+                  : null }
             </TabContent>
-        );
+        )
     }
 }
 
-export default Home;
-
-
-
-
-const styles = StyleSheet.create({
-    card: { 
-        flex:           1,
-        margin:         20,
-        flexDirection:  'column',
-        elevation:          2,
-        alignItems:         'center',
-    },
-
-    avatar: { 
-        width:          '44%',
-        height:         undefined,
-        aspectRatio:    1,
-        zIndex:         2,
-        borderWidth:    4,
-        borderColor:    '#fff',
-        flex:           1,
-        position:       'absolute',
-        top:'0%',
-        
-
-    },
-    /*
-        avatar: { 
-        aspectRatio:    1,
-        zIndex:         100,
-        borderWidth:    4,
-        borderColor:    '#fff',
-
-        position:       'absolute',
-        left:'50%',
-        width:'25%',
-        height: undefined,
-
-        aspectRatio:1,
-        top:0,
-        left:0,
-
-    },
-    */
-   cardTop: {
-       flex:    12.5,
-   },
-    cardTopInformation: {
-        flex:               25, 
-        flexDirection:      'row',
-        justifyContent:     'center',
-        alignItems:         'center',
-        zIndex:             1,
-        borderWidth:        1,
-        borderColor:        '#ccc',
-        borderBottomWidth:  0,
-    },
-    backgroundAvatar: {
-        width:          '100%',
-        height:         '100%',
-    },
-    textWhite: {
-        color:           '#fff',
-        fontFamily:      'open-sans-light', 
-    },
-    textDescription: {
-        fontFamily:     'open-sans-regular', 
-        fontSize:       14,
-        color:          '#000',
-        textAlign:      'justify',
-        margin:         8
-    },
-
-    /*
-        cardTopDescription: {
-        justifyContent:     'center',
-        alignItems:         'center',
-        flex:               1,
-    },
-
-    cardTopDescriptionTitle: {
-        color:              '#fff',
-        fontFamily:         'open-sans-light', 
-        fontSize:           30,
-    },
-    cardTopInfosElement: {
-        borderWidth:        1,
-        flex:               1,
-
-    },
-    cardTopInfosElement: {
-        color:              '#fff',
-        fontFamily:         'open-sans-light', 
-        fontSize:           30,
-    },*/
-    cardBottom: {
-        flex:               62.5,
-        
-        backgroundColor:    '#fff',
-        borderWidth:        1,
-        borderColor:        '#ccc',
-        borderTopWidth: 0,
-        justifyContent:     'flex-start',
-        alignItems:         'flex-start',
-    }
-  });
+export default Roomers;
