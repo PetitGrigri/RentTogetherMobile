@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Font } from 'expo';
 import TabContent from '../Components/TabContent';
-import * as datesUtils from '../utils/dates';
+import ConversationItem from '../Components/ConversationItem';
 
 const listeConversations = [{
     id: 107,
@@ -195,35 +195,7 @@ const listeConversations = [{
     ],
     lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
     dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
-}]
-
-const Conversation = props => {
-    
-    
-    let {id, lastMessage, dateTimeLastMessage, users} = props.item
-
-    
-
-    return (
-        <TouchableOpacity onPress={props.handlePress}>
-            <View style={ styles.row }>
-                <Image style={ styles.avatar } source={require('../assets/tests/iron_man.jpg')}  />
-                <View style={styles.right}>
-                    <View style={styles.rightTop}>
-                        <Text style={ styles.users }>
-                            Test toto
-                        </Text>
-                        <Text style={ styles.date }>
-                            {datesUtils.toString(dateTimeLastMessage)}
-                        </Text>
-                    </View>
-                    <Text style={ styles.secondaryText } numberOfLines={2}>{lastMessage}</Text>
-                </View>
-            </View>
-        </TouchableOpacity>
-    );
-}
-
+}];
 
 class Messages extends Component {
 
@@ -256,8 +228,11 @@ class Messages extends Component {
                         data={listeConversations}
                         keyExtractor={item => `${item.id}`}
                         ItemSeparatorComponent={ () => <View style={{ height: 1, backgroundColor: '#ccc', marginLeft:20,marginRight:20 }} /> }
-                        renderItem={(conversation) => <Conversation key={conversation.id} {...conversation} handlePress={ this.handlePress }/> }
-                    />
+                        renderItem={(conversation) => <ConversationItem key={conversation.id} {...conversation} handlePress={ this.handlePress }/> }
+                        refreshing={false}
+                        onRefresh={() => console.log('refresh')}
+                        onEndReached={() => console.log('loadNext') }
+                   />
                 </TabContent>
               : null
         );
@@ -265,47 +240,3 @@ class Messages extends Component {
 }
 
 export default Messages;
-
-
-const styles = StyleSheet.create({
-    row: { 
-        flexDirection: "row", 
-        alignItems: "center", 
-        padding: 8 ,
-        flex:1
-    },
-    avatar: { 
-        width:          50, 
-        height:         50, 
-        borderRadius:   25, 
-        marginRight:    8 , 
-        borderWidth:    2,
-        borderColor:    '#ccc',
-    },
-    right: {
-        marginRight: 8, 
-        flex:1 
-    },
-    rightTop: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        flex:1,
-    },
-    users: {
-        fontFamily: 'open-sans-regular', 
-        fontSize: 16,
-        color: '#000',
-        marginBottom: 4
-    },
-    date: {
-        fontFamily: 'open-sans-light', 
-        fontSize: 14,
-        color: '#333',
-        marginBottom: 4
-    },
-    secondaryText: { 
-        color: '#333',
-        fontFamily: 'open-sans-light', 
-        fontSize: 14,
-    }
-  });

@@ -15,8 +15,8 @@ const TabNavigator = createBottomTabNavigator({
             tabBarLabel: 'Locataires',
             tabBarIcon: ({focused}) => (
                 <Ionicons color={focused?'#ff8f00':'#ccc'} name={focused ? 'ios-contacts' : 'ios-contacts-outline'} size={32}/>
-              ),
-          },
+            ),
+        },
     },
     Locations: {
         screen: Locations,
@@ -24,8 +24,8 @@ const TabNavigator = createBottomTabNavigator({
             tabBarLabel: 'Locations',
             tabBarIcon: ({focused}) => (
                 <Ionicons color={focused?'#ff8f00':'#ccc'} name={focused ? 'ios-home' : 'ios-home-outline'} size={32}/>
-              ),
-          },
+            ),
+        },
     },
     Matches: {
         screen: Matches,
@@ -33,8 +33,8 @@ const TabNavigator = createBottomTabNavigator({
             tabBarLabel: 'Matches',
             tabBarIcon: ({focused}) => (
                 <Ionicons color={focused?'#ff8f00':'#ccc'} name={focused ? 'ios-checkmark-circle' : 'ios-checkmark-circle-outline'} size={32}/>
-              ),
-          },
+            ),
+        },
     },
     Messages: {
         screen: Messages,
@@ -42,8 +42,8 @@ const TabNavigator = createBottomTabNavigator({
             tabBarLabel: 'Messages',
             tabBarIcon: ({focused}) => (
                 <Ionicons color={focused?'#ff8f00':'#ccc'} name={focused ? 'ios-chatbubbles' : 'ios-chatbubbles-outline'} size={32}/>
-              ),
-          },
+            ),
+        },
     },
     Profile: {
         screen: Profile,
@@ -51,8 +51,13 @@ const TabNavigator = createBottomTabNavigator({
             tabBarLabel: 'Mon profil',
             tabBarIcon: ({focused}) => (
                 <Ionicons color={focused?'#ff8f00':'#ccc'} name={focused ? 'ios-contact' : 'ios-contact-outline'} size={32}/>
-              ),
-          },
+            ),
+            
+            headerStyle: {
+                backgroundColor: 'rgba(255,255,255,0.5)',
+            },
+            headerTransparent: true
+        }
     },
 },{
     tabBarOptions: {

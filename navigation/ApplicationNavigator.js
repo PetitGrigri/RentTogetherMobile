@@ -9,7 +9,7 @@ const ApplicationNavigator = createStackNavigator({
         navigationOptions: {
             headerStyle: {
                 height: 0,
-                backgroundColor: '#fff',
+                backgroundColor: 'rgba(255,255,255,0.5)'
             },
             headerTransparent: true
         }
