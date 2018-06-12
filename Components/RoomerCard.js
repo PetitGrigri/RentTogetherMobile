@@ -25,7 +25,7 @@ class RoomerCard extends Component
                 <Image  
                     style={ [styles.avatar,{borderRadius: this.state.avatarRadius} ] } 
                     source={ this.props.image }
-                    onLayout={(event) => this.changeRadius(event.nativeEvent)}    />
+                    onLayout={(event) => this.changeRadius(event.nativeEvent)}  />
 
                 <View style={ styles.cardTopInformation}>
                     <ImageBackground

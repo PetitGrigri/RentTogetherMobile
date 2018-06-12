@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, PanResponder } from 'react-native'
 import PropTypes from 'prop-types';
-import { Foundation } from '@expo/vector-icons';
 
 class Rating extends Component {
 
     static propTypes = {
         fractions: PropTypes.number.isRequired,
         currentValue: PropTypes.number.isRequired,
+        activeComponent: PropTypes.object.isRequired,
+        unactiveComponent: PropTypes.object.isRequired,
     }
 
-    //TODO static default value ! 
+    static defaultProps = {
+        onChange: (value) => console.log('rating change')
+      }
+    
 
 
     constructor(props) {
@@ -34,9 +38,13 @@ class Rating extends Component {
         let positionX   = event.nativeEvent.pageX - this.state.wrapperX;
         let rating      = Math.ceil(((positionX-padding) / this.state.wrapperWith) * this.props.fractions)
 
+        if (this.state.value != rating) {
+            this.props.onChange(rating);
+        }
         this.setState({
             value: (rating > 0) ? rating : 1
         })
+
     }
 
     /**
@@ -83,10 +91,22 @@ class Rating extends Component {
 
     render() {
         let stars = [];
+
         for (var i = 1; i <= this.props.fractions; i++) {
-            stars.push( (i <= this.state.value) 
-                          ? <Foundation key={i} color='#ff8f00' name='star' size={32} onLayout={ (i===1) ? this.getStarInformation : null } /> 
-                          : <Foundation key={i} color='#aaa' name='star' size={32} onLayout={ (i===1) ? this.getStarInformation : null } /> );
+
+            let layout = (i===1) 
+              ? this.getStarInformation 
+              : null;
+
+            let props = { 
+                key: i,
+                onLayout: layout
+
+            }
+            stars.push((i <= this.state.value) 
+              ? React.cloneElement(this.props.activeComponent,   props)
+              : React.cloneElement(this.props.unactiveComponent, props))
+              
         }
         return (
             <View style={ styles.container } {...this._panResponder.panHandlers} onLayout={this.getInformationsWrapper}>
