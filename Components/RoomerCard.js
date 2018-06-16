@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { ImageBackground, StyleSheet, View, Image } from 'react-native';
 import Text from '../Components/Text';
-import TabContent from '../Components/TabContent';
 import PropTypes from 'prop-types';
+import RatingCondensed2 from './RatingCondensed2';
+
 
 class RoomerCard extends Component 
 {
@@ -26,7 +27,7 @@ class RoomerCard extends Component
                     style={ [styles.avatar,{borderRadius: this.state.avatarRadius} ] } 
                     source={ this.props.image }
                     onLayout={(event) => this.changeRadius(event.nativeEvent)}  />
-
+                    
                 <View style={ styles.cardTopInformation}>
                     <ImageBackground
                         blurRadius={ 10 } 
@@ -46,14 +47,18 @@ class RoomerCard extends Component
                                 <Text h1 style= {styles.textWhite}>{ this.props.name }</Text>
                             </View>
                         </View>
+                        <View style={styles.cardBottomTop} />
                     </ImageBackground>
                 </View>
                 <View style={ styles.cardBottom }>
+                    
                     <Text style={ styles.textDescription }>
                         { this.props.description }
                     </Text>
 
-                    <Text>//TODO Caractéristiques</Text>
+                    <View style={{ flexDirection: 'row', alignSelf: 'flex-start', justifyContent: 'space-around' , flexWrap: 'wrap' }} >
+                        { this.props.characteristics.map((characteristic, index) => <RatingCondensed2 key={index} {...characteristic} />)}
+                    </View>
                 </View>
             </View>
         );
@@ -129,7 +134,16 @@ const styles = StyleSheet.create({
         borderWidth:        1,
         borderColor:        '#ccc',
         borderTopWidth:     0,
-        justifyContent:     'flex-start',
+        justifyContent:     'space-between',
         alignItems:         'flex-start',
+        paddingBottom:      8,
+    },
+    cardBottomTop: {
+        position:           'relative',
+        bottom:             10,
+        zIndex:             1000,
+        backgroundColor:    '#fff',
+        height:             20,
+        borderRadius:       10,
     }
   });
