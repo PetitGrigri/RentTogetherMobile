@@ -3,6 +3,7 @@
     "name": "Rent Together",
     "description": "Application mobile permettant de faciliter la mise en relation entre colocataires, mais aussi de trouver des appartements ouvert à la colocation",
     "sdkVersion": "27.0.0",
-    "orientation": "portrait"
+    "orientation": "portrait",
+    "icon": "./assets/icon/icon.png"
   }
 }
