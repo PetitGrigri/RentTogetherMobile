@@ -13,7 +13,6 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class Login extends Component {
-    static navigationOptions = { title: 'Bienvenue', header: null };
 
     constructor(props) {
         super(props);

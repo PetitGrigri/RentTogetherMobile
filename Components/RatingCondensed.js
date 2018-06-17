@@ -6,7 +6,7 @@ import { PropTypes } from 'prop-types';
 class RatingCondensed extends Component {
 
     static propTypes = {
-        value:          PropTypes.isRequired,
+        value:          PropTypes.string.isRequired,
         icon:           PropTypes.object.isRequired,
     }
 

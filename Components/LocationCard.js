@@ -11,6 +11,10 @@ class LocationCard extends Component
        
     }
 
+    static propTypes = {
+        description:    PropTypes.string.isRequired,
+        images:         PropTypes.array.isRequired,
+    };
     constructor(props) {
 
         super(props);
@@ -39,13 +43,6 @@ class LocationCard extends Component
         );
     }
 }
-
-LocationCard.propTypes = {
-    age:            PropTypes.number.isRequired,
-    description:    PropTypes.string.isRequired,
-    name:           PropTypes.string.isRequired,
-    pourcentage:    PropTypes.number.isRequired,
-};
 
 export default LocationCard;    
     
@@ -91,8 +88,8 @@ const styles = StyleSheet.create({
         borderColor:        '#ccc',
         borderTopWidth:     0,
         justifyContent:     'space-between',
-        alignItems:         'flex-start',
         padding:            8,
+        width:              '100%',
     },
     cardBottomTop: {
         backgroundColor:    '#fff',

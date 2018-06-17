@@ -52,7 +52,6 @@ const TabNavigator = createBottomTabNavigator({
             tabBarIcon: ({focused}) => (
                 <Ionicons color={focused?'#ff8f00':'#ccc'} name={focused ? 'ios-contact' : 'ios-contact-outline'} size={32}/>
             ),
-            
             headerStyle: {
                 backgroundColor: 'rgba(255,255,255,0.5)',
             },

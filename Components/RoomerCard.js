@@ -47,8 +47,8 @@ class RoomerCard extends Component
                                 <Text h1 style= {styles.textWhite}>{ this.props.name }</Text>
                             </View>
                         </View>
-                        <View style={styles.cardBottomTop} />
                     </ImageBackground>
+                    <View style={styles.cardBottomTop} />
                 </View>
                 <View style={ styles.cardBottom }>
                     
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
         alignItems:         'center',
         zIndex:             1,
         borderWidth:        1,
+        borderBottomWidth:  0,
         borderColor:        '#ccc',
         borderBottomWidth:  0,
     },
@@ -135,15 +136,17 @@ const styles = StyleSheet.create({
         borderColor:        '#ccc',
         borderTopWidth:     0,
         justifyContent:     'space-between',
-        alignItems:         'flex-start',
-        paddingBottom:      8,
+        padding:            8,
+        width:              '100%',
     },
     cardBottomTop: {
-        position:           'relative',
-        bottom:             10,
+        position:           'absolute',
+        bottom:             -12,
         zIndex:             1000,
         backgroundColor:    '#fff',
         height:             20,
+        width:              '100%',
         borderRadius:       10,
+        borderWidth:        0,
     }
   });
