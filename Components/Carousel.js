@@ -62,7 +62,8 @@ class Carousel extends Component {
                         this.state.translation,
                         {
                             duration: 500,
-                            toValue: nextTranslation
+                            toValue: nextTranslation,
+                            useNativeDriver: true,
                         }
                     ).start(() => this.nextImage());
 
@@ -78,7 +79,8 @@ class Carousel extends Component {
                         this.state.translation,
                         {
                             duration: 500,
-                            toValue: nextTranslation
+                            toValue: nextTranslation,
+                            useNativeDriver: true,
                         }
                     ).start(() => this.previousImage());
                 }
@@ -103,9 +105,9 @@ class Carousel extends Component {
 
     getDynamicStyle = () =>{
        return { 
-           width:   this.state.cardWidth * 3, 
-           height:  this.state.cardHeight, 
-           left:    this.state.translation
+           width:       this.state.cardWidth * 3, 
+           height:      this.state.cardHeight, 
+           transform:   [{ translateX: this.state.translation }]
         }
     }
 
@@ -140,7 +142,6 @@ export default Carousel;
 
 
 const styles = StyleSheet.create({
-
     carrouselWrapper: {
         width:              '100%',
         height:             '100%',

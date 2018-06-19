@@ -35,13 +35,13 @@ const inputButtonStyle = StyleSheet.create({
         color: '#fff'
     },
     button: {
-        height: 40, 
-        borderWidth: 0,
-        borderRadius: 20,
-        backgroundColor: '#ff8f00',
-        alignItems:'center',
-        justifyContent: 'center',
-        marginBottom:5,
-        marginTop:5,
+        height:             40, 
+        borderWidth:        0,
+        borderRadius:       20,
+        backgroundColor:    '#ff8f00',
+        alignItems:         'center',
+        justifyContent:     'center',
+        marginBottom:       5,
+        marginTop:          5,
     }
 });

@@ -3,10 +3,10 @@ import{
     StatusBar,
     SafeAreaView,
     Platform,
-    Text,
     View,
     StyleSheet
 } from 'react-native'; 
+
 
 const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight : 0;
 

@@ -1,12 +1,14 @@
 import React from 'react';
-import { createBottomTabNavigator } from 'react-navigation';
+import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
 import Roomers from '../screens/Roomers';
 import Locations from '../screens/Locations';
 import Profile from '../screens/Profile';
-import Matches from '../screens/Matches';
+import MatchesLocations from '../screens/MatchesLocations';
+import MatchesRoomers from '../screens/MatchesRoomers';
 import Messages from '../screens/Messages';
+import MatchesHeader from '../navigation/MatchesHeader';
 
 const TabNavigator = createBottomTabNavigator({
     Roomers: {
@@ -28,7 +30,19 @@ const TabNavigator = createBottomTabNavigator({
         },
     },
     Matches: {
-        screen: Matches,
+        screen: createStackNavigator({
+            matchesRoomers: {
+                screen: MatchesRoomers,
+            },
+            matchesLocations: {
+                screen: MatchesLocations,
+            }
+        }, {
+            navigationOptions: {
+                header: <MatchesHeader />,
+            },
+            headerMode: 'float',
+        }), 
         navigationOptions: {
             tabBarLabel: 'Matches',
             tabBarIcon: ({focused}) => (
