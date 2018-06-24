@@ -96,9 +96,7 @@ export const handleConnectWithPreviousToken = (token ) => {
         // Récupération de l'utilisateur via un token
         api.getUtilisateurs(
             token,
-            {
-                $filter:    `token eq '${token}'`
-            },
+            { $filter:    `token eq '${token}'` },
             (dataUser) => dispatch(handleGetUserWithTokenSuccess(dataUser)),
             (error) => dispatch(handleGetUserWithTokenError(error))
         )

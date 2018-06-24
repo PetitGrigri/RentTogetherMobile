@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import LoginNavigator from './LoginNavigator';
 import ApplicationNavigator from './ApplicationNavigator';
 import { handleConnectWithPreviousToken } from '../actions/connection';
-import LoginToken from '../screens/LoginToken'
 import { TOKEN_NAME } from '../actions/connection';
 
 class MainNavigator extends React.Component {
@@ -27,16 +26,14 @@ class MainNavigator extends React.Component {
      *   - Le navigator principal de la navigation (ApplicationNavigator)
      */
     render() {
-        return this.props.loadingSignInToken 
-          ? <LoginToken />
-          : !this.props.isAuthenticated 
-            ? <LoginNavigator /> 
-            : <ApplicationNavigator />
+        return this.props.isAuthenticated 
+            ? <ApplicationNavigator />
+            : <LoginNavigator /> 
     }
 }
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.connection.isAuthenticated, 
+    isAuthenticated:    state.connection.isAuthenticated, 
     loadingSignInToken: state.connection.loadingSignInToken,
 });
 
