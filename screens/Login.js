@@ -13,7 +13,7 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-
+        
         this.state = {
             login:      '',
             password:   '',
@@ -21,6 +21,7 @@ class Login extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
+        
         //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
         if ((prevProps.message != this.props.message) && (!empty(this.props.message))) {
             Alert.alert(
