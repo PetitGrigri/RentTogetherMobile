@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet,ImageBackground,Image, View, SectionList, ScrollView, StatusBar } from 'react-native';
 import Text from  '../Components/Text';
-import { Font } from 'expo';
 import { Foundation, MaterialCommunityIcons} from '@expo/vector-icons';
 import Rating from '../Components/Rating';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-
-const statusBarHeight = StatusBar.height;
-console.log(statusBarHeight);
+import { hangleGetMedia } from '../actions/media';
+import { connect } from 'react-redux'
 
 const itemRow = (props) => {
     let { index, item } = props;
@@ -101,58 +99,70 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            fontLoaded: false,
             avatarRadius: 0,
+            imageUser: null
         }
-    }
-    componentDidMount() {
-        Font.loadAsync({
-            'open-sans-light': require('../assets/fonts/Open_Sans/OpenSans-Light.ttf'),
-            'open-sans-regular': require('../assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
-        }).then(() => {
-            this.setState({fontLoaded: true});
-        });
     }
 
     changeRadius = (nativeEvent) => {
         this.setState({avatarRadius: nativeEvent.layout.width / 2 })
     }
 
+    componentDidMount = () => {
+        this.props.hangleGetMedia(this.props.user.token, this.props.user.userId);
+    };
+    
     render() {
         return (
-            this.state.fontLoaded
-              ? <ScrollView style={styles.container}>
-                    <ImageBackground 
-                        source={require('../assets/tests/star_lord.jpg')}  
-                        style= {[styles.imageHeader, { paddingTop: getStatusBarHeight() }  ]}
-                        blurRadius= { 10 }
-                    >
-                        <Image 
-                            source={require('../assets/tests/star_lord.jpg')}  
-                            style={ [styles.imageAvatar, {borderRadius: this.state.avatarRadius} ] } 
-                            onLayout={(event) => this.changeRadius(event.nativeEvent)}  
+            <ScrollView style={styles.container}>
+                <ImageBackground 
+                    source={ this.props.image 
+                        ? { uri: this.props.image }
+                        : require('../assets/tests/star_lord.jpg') }  
+                    style= {[styles.imageHeader, { paddingTop: getStatusBarHeight() }  ]}
+                    blurRadius= { 10 }>
+                    <Image 
+                        source={ this.props.image 
+                            ? { uri: this.props.image }
+                            : require('../assets/tests/star_lord.jpg') }  
+                        style={ [styles.imageAvatar, {borderRadius: this.state.avatarRadius} ] } 
+                        onLayout={(event) => this.changeRadius(event.nativeEvent)}  
+                    />
+                    <Text h1 style= {styles.textWhite}>John Doe</Text>
+                    
+                </ImageBackground>
+                    <View style={styles.cardBottomTop} />
+                    <View style={styles.containerInformations}>
+                        <SectionList
+                            renderItem={({ item, index, section }) => <Text key={index}>{item}</Text>}
+                            renderSectionHeader={({section: {title}}) => (
+                                <Text h2 style={styles.titleProfile}>{title}</Text>
+                            )}
+                            sections={sections}
+                            keyExtractor={(item, index) => item + index}
                         />
-                        <Text h1 style= {styles.textWhite}>John Doe</Text>
-                        
-                    </ImageBackground>
-                        <View style={styles.cardBottomTop} />
-                        <View style={styles.containerInformations}>
-                            <SectionList
-                                renderItem={({ item, index, section }) => <Text key={index}>{item}</Text>}
-                                renderSectionHeader={({section: {title}}) => (
-                                    <Text h2 style={styles.titleProfile}>{title}</Text>
-                                )}
-                                sections={sections}
-                                keyExtractor={(item, index) => item + index}
-                            />
-                        </View>
-                </ScrollView>
-              : null
+                    </View>
+            </ScrollView>
         );
     }
 }
 
-export default Profile;
+const mapStateToProps = state => ({
+    loadingGet:     state.media.loadingGet,
+    messageError:   state.media.messageError,
+    image:          state.media.image,
+    user:           state.connection.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+    hangleGetMedia: (token, userId) => dispatch(hangleGetMedia(token, userId)),
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Profile);
+
 
 const styles = StyleSheet.create({
     container: {
@@ -209,12 +219,12 @@ const styles = StyleSheet.create({
         flex:           1,
     },
     cardBottomTop: {
-        position: 'relative',
-        bottom: 10,
-        zIndex: 1000,
-        backgroundColor:'#eee',
-        height: 20,
-        borderRadius: 10,
+        position:           'relative',
+        bottom:             10,
+        zIndex:             1000,
+        backgroundColor:    '#eee',
+        height:             20,
+        borderRadius:       10,
     }
 
 });

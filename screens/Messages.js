@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
 import { 
-    ImageBackground, 
-    Text, 
-    TouchableHighlight, 
     FlatList,
-    TouchableOpacity,
     View,
-    Image,
-    SafeAreaView,
-    StyleSheet,
 } from 'react-native';
-import { Font } from 'expo';
 import TabContent from '../Components/TabContent';
 import ConversationItem from '../Components/ConversationItem';
 
@@ -199,42 +191,23 @@ const listeConversations = [{
 
 class Messages extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            fontLoaded:false,
-        }
-    }
-    componentDidMount() {
-        //chargement de la font open-sans
-        Font.loadAsync({
-            'open-sans-light': require('../assets/fonts/Open_Sans/OpenSans-Light.ttf'),
-            'open-sans-regular': require('../assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
-        }).then(() => {
-            this.setState({fontLoaded: true});
-        });
-    }
-
     handlePress = () => {
         this.props.navigation.push('chat');
     }
 
     render() {
         return (
-            this.state.fontLoaded 
-              ? <TabContent>
-                    <FlatList
-                        data={listeConversations}
-                        keyExtractor={item => `${item.id}`}
-                        ItemSeparatorComponent={ () => <View style={{ height: 1, backgroundColor: '#ccc', marginLeft:20,marginRight:20 }} /> }
-                        renderItem={(conversation) => <ConversationItem key={conversation.id} {...conversation} handlePress={ this.handlePress }/> }
-                        refreshing={false}
-                        onRefresh={() => console.log('refresh')}
-                        onEndReached={() => console.log('loadNext') }
-                   />
-                </TabContent>
-              : null
+            <TabContent>
+                <FlatList
+                    data={listeConversations}
+                    keyExtractor={item => `${item.id}`}
+                    ItemSeparatorComponent={ () => <View style={{ height: 1, backgroundColor: '#ccc', marginLeft:20,marginRight:20 }} /> }
+                    renderItem={(conversation) => <ConversationItem key={conversation.id} {...conversation} handlePress={ this.handlePress }/> }
+                    refreshing={false}
+                    onRefresh={() => console.log('refresh')}
+                    onEndReached={() => console.log('loadNext') }
+                />
+            </TabContent>
         );
     }
 }

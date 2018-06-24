@@ -1,239 +1,147 @@
 import React, { Component } from 'react';
-import { View, StyleSheet,FlatList } from 'react-native';
-import ConversationItem from '../Components/ConversationItem';
-import { Font } from 'expo';
-import { Header } from 'react-navigation';
-import TabContent from '../Components/TabContent';
+import { View, StyleSheet,FlatList, Text } from 'react-native';
+import RoomerMatchesItem from '../Components/RoomerMatchesItem';
 
-const listeConversations = [{
-    id: 107,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Tony",
-            lastName: "Stark",
-            photoUrl: ""
-        },
-    ],
-    lastMessage: "Salut Fabien, je me disais qu'une armure te serais très utile",
-    dateTimeLastMessage: "2018-05-17T21:35:32.5268506+00:00"
+const matchesRoomers = [{
+    id: 1,
+    user: {
+        firstName: "Thomasine ",
+        lastName: "Chinn",
+    }
 }, 
 {
-    id: 57,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Jack",
-            lastName: "Sparrow",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Why the rhum is gone ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    id: 6,
+    user: {
+        firstName: "Marlene",
+        lastName: "Faz",
+    }
 }, 
 {
-    id: 32,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Charles",
-            lastName: "Xavier",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    id: 9,
+    user: {
+        firstName: "Amal ",
+        lastName: "Bohland",
+    }
 }, 
 {
-    id: 33,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Charles",
-            lastName: "Xavier",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    id: 12,
+    user: {
+        firstName: "Mindy",
+        lastName: "Hasan",
+    }
 }, 
 {
-    id: 34,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Charles",
-            lastName: "Xavier",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    id: 10,
+    user: {
+        firstName: "Jean ",
+        lastName: "Eichman",
+    }
 }, 
 {
-    id: 35,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Charles",
-            lastName: "Xavier",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    id: 17,
+    user: {
+        firstName: "Clarice",
+        lastName: "Silveira",
+    }
 }, 
 {
-    id: 36,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Charles",
-            lastName: "Xavier",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    id: 20,
+    user: {
+        firstName: "Isela",
+        lastName: "Tutor",
+    }
 }, 
 {
     id: 37,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Charles",
-            lastName: "Xavier",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    user: {
+        firstName: "David",
+        lastName: "Marrufo",
+    }
 }, 
 {
-    id: 38,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Charles",
-            lastName: "Xavier",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    id: 60,
+    user: {
+        firstName: "Arminda",
+        lastName: "Stainback",
+    }
 }, 
 {
-    id: 39,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Charles",
-            lastName: "Xavier",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    id: 89,
+    user: {
+        firstName: "Beatrice",
+        lastName: "Noack",
+    }
 }, 
 {
-    id: 40,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Charles",
-            lastName: "Xavier",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    id: 99,
+    user: {
+        firstName: "Jermaine",
+        lastName: "Lavoie",
+    }
 }, 
 {
-    id: 41,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Charles",
-            lastName: "Xavier",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    id: 101,
+    user: {
+        firstName: "Lina",
+        lastName: "Risley",
+    }
 }, 
 {
-    id:42,
-    users:
-    [
-        {
-            id: 2,
-            firstName: "Charles",
-            lastName: "Xavier",
-            photoUrl: "",
-        },
-    ],
-    lastMessage: "Je suis à la recherche d'un ami, il s'appelle Logan, l'aurais tu vu ? ",
-    dateTimeLastMessage: "2018-05-13T22:02:12.5268506+00:00"
+    id: 103,
+    user: {
+        firstName: "Laila",
+        lastName: "Vert",
+    }
 }];
 
 class MatchesRoomers extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            fontLoaded:false,
-        }
-    }
-    handlePress() {
-        console.log('press');
-    }
 
     componentDidMount() {
-        //chargement de la font open-sans
-        Font.loadAsync({
-            'open-sans-light': require('../assets/fonts/Open_Sans/OpenSans-Light.ttf'),
-            'open-sans-regular': require('../assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
-        }).then(() => {
-            this.setState({fontLoaded: true});
-        });
+
     }
+
+    getData = () =>{
+        let matchesRoomersCards = matchesRoomers
+        let lastRowItemsCount = matchesRoomers.length % 2;
+
+        if (lastRowItemsCount < 2) {
+            matchesRoomersCards.push({ 
+                id:     'empty',
+                isEmpty:  true
+            })
+        }
+
+        return matchesRoomersCards;
+        
+    }
+
+    handlePress = () => {
+        console.log('handlePress');
+    }
+
     render() {
+        let roomersCards    = this.getData();
+        let handlePress     = this.handlePress;
         return (
-            this.state.fontLoaded 
-              ? <FlatList
-                        data={listeConversations}
-                        keyExtractor={item => `${item.id}`}
-                        ItemSeparatorComponent={ () => <View style={{ height: 1, backgroundColor: '#ccc', marginLeft:20,marginRight:20 }} /> }
-                        renderItem={(conversation) => <ConversationItem key={conversation.id} {...conversation} handlePress={ this.handlePress }/> }
-                        refreshing={false}
-                        onRefresh={() => console.log('refresh')}
-                        onEndReached={() => console.log('loadNext') }
-                />
-              : null
+            <FlatList
+                data={ roomersCards }
+                keyExtractor={item => `${item.id}`}
+                renderItem={(roomerCard) => (roomerCard.item.isEmpty === true) ? <View style={styles.emptyContainer} /> : <RoomerMatchesItem {...roomerCard.item} handlePress={ handlePress }/> } 
+                refreshing={false}
+                onRefresh={() => console.log('refresh')}
+                numColumns={ 2 }
+                style={styles.container}
+            />
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex:   1,
+    emptyContainer: {
+        flex:       1,
+        margin:     16,
     },
-    segmentedView: {
-        padding: 8 ,
-    }
 })
 
 export default MatchesRoomers;

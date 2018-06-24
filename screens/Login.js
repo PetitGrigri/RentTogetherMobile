@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import { ScrollView, ActivityIndicator, StyleSheet, Text, View, ImageBackground, Image, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, Toucha } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, ImageBackground, Image, Dimensions, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux'
 import { handleSignIn, handleHideError } from '../actions/connection.js'
-import { Font } from 'expo';
-import { Link } from 'react-router-native';
 import InputText from '../Components/InputText';
 import ButtonSubmit from '../Components/ButtonSubmit';
 import { empty } from '../utils/check';
 import {Alert} from 'react-native';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class Login extends Component {
 
@@ -18,21 +15,11 @@ class Login extends Component {
         super(props);
 
         this.state = {
-            login:'',
-            password:'',
-            fontLoaded:false,
+            login:      '',
+            password:   '',
         }
     }
-    componentDidMount() {
-        //chargement de la font open-sans
-        Font.loadAsync({
-            'open-sans-light': require('../assets/fonts/Open_Sans/OpenSans-Light.ttf'),
-            'open-sans-regular': require('../assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
-        }).then(() => {
-            this.setState({fontLoaded: true});
-        });
-    }
-    
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
         if ((prevProps.message != this.props.message) && (!empty(this.props.message))) {
@@ -48,7 +35,6 @@ class Login extends Component {
             //on supprime le message d'erreur dans le state redux
             this.props.handleHideError();
         }
-
     }
 
     //Méthode destinée à la gestion de la connexion
@@ -60,68 +46,61 @@ class Login extends Component {
   render() {
 
     return (
-        this.state.fontLoaded 
-          ? <ImageBackground
-                source={require('../assets/login-screen-mobile.jpg')}
-                style={styles.bgImage}
+        <ImageBackground
+            source={require('../assets/login-screen-mobile.jpg')}
+            style={styles.bgImage}
+            >
+            <ScrollView
+                scrollEnabled={false}
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={styles.container}
                 >
-                <ScrollView
-                    scrollEnabled={false}
-                    keyboardShouldPersistTaps="handled"
-                    contentContainerStyle={styles.container}
-                    >
-                    <KeyboardAvoidingView behavior="position" style={{flex:6, justifyContent: 'center', alignItems: 'center'}}>
+                <KeyboardAvoidingView behavior="position" style={{flex:6, justifyContent: 'center', alignItems: 'center'}}>
 
-                        <View style={{flex:4, justifyContent: 'center', alignItems: 'center'}}>  
-                            <Image source={require('../assets/logo.png')} style={styles.logo} />
-                            <Text style={styles.loginTitle}>Rent Together</Text>
-                        </View>
-
-                        <View style={styles.form}>
-                            
-                            <InputText 
-                                onChangeText={(text) => this.setState({login:text}) } 
-                                placeholder='Email' />
-
-                            <InputText 
-                                onChangeText={(text) => this.setState({password:text}) } 
-                                placeholder='Mot de passe'
-                                secureTextEntry />
-
-                            <ButtonSubmit 
-                                text='Login'
-                                style={{marginTop:40}}
-                                loading={ this.props.loadingSignIn }
-                                onPress={ this.handleSignIn } />
-                        </View>
-                    </KeyboardAvoidingView>
-
-                    <View style={{flex:1}} />
-                    <View style={{alignItems: 'center', justifyContent:'center',  flex:1}}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('register')}>
-                            <Text style={styles.footerText}>Créer un nouveau compte</Text>
-                        </TouchableOpacity>
+                    <View style={{flex:4, justifyContent: 'center', alignItems: 'center'}}>  
+                        <Image source={require('../assets/logo.png')} style={styles.logo} />
+                        <Text style={styles.loginTitle}>Rent Together</Text>
                     </View>
-                </ScrollView>
-            </ImageBackground>
-          : null
+
+                    <View style={styles.form}>
+                        
+                        <InputText 
+                            onChangeText={(text) => this.setState({login:text}) } 
+                            placeholder='Email' />
+
+                        <InputText 
+                            onChangeText={(text) => this.setState({password:text}) } 
+                            placeholder='Mot de passe'
+                            secureTextEntry />
+
+                        <ButtonSubmit 
+                            text='Login'
+                            style={{marginTop:40}}
+                            loading={ this.props.loadingSignIn }
+                            onPress={ this.handleSignIn } />
+                    </View>
+                </KeyboardAvoidingView>
+
+                <View style={{flex:1}} />
+                <View style={{alignItems: 'center', justifyContent:'center',  flex:1}}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('register')}>
+                        <Text style={styles.footerText}>Créer un nouveau compte</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </ImageBackground>
     );
   }
 }
-
-/*          
-            */
-
-
 const mapStateToProps = state => ({
-    loadingSignIn: state.connection.loadingSignIn, 
-    isAuthenticated: state.connection.isAuthenticated, 
-    message: state.connection.message,
+    loadingSignIn:      state.connection.loadingSignIn, 
+    isAuthenticated:    state.connection.isAuthenticated, 
+    message:            state.connection.message,
 });
 
 const mapDispatchToProps = dispatch => ({
-    hangleSignIn: (login, password) => dispatch(handleSignIn(login, password)),
-    handleHideError: () => dispatch(handleHideError())
+    hangleSignIn:       (login, password) => dispatch(handleSignIn(login, password)),
+    handleHideError:    () => dispatch(handleHideError())
 });
   
 export default connect(
@@ -138,18 +117,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   logo:{
-    width: SCREEN_WIDTH/4,
+    width:  SCREEN_WIDTH/4,
     height: SCREEN_WIDTH/4,
   },
   loginTitle: {
-    fontFamily: 'open-sans-light', 
-    fontSize: 44,
-    color: '#e65100'
+    fontFamily:     'open-sans-light', 
+    fontSize:       44,
+    color:          '#e65100'
   },
   footerText: {
-    fontFamily: 'open-sans-regular', 
-    fontSize: 12,
-    color: '#fff'
+    fontFamily:     'open-sans-regular', 
+    fontSize:       12,
+    color:          '#fff'
   },
   form: {
     flex:2,

@@ -4,12 +4,10 @@ import { Provider } from 'react-redux';
 import logger from 'redux-logger';
 import { createStore, applyMiddleware } from 'redux';
 import mainReducer from './reducers/mainReducer';
-import { NativeRouter, Route, Link, Switch, BackButton} from 'react-router-native'
-import Login from './screens/Login';
-import Register from './screens/Register';
 import MainNavigator from './navigation/MainNavigator';
 import 'intl';
 import 'intl/locale-data/jsonp/fr';
+import { Font } from 'expo';
 
 //création du store redux
 const store = createStore(
@@ -20,12 +18,37 @@ const store = createStore(
   )
 );
 
+
 class App extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            fontLoaded:false, 
+        }
+    }
+
+    /**
+     * Au chargement de l'application on va charger les polices open-sans light et regular.
+     * Ces dernières seront utilisées dans l'application
+     */
+    componentDidMount() {
+        Font.loadAsync({
+            'open-sans-light': require('./assets/fonts/Open_Sans/OpenSans-Light.ttf'),
+            'open-sans-regular': require('./assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
+        }).then(() => {
+            this.setState({fontLoaded: true});
+        });
+    }
+
     render() {
         return (
-            <Provider store={store}>
-                <MainNavigator />
-            </Provider>
+            this.state.fontLoaded
+              ? <Provider store={store}>
+                    <MainNavigator />
+                </Provider>
+              : null
         );
     }
 }

@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import { ScrollView, TouchableWithoutFeedback, TouchableOpacity, Animated, StyleSheet, Text, View, ImageBackground, Image, Dimensions, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { connect } from 'react-redux'
 import { handleCreateUser } from '../actions/utilisateurs'
-import { Font } from 'expo';
-import { Link } from 'react-router-native'
 import InputText from '../Components/InputText';
 import ButtonSubmit from '../Components/ButtonSubmit';
-import Login from './Login';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -17,28 +14,20 @@ class Register extends Component {
         super(props);
 
         this.state = {
-            email:'',
-            firstName: '',
-            lastName: '',
-            password:'',
-            phoneNumber:'',
-            fontLoaded:false,
-            displayTitle:true,
-            isRoomer:true,
-            isOwner:false,
+            email:          '',
+            firstName:      '',
+            lastName:       '',
+            password:       '',
+            phoneNumber:    '',
+            displayTitle:   true,
+            isRoomer:       true,
+            isOwner:        false,
         }
 
         this.roomerTypeStyle = new Animated.Value(SCREEN_WIDTH/6);
         this.ownerTypeStyle = new Animated.Value(SCREEN_WIDTH/8);
     }
     componentDidMount() {
-        Font.loadAsync({
-            'open-sans-light': require('../assets/fonts/Open_Sans/OpenSans-Light.ttf'),
-            'open-sans-regular': require('../assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
-        }).then(() => {
-            this.setState({fontLoaded: true});
-        });
-
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
     }
@@ -49,14 +38,12 @@ class Register extends Component {
     }
 
     keyboardDidShow = () => {
-        console.log('SHOW');
-        
+        console.log('keyboardDidShow');
         this.setState({displayTitle:false});
     }
 
     keyboardDidHide = () => {
-        console.log('HIDE');
-
+        console.log('keyboardDidHide');
         this.setState({displayTitle:true});
     }
 

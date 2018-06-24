@@ -1,6 +1,6 @@
 import * as api from '../api/api.js';
 
-//Types d'actions destinées à l'ajout d'un utilisateur
+//Types d'actions destinées à la gestion d'un utilisateur
 export const
     // Récupération de la liste des utilisateurs
     USER_GET_USERS_REQUEST  = 'USER_GET_USERS',
@@ -21,6 +21,7 @@ export const
     // Suppression des messages d'erreurs ou de réussite
     USER_USER_HIDE_MESSAGES= 'USER_USER_HIDE_MESSAGES',
     USER_USER_HIDE_POPUP_MESSAGES = 'USER_USER_HIDE_POPUP_MESSAGES'
+
     ;
 
 /**
@@ -230,6 +231,3 @@ export const handleUpdateUserError = (error) => {
         message: error
     }
 }
-
-
-

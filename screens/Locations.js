@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { ImageBackground, StyleSheet, View, Image } from 'react-native';
 import Text from '../Components/Text';
 import TabContent from '../Components/TabContent';
-import { Font } from 'expo';
 import LocationCard from '../Components/LocationCard';
 import { MaterialIcons, FontAwesome} from '@expo/vector-icons';
 import SwipeCards from 'react-native-swipe-cards'
@@ -62,24 +61,6 @@ const appartments = [{
 
 class Locations extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            fontLoaded:false,
-        }
-    }
-    
-    componentDidMount() {
-        //chargement de la font open-sans
-        Font.loadAsync({
-            'open-sans-light': require('../assets/fonts/Open_Sans/OpenSans-Light.ttf'),
-            'open-sans-regular': require('../assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
-        }).then(() => {
-            this.setState({fontLoaded: true});
-        });
-    }
-
     handleYup = () => {
         console.log('Oui');
     }
@@ -92,24 +73,21 @@ class Locations extends Component {
     render() {
         return (
             <TabContent>
-                { (this.state.fontLoaded) 
-                  ? <SwipeCards
-                        cards={ appartments }
-                        stack={false}
-                        renderCard={(appartement) => <LocationCard {...appartement} />}
-                        renderNoMoreCards={() => <View style={{flex:1}}><Text>Terminé</Text></View>}
-                        showYup={true}
-                        showNope={true}
-                        showMaybe={false}
-                        yupText='Je te veux !'
-                        nopeText='Mmmm non...'
-                        handleYup={this.handleYup}
-                        handleNope={this.handleNope}
-                        dragY={false}
-                        onClickHandler={()=>{}}
-                        
-                        /> 
-                  : null }
+                <SwipeCards
+                    cards={ appartments }
+                    stack={false}
+                    renderCard={(appartement) => <LocationCard {...appartement} />}
+                    renderNoMoreCards={() => <View style={{flex:1}}><Text>Terminé</Text></View>}
+                    showYup={true}
+                    showNope={true}
+                    showMaybe={false}
+                    yupText='Je te veux !'
+                    nopeText='Mmmm non...'
+                    handleYup={this.handleYup}
+                    handleNope={this.handleNope}
+                    dragY={false}
+                    onClickHandler={()=>{}}
+                /> 
             </TabContent>
         )
     }

@@ -1,17 +1,11 @@
 import React, { Component } from 'react';
 import { 
-    ImageBackground, 
     Text, 
-    TouchableHighlight, 
-    FlatList,
     TouchableOpacity,
     View,
     Image,
-    SafeAreaView,
     StyleSheet,
 } from 'react-native';
-import { Font } from 'expo';
-import TabContent from '../Components/TabContent';
 import { convertStringToDateFR } from '../utils/convert';
 
 import PropTypes from 'prop-types';

@@ -12,6 +12,7 @@ const tabs = [{
     title:  'Locations',
     screen: 'matchesLocations'
 }];
+
 class MatchesHeader extends Component {
 
     constructor(props) {
@@ -22,6 +23,7 @@ class MatchesHeader extends Component {
         }
     }
     changeTab = (index) => {
+        
         Animated.timing(
             this.state.translation,
             {
@@ -31,6 +33,7 @@ class MatchesHeader extends Component {
             }
         ).start();
         this.props.navigation.navigate(tabs[index].screen);
+        
     }
 
     getTabWidth = (nativeEvent, index) => {

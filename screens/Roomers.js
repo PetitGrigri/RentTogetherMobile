@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { ImageBackground, StyleSheet, View, Image } from 'react-native';
 import Text from '../Components/Text';
 import TabContent from '../Components/TabContent';
-import { Font } from 'expo';
 import RoomerCard from '../Components/RoomerCard';
 import SwipeCards from 'react-native-swipe-cards'
 import { Foundation, MaterialCommunityIcons} from '@expo/vector-icons';
 
-const roomers = [{
+const roomers = 
+[{
     name: "DEADPOOL",
     pourcentage:    84,
     age:            30,
@@ -69,24 +69,6 @@ const roomers = [{
 
 class Roomers extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            fontLoaded:false,
-        }
-    }
-    
-    componentDidMount() {
-        //chargement de la font open-sans
-        Font.loadAsync({
-            'open-sans-light': require('../assets/fonts/Open_Sans/OpenSans-Light.ttf'),
-            'open-sans-regular': require('../assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
-        }).then(() => {
-            this.setState({fontLoaded: true});
-        });
-    }
-
     handleYup = () => {
         console.log('Oui');
     }
@@ -99,24 +81,21 @@ class Roomers extends Component {
     render() {
         return (
             <TabContent>
-                { (this.state.fontLoaded) 
-                  ? <SwipeCards
-                        cards={ roomers }
-                        stack={false}
-                        renderCard={(roomer) => <RoomerCard {...roomer} />}
-                        renderNoMoreCards={() => <View style={{flex:1}}><Text>Terminé</Text></View>}
-                        showYup={true}
-                        showNope={true}
-                        showMaybe={false}
-                        yupText='Je te veux !'
-                        nopeText='Mmmm non...'
-                        handleYup={this.handleYup}
-                        handleNope={this.handleNope}
-                        dragY={false}
-                        onClickHandler={()=>{}}
-                        
-                        /> 
-                  : null }
+            <SwipeCards
+                cards={ roomers }
+                stack={false}
+                renderCard={(roomer) => <RoomerCard {...roomer} />}
+                renderNoMoreCards={() => <View style={{flex:1}}><Text>Terminé</Text></View>}
+                showYup={true}
+                showNope={true}
+                showMaybe={false}
+                yupText='Je te veux !'
+                nopeText='Mmmm non...'
+                handleYup={this.handleYup}
+                handleNope={this.handleNope}
+                dragY={false}
+                onClickHandler={()=>{}}
+            /> 
             </TabContent>
         )
     }

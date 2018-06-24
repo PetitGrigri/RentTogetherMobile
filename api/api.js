@@ -1,5 +1,7 @@
 import { empty } from '../utils/check.js';
 import * as config from '../config.js';
+import { urlWithParams } from '../utils/convert';
+import { cleanUser, cleanUsersList } from '../utils/clean.js';
 import base64 from 'base-64';
 
 const url = config.REACT_APP_API_URL;
@@ -34,7 +36,7 @@ export const connectionAPI =  (login, password, callBackOk, callBackError) => {
             //tentative de connexion d'un administrateur :
             if (!empty(dataUser.token) && !empty(dataUser.email) && !empty(dataUser.firstName) && !empty(dataUser.lastName) && !empty(dataUser.isAdmin)) {
                 if (dataUser.isAdmin === 1) {
-                    callBackOk(dataUser);
+                    callBackOk(cleanUser(dataUser));
                 } else {
                     throw Error("Vous n'êtes pas autorisez à accéder à l'application.");
                 }
@@ -78,6 +80,7 @@ export const createUtilisateur= function(user,  callBackOk, callBackError) {
                 return response.json().catch(error => {
                     throw Error("Erreur de l'API.");
                 });
+                //TODO ici ajouter utilisateur
             } else {
                 throw Error(response.statusText);
             }
@@ -95,16 +98,18 @@ export const createUtilisateur= function(user,  callBackOk, callBackError) {
  * Méthode destinée à récupérer la liste des utilisateurs
  * 
  * @param {string} token Le token de l'utilisateur connecté
+ * @param {object} filter Un objet représentant le filtre à utiliser
  * @param {function} callBackOk Le callback à utiliser quand on aura récupérer la liste des utilisateurs (la liste des utilisateurs sera transmise en paramètre)
  * @param {function} callBackError Le callback à utiliser quand la récupération de la liste des utilisateurs n'est pas possibles (L'erreur sera transmise en paramètre)
  */
-export const getUtilisateurs = function(token, callBackOk, callBackError) {
+export const getUtilisateurs = function(token, filter, callBackOk, callBackError) {
     // Le header contiendra le token d'authentification plus tard
     var myHeaders = new Headers({
         'Content-Type':'application/json',
         'Authorization':'Bearer '+token
     });
-    
+
+
     //les paramêtres de la requête
     var options = {
         method: 'GET',
@@ -113,7 +118,7 @@ export const getUtilisateurs = function(token, callBackOk, callBackError) {
         cache: 'default'
     };
 
-    fetch(url+ "/Users", options)
+    fetch(urlWithParams(url+ "/Users", filter), options)
         .then(response => {
             if (response.ok === true) {
                 return response.json().catch(error => {
@@ -123,8 +128,8 @@ export const getUtilisateurs = function(token, callBackOk, callBackError) {
                 throw Error(response.statusText);
             }
         })
-        .then(dataAdministrators => {
-            callBackOk(dataAdministrators);
+        .then(dataUsers => {
+            callBackOk(cleanUsersList(dataUsers));
         })
         .catch(error => {
             callBackError(error.message);
@@ -221,4 +226,63 @@ export const putUser = function(user, token, callBackOk, callBackError) {
                 callBackError(error.message),
             10000);
         });
+}
+
+
+export const getUserMedia = function(token, userId, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+   var myHeaders = new Headers({
+       'Authorization':'Bearer '+ token
+   });
+
+   console.log(userId);
+
+   //les paramêtres de la requête
+   var options = {
+       method: 'GET',
+       headers: myHeaders,
+       mode: 'cors',
+       cache: 'default',
+   };
+
+   //réalisation de la requête
+   fetch(url+ "/media/"+userId, options)
+        .then(response => {
+
+            if (response.ok === true) {
+                console.log('response OK');
+                return response.blob();
+                
+            } else {
+                console.log('response KO');
+                throw Error(response.statusText);
+            }
+        })
+        .then(blob => {
+            console.log(blob);
+            console.log('image OK 2');
+            var reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                console.log('reader terminé')
+
+                let result = reader.result;
+                
+                console.log('callback OK :)');
+                console.log(`base64 : ${result}`);
+                console.log('george !')
+                callBackOk(result)
+
+              }, false);
+
+            reader.readAsDataURL(blob);
+            
+
+        })
+        .catch(error => {
+            console.log('callback KO :(');
+            callBackError(error.message);
+        });
+
+    
 }

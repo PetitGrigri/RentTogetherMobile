@@ -1,12 +1,21 @@
-import { SIGN_IN_REQUEST, SIGN_IN_ERROR, SIGN_IN_SUCESS, SIGN_IN_HIDE_ERROR }from '../actions/connection.js'
+import { 
+    SIGN_IN_REQUEST, 
+    SIGN_IN_ERROR, 
+    SIGN_IN_SUCESS, 
+    SIGN_IN_HIDE_ERROR,
+    SIGN_IN_WITH_PREVIOUS_TOKEN_REQUEST,
+    SIGN_IN_WITH_PREVIOUS_TOKEN_SUCCESS,
+    SIGN_IN_WITH_PREVIOUS_TOKEN_ERROR
+ }from '../actions/connection.js'
 
 
 //le state initial
 const initialConnectionState = {
-    loadingSignIn : false,
-    isAuthenticated : false,
-    user: {},
-    message : "",
+    loadingSignIn :     false,
+    loadingSignInToken: false,
+    isAuthenticated :   false,
+    user:               {},
+    message :           "",
 }
 
 
@@ -50,6 +59,23 @@ const connection = (state = initialConnectionState, action) => {
             return Object.assign({}, state, {
                 message: ""
             });
+
+
+        case SIGN_IN_WITH_PREVIOUS_TOKEN_REQUEST:
+            return Object.assign({}, state, {
+                loadingSignInToken: true,
+            });
+        case SIGN_IN_WITH_PREVIOUS_TOKEN_SUCCESS:
+            return Object.assign({}, state, {
+                loadingSignInToken:     false,
+                isAuthenticated:        true,
+                user:                   action.user
+            });
+        case SIGN_IN_WITH_PREVIOUS_TOKEN_ERROR:
+            return Object.assign({}, state, {
+                loadingSignInToken:     false,
+            });
+        
 
         //autres 
         default : 
