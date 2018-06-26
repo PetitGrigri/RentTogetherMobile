@@ -7,7 +7,7 @@ import Locations from '../screens/Locations';
 import Profile from '../screens/Profile';
 import MatchesLocations from '../screens/MatchesLocations';
 import MatchesRoomers from '../screens/MatchesRoomers';
-import Messages from '../screens/Messages';
+import Conversations from '../screens/Conversations';
 import MatchesHeader from '../navigation/MatchesHeader';
 
 import { Easing, Animated, Platform } from 'react-native';
@@ -101,8 +101,8 @@ const TabNavigator = createBottomTabNavigator({
             ),
         },
     },
-    Messages: {
-        screen: Messages,
+    Conversations: {
+        screen: Conversations,
         navigationOptions: {
             tabBarLabel: 'Messages',
             tabBarIcon: ({focused}) => (

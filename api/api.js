@@ -229,13 +229,14 @@ export const putUser = function(user, token, callBackOk, callBackError) {
 }
 
 
+
+
+
 export const getUserMedia = function(token, userId, callBackOk, callBackError) {
     // Le header contiendra le token d'authentification plus tard
    var myHeaders = new Headers({
        'Authorization':'Bearer '+ token
    });
-
-   console.log(userId);
 
    //les paramêtres de la requête
    var options = {
@@ -250,39 +251,84 @@ export const getUserMedia = function(token, userId, callBackOk, callBackError) {
         .then(response => {
 
             if (response.ok === true) {
-                console.log('response OK');
+                //console.log('response OK');
                 return response.blob();
                 
             } else {
-                console.log('response KO');
+                //console.log('response KO');
                 throw Error(response.statusText);
             }
         })
         .then(blob => {
-            console.log(blob);
-            console.log('image OK 2');
+            console.log('API OK', blob);
             var reader = new FileReader();
 
             reader.addEventListener("load", function () {
-                console.log('reader terminé')
 
                 let result = reader.result;
                 
-                console.log('callback OK :)');
-                console.log(`base64 : ${result}`);
-                console.log('george !')
-                callBackOk(result)
+                //TODO vérifier pour quelle raison on a une application/
+                //console.log(`base64 : ${result}`);
+                console.log('API reception image pour : ',userId, result);
+
+                callBackOk(userId, result)
 
               }, false);
 
             reader.readAsDataURL(blob);
-            
-
+            //reader.readAsText(blob);
         })
         .catch(error => {
-            console.log('callback KO :(');
+            console.log('API KO', error);
+            callBackError(userId, error.message);
+        });
+}
+
+
+
+
+
+
+
+
+
+
+
+export const getConversations = function(token, userId, filter, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+    let myHeaders = new Headers({
+        'Content-Type':     'application/json',
+        'Authorization':    'Bearer '+token
+    });
+
+    //les paramètres de la requête
+    let options = {
+        method:     'GET',
+        headers:    myHeaders,
+        mode:       'cors',
+        cache:      'default'
+    };
+
+    let gestConversationsURL = urlWithParams(`${url}/Conversations/${userId}`,filter);
+
+    console.log(gestConversationsURL);
+    console.log(options);
+
+    fetch(gestConversationsURL, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataConversations => {
+            callBackOk(dataConversations);
+        })
+        .catch(error => {
             callBackError(error.message);
         });
-
     
 }

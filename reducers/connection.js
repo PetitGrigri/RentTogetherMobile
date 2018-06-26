@@ -50,7 +50,7 @@ const connection = (state = initialConnectionState, action) => {
         case  SIGN_IN_ERROR : 
             return Object.assign({}, state, {
                 loadingSignIn : false,
-                isAuthenticated: true,
+                isAuthenticated: false,
                 message: action.message||"Erreur de connexion",
             });
 

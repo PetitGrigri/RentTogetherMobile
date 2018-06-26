@@ -7,18 +7,24 @@ import {
     StyleSheet,
 } from 'react-native';
 import { convertStringToDateFR } from '../utils/convert';
-
+import { isset } from '../utils/check';
 import PropTypes from 'prop-types';
 
 class ConversationItem extends Component {
 
     static propTypes = {
-        item: PropTypes.object.isRequired,
+        
         handlePress: PropTypes.func.isRequired,
     }
 
     render() {
-        let {id, lastMessage, dateTimeLastMessage, users} = this.props.item
+
+        let { createdDate, messages, participants } = this.props;
+
+        //récupération de la date du dernier message ou de la date de création de la conversation
+        createdDate             = isset(messages[0]) ? messages[0].createdDate : createdDate;
+        let lastMessageContent  = isset(messages[0]) ? messages[0].messageText : "Cette conversation n'a pas encore de message";
+
         return (
             <TouchableOpacity onPress={this.props.handlePress}>
                 <View style={ styles.row }>
@@ -26,13 +32,13 @@ class ConversationItem extends Component {
                     <View style={styles.right}>
                         <View style={styles.rightTop}>
                             <Text style={ styles.users }>
-                                Test toto
+                                { '//TODO' }
                             </Text>
                             <Text style={ styles.date }>
-                                { convertStringToDateFR(dateTimeLastMessage) }
+                                { convertStringToDateFR(createdDate) }
                             </Text>
                         </View>
-                        <Text style={ styles.secondaryText } numberOfLines={2}>{lastMessage}</Text>
+                        <Text style={ styles.secondaryText } numberOfLines={2}>{ lastMessageContent}</Text>
                     </View>
                 </View>
             </TouchableOpacity>

@@ -1,48 +1,47 @@
 import { 
-    USER_GET_MEDIA, 
-    USER_GET_MEDIA_ERROR,
-    USER_GET_MEDIA_SUCCESS, 
-    USER_GET_MEDIA_HIDE_ERROR,
+    USER_GET_USER_IMAGE_REQUEST,
+    USER_GET_USER_IMAGE_SUCCESS, 
+    USER_GET_USER_IMAGE_ERROR
 } from '../actions/media'
 
 
 //le state initial
 const initialMediaState = {
-    loadingGet: false,
-    messageError: "",
-    image: null
+    usersMediaLoading: [],
+    usersMediaError: [],
+    usersMedia: {},
 }
+
 
 const media = (state = initialMediaState, action) => {
 
     switch(action.type) {
-        // Gestion d'une demande d'ajout d'un utilisateur
-        case USER_GET_MEDIA: 
+        case USER_GET_USER_IMAGE_REQUEST :
+
+            let newUsersMediaLoading = state.usersMediaLoading.slice(0);
+            newUsersMediaLoading.push(action.userId)
+
             return Object.assign({}, state, {
-                loadingGet : true
+                usersMediaLoading : newUsersMediaLoading
             });
 
-        // Gestion de la réussite de l'ajout d'un administrateur
-        case  USER_GET_MEDIA_SUCCESS: 
+        case USER_GET_USER_IMAGE_SUCCESS : 
             return Object.assign({}, state, {
-                loadingGet :    false,
-                image:          action.image
+                usersMediaLoading   : state.usersMediaLoading.filter(value => (value !== action.userId)),
+                usersMedia          : Object.assign({}, state.usersMedia, { [action.userId] : action.image })
             });
 
-        // Gestion d'une erreur lors de l'ajout d'un administrateur
-        case  USER_GET_MEDIA_ERROR : 
+
+        case USER_GET_USER_IMAGE_ERROR :
+
+             let newUsersMediaError = state.usersMediaError.slice(0);
+            newUsersMediaError.push(action.userId)
+
             return Object.assign({}, state, {
-                loadingGet:     false,
-                messageError:   action.message
-                
+                usersMediaLoading   : state.usersMediaLoading.filter(value => (value !== action.userId)),
+                usersMediaError     : newUsersMediaError
             });
-        
 
-
-        case USER_GET_MEDIA_HIDE_ERROR : 
-            return Object.assign({}, state, {
-                messageError:   "",
-            })
 
         //autres 
         default : 

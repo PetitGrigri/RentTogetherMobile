@@ -4,8 +4,11 @@ import Text from  '../Components/Text';
 import { Foundation, MaterialCommunityIcons} from '@expo/vector-icons';
 import Rating from '../Components/Rating';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { hangleGetMedia } from '../actions/media';
+import { handleGetUserMedia } from '../actions/media';
 import { connect } from 'react-redux'
+import { getUserMedia } from '../utils/fileSystem';
+import { UserImage, UserImageBackground } from '../containers';
+
 
 const itemRow = (props) => {
     let { index, item } = props;
@@ -37,58 +40,6 @@ const itemRowCharacteristic = (props) => {
 
 }
 
-const sections = [
-    {   title: 'Mes informations', 
-        data: [{
-            label : "Nom",
-            value: "DOE"
-        }, {
-            label : "Prénom",
-            value: "John"
-        }, {
-            label: "Email",
-            value: "john.doe@lost.com"
-        }], 
-        renderItem: itemRow 
-    }, {   
-        title: 'Mes recherches', 
-        data: [{
-            codePostal: "75015",
-            city: "Paris 15ème"
-        }, {
-            codePostal: "45000",
-            city: "Orléans"
-        }],
-        renderItem: itemRowLocation
-    }, {
-        title: 'Mes caractéristiques', 
-        data: [{
-            currentValue:       1,
-            fractions:          5,
-            activeComponent:    <Foundation color='#ff8f00' name='guide-dog' size={32} />,
-            unactiveComponent:  <Foundation color='#aaa' name='guide-dog' size={32}/>,
-            reviews:            ['Allergique', 'Je n\'en veux pas', 'Pas d\'avis', 'Un, ca ne me dérange pas', 'J\'adore las animaux'],
-            onChange:           (value) => console.log('animaux : ', value)
-        },{
-            currentValue:       1,
-            fractions:          5,
-            activeComponent:    <MaterialCommunityIcons color='#ff8f00' name='smoking' size={32} />,
-            unactiveComponent:  <MaterialCommunityIcons color='#aaa' name='smoking' size={32}/>,
-            onChange:           (value) => console.log('fumée : ', value)
-        },{
-            currentValue:       1,
-            fractions:          5,
-            activeComponent:    <MaterialCommunityIcons color='#ff8f00' name='broom' size={32} />,
-            unactiveComponent:  <MaterialCommunityIcons color='#aaa' name='broom' size={32}/>,
-            onChange:           (value) => console.log('fumée : ', value)
-        },
-
-        ],
-        renderItem: itemRowCharacteristic 
-    },
-];
-
-
 //TODO
 const titleHeader = (props) => {
 
@@ -104,33 +55,83 @@ class Profile extends Component {
         }
     }
 
+
     changeRadius = (nativeEvent) => {
         this.setState({avatarRadius: nativeEvent.layout.width / 2 })
     }
 
     componentDidMount = () => {
-        this.props.hangleGetMedia(this.props.user.token, this.props.user.userId);
+        this.props.handleGetUserMedia(this.props.user.userId);
+
     };
     
+    getSections = () => {
+        return [{   
+            title: 'Mes informations', 
+            data: [{
+                label : "Nom",
+                value: this.props.user.lastName,
+            }, {
+                label : "Prénom",
+                value: this.props.user.firstName,
+            }, {
+                label: "Email",
+                value: this.props.user.email,
+            }], 
+            renderItem: itemRow 
+        }, {   
+            title: 'Mes recherches', 
+            data: [{
+                codePostal: "75015",
+                city: "Paris 15ème"
+            }, {
+                codePostal: "45000",
+                city: "Orléans"
+            }],
+            renderItem: itemRowLocation
+        }, {
+            title: 'Mes caractéristiques', 
+            data: [{
+                currentValue:       1,
+                fractions:          5,
+                activeComponent:    <Foundation color='#ff8f00' name='guide-dog' size={32} />,
+                unactiveComponent:  <Foundation color='#aaa' name='guide-dog' size={32}/>,
+                reviews:            ['Allergique', 'Je n\'en veux pas', 'Pas d\'avis', 'Un, ca ne me dérange pas', 'J\'adore las animaux'],
+                onChange:           (value) => console.log('animaux : ', value)
+            },{
+                currentValue:       1,
+                fractions:          5,
+                activeComponent:    <MaterialCommunityIcons color='#ff8f00' name='smoking' size={32} />,
+                unactiveComponent:  <MaterialCommunityIcons color='#aaa' name='smoking' size={32}/>,
+                onChange:           (value) => console.log('fumée : ', value)
+            },{
+                currentValue:       1,
+                fractions:          5,
+                activeComponent:    <MaterialCommunityIcons color='#ff8f00' name='broom' size={32} />,
+                unactiveComponent:  <MaterialCommunityIcons color='#aaa' name='broom' size={32}/>,
+                onChange:           (value) => console.log('fumée : ', value)
+            },
+
+            ],
+            renderItem: itemRowCharacteristic 
+        }];
+    }
+
     render() {
         return (
             <ScrollView style={styles.container}>
-                <ImageBackground 
-                    source={ this.props.image 
-                        ? { uri: this.props.image }
-                        : require('../assets/tests/star_lord.jpg') }  
+                <UserImageBackground
+                    userId= { this.props.user.userId }
                     style= {[styles.imageHeader, { paddingTop: getStatusBarHeight() }  ]}
                     blurRadius= { 10 }>
-                    <Image 
-                        source={ this.props.image 
-                            ? { uri: this.props.image }
-                            : require('../assets/tests/star_lord.jpg') }  
+                    <UserImage 
+                        userId= { this.props.user.userId }
                         style={ [styles.imageAvatar, {borderRadius: this.state.avatarRadius} ] } 
                         onLayout={(event) => this.changeRadius(event.nativeEvent)}  
                     />
                     <Text h1 style= {styles.textWhite}>John Doe</Text>
                     
-                </ImageBackground>
+                </UserImageBackground>
                     <View style={styles.cardBottomTop} />
                     <View style={styles.containerInformations}>
                         <SectionList
@@ -138,9 +139,10 @@ class Profile extends Component {
                             renderSectionHeader={({section: {title}}) => (
                                 <Text h2 style={styles.titleProfile}>{title}</Text>
                             )}
-                            sections={sections}
+                            sections={ this.getSections() }
                             keyExtractor={(item, index) => item + index}
                         />
+                        
                     </View>
             </ScrollView>
         );
@@ -150,18 +152,25 @@ class Profile extends Component {
 const mapStateToProps = state => ({
     loadingGet:     state.media.loadingGet,
     messageError:   state.media.messageError,
-    image:          state.media.image,
+    image:          state.media.usersMedia[state.connection.user.userId] ? state.media.usersMedia[state.connection.user.userId] : null,
     user:           state.connection.user,
 });
 
 const mapDispatchToProps = dispatch => ({
-    hangleGetMedia: (token, userId) => dispatch(hangleGetMedia(token, userId)),
+    handleGetUserMedia: (userId) => dispatch(handleGetUserMedia(userId)),
 });
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Profile);
+
+
+
+
+
+
+
 
 
 const styles = StyleSheet.create({
