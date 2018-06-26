@@ -251,29 +251,17 @@ export const getUserMedia = function(token, userId, callBackOk, callBackError) {
         .then(response => {
 
             if (response.ok === true) {
-                //console.log('response OK');
                 return response.blob();
-                
             } else {
-                //console.log('response KO');
                 throw Error(response.statusText);
             }
         })
         .then(blob => {
-            console.log('API OK', blob);
             var reader = new FileReader();
 
             reader.addEventListener("load", function () {
-
-                let result = reader.result;
-                
-                //TODO vérifier pour quelle raison on a une application/
-                //console.log(`base64 : ${result}`);
-                console.log('API reception image pour : ',userId, result);
-
-                callBackOk(userId, result)
-
-              }, false);
+                callBackOk(userId, reader.result)
+            }, false);
 
             reader.readAsDataURL(blob);
             //reader.readAsText(blob);

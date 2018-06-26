@@ -45,7 +45,7 @@ class UserImageBackground extends Component {
             <ImageBackground 
                 source={ this.state.userImageContent
                         ? { uri: this.state.userImageContent }
-                        : require('../assets/tests/star_lord.jpg') }  
+                        : require('../assets/no_user.png') }  
                 { ...this.props} 
             />
         );
