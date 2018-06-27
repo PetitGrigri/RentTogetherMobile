@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 import TabNavigator from './TabNavigator';
-import Chat from '../screens/Chat';
+import Messages from '../screens/Messages';
 
 const ApplicationNavigator = createStackNavigator({
     home: {
@@ -14,13 +14,12 @@ const ApplicationNavigator = createStackNavigator({
             headerTransparent: true
         }
     },
-    chat: {
-        screen: Chat, 
+    messages: {
+        screen: Messages, 
         navigationOptions: {
             headerStyle: {
-                backgroundColor: 'rgba(255,255,255,0.5)',
+                backgroundColor: '#ff8f00',
             },
-            headerTransparent: true
         }
     }
 });

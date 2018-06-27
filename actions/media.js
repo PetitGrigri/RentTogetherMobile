@@ -13,7 +13,6 @@ export const handleGetUserMedia =  (userId) => {
 
         // Si on est déjà en train de télécharger l'image de l'utilisateur, on ne dispatch rien
         if (getState().media.usersMediaLoading.indexOf(userId) > -1 ) {
-            console.log(`L'image de l'utilisateur ${userId} est déjà en cours de téléchargement`);
             return;
         }
         // On dispatch l'état de connexion en cours (demande de récupération d'une image en cours)

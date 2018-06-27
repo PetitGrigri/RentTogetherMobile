@@ -14,7 +14,7 @@ const store = createStore(
   mainReducer,
   applyMiddleware(
       thunkMiddleware,    //permet d'avoir de propager de dispatcher des fonctions
-      logger,             //permet d'avoir un reporting de ce qu'il se passe 
+      //logger,             //permet d'avoir un reporting de ce qu'il se passe 
   )
 );
 
@@ -35,8 +35,10 @@ class App extends React.Component {
      */
     componentDidMount() {
         Font.loadAsync({
-            'open-sans-light': require('./assets/fonts/Open_Sans/OpenSans-Light.ttf'),
-            'open-sans-regular': require('./assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
+            'open-sans-light':      require('./assets/fonts/Open_Sans/OpenSans-Light.ttf'),
+            'open-sans-regular':    require('./assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
+            'open-sans-bold':       require('./assets/fonts/Open_Sans/OpenSans-Bold.ttf'),
+            'open-sans-semi-bold':       require('./assets/fonts/Open_Sans/OpenSans-SemiBold.ttf')
         }).then(() => {
             this.setState({fontLoaded: true});
         });

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet,ImageBackground,Image, View, SectionList, ScrollView, StatusBar } from 'react-native';
+import { StyleSheet, View, SectionList, ScrollView, StatusBar } from 'react-native';
 import Text from  '../Components/Text';
 import { Foundation, MaterialCommunityIcons} from '@expo/vector-icons';
 import Rating from '../Components/Rating';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { handleGetUserMedia } from '../actions/media';
 import { connect } from 'react-redux'
-import { getUserMedia } from '../utils/fileSystem';
 import { UserImage, UserImageBackground } from '../containers';
 
 
@@ -129,7 +128,7 @@ class Profile extends Component {
                         style={ [styles.imageAvatar, {borderRadius: this.state.avatarRadius} ] } 
                         onLayout={(event) => this.changeRadius(event.nativeEvent)}  
                     />
-                    <Text h1 style= {styles.textWhite}>John Doe</Text>
+                    <Text h1 style= {styles.textWhite}>{ this.props.user.firstName } { this.props.user.lastName }</Text>
                     
                 </UserImageBackground>
                     <View style={styles.cardBottomTop} />

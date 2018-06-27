@@ -4,10 +4,14 @@ import { isset } from '../utils/check';
 import { getUserMedia } from '../utils/fileSystem';
 import { connect } from 'react-redux'
 import { handleGetUserMedia } from '../actions/media';
-
+import { PropTypes } from 'prop-types';
 
 class UserImage extends Component {
 
+    static propTypes= {
+        userId:     PropTypes.any.isRequired,
+    }
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -18,6 +22,7 @@ class UserImage extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         // Si le store redux vient de récupérer l'URI de l'utilisateur qui nous interesse, alors on récupère le contenu de l'URI
         if ((!isset(prevProps.imagesUsers[this.props.userId])) && (isset(this.props.imagesUsers[this.props.userId]))) {
+
             getUserMedia(this.props.imagesUsers[this.props.userId], (imageContent) => { 
                 this.setState({ 
                     userImageContent: imageContent
@@ -27,14 +32,17 @@ class UserImage extends Component {
     }
     
     componentWillMount() {
-        //si on a déjà l'uri de l'image dans le state média, on récupère son contenu
+
+        //si on a déjà l'URI de l'image dans le state média, on récupère son contenu
         if (isset(this.props.imagesUsers[this.props.userId])) {
-            getUserMedia(this.props.image, (imageContent) => { 
+            getUserMedia(this.props.imagesUsers[this.props.userId], (imageContent) => { 
                 this.setState({ 
-                    userImageContent: image
+                    userImageContent: imageContent
                 })
             });
-        } else {
+        } 
+        // Sinon, on demande à récupérer cette URI
+        else {
             this.props.handleGetUserMedia(this.props.userId);
         }
     };

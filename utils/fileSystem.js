@@ -10,8 +10,7 @@ const folderUserMedia = `${Expo.FileSystem.documentDirectory}users-media`;
 export const saveUserMedia = async (userId, image) =>  {
     //création du dossier des images des utilisateurs s'il n'existe pas
     let etatDossier = await createUserMediaFolderIfNotExist();
-    console.log (`Etat du dossier user-media : ${etatDossier?'OK':'KO'}`);
-
+    
     // Création de l'URI de l'image
     let imageURI = `${folderUserMedia}/user_${userId}.png`;
 

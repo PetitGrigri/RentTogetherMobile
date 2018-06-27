@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet,FlatList } from 'react-native';
-import ConversationItem from '../Components/ConversationItem';
+import ConversationItem from '../containers/ConversationItem';
 
 const listeConversations = [{
     id: 107,

@@ -320,3 +320,106 @@ export const getConversations = function(token, userId, filter, callBackOk, call
         });
     
 }
+
+
+
+
+export const getMessages = function(token, conversationId, filter, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+    let myHeaders = new Headers({
+        'Content-Type':     'application/json',
+        'Authorization':    'Bearer '+token
+    });
+
+    //les paramètres de la requête
+    let options = {
+        method:     'GET',
+        headers:    myHeaders,
+        mode:       'cors',
+        cache:      'default'
+    };
+
+    let getMessagesURL = urlWithParams(`${url}/Conversations/${conversationId}/Messages`,filter);
+
+    console.log(getMessagesURL);
+    console.log(options);
+
+    fetch(getMessagesURL, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataMessages => {
+            callBackOk(dataMessages);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+    
+}
+
+
+
+
+/**
+ * Fonction permettant de poster un message
+ * 
+ * @param {string} user L'objet FormData correspondant à l'utilisateur
+ * 
+ * 
+ * 
+ * @param {function} callBackOk 
+ * @param {function} callBackError 
+ */
+export const postMessage = function(token, userId, conversationId, message,  callBackOk, callBackError) {
+
+    console.log('API 0', token, userId, conversationId, message,  callBackOk, callBackError)
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':     'application/json',
+        'Authorization':    'Bearer '+token
+    });
+
+    // Conversion de notre FormData en objet 
+    var jsonMessageString = JSON.stringify({
+        "userId":           userId,
+        "conversationId":   conversationId,
+        "messageText":      message
+    });
+
+    //les paramètres de la requête
+    var options = {
+        method:     'POST',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default',
+        body: jsonMessageString
+    };
+
+    console.log('API 1');
+
+    fetch(url+ "/messages", options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+                //TODO ici ajouter utilisateur
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(message => {
+            callBackOk(message);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+
+    console.log('API 2');
+}

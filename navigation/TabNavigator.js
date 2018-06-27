@@ -8,6 +8,7 @@ import Profile from '../screens/Profile';
 import MatchesLocations from '../screens/MatchesLocations';
 import MatchesRoomers from '../screens/MatchesRoomers';
 import Conversations from '../screens/Conversations';
+import Messages from '../screens/Messages';
 import MatchesHeader from '../navigation/MatchesHeader';
 
 import { Easing, Animated, Platform } from 'react-native';
@@ -59,6 +60,7 @@ const transitionConfig = (Platform.OS === 'android') ? () => {
           return slideFromRight
         },
     }} : null;
+
 
 const TabNavigator = createBottomTabNavigator({
     Roomers: {

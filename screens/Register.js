@@ -100,82 +100,80 @@ class Register extends Component {
   render() {
 
     return (
-        this.state.fontLoaded 
-          ? <View style={styles.container}>
-                <ImageBackground
-                    source={require('../assets/login-screen-mobile.jpg')}
-                    style={styles.bgImage}
+        <View style={styles.container}>
+            <ImageBackground
+                source={require('../assets/login-screen-mobile.jpg')}
+                style={styles.bgImage}
+                >
+                <ScrollView
+                    scrollEnabled={false}
+                    keyboardShouldPersistTaps="handled"
+                    contentContainerStyle={styles.container}
                     >
-                    <ScrollView
-                        scrollEnabled={false}
-                        keyboardShouldPersistTaps="handled"
-                        contentContainerStyle={styles.container}
-                        >
-                        <KeyboardAvoidingView behavior="position" style={{alignItems: 'center', justifyContent:'center',flex:8}}>
-                            <View style={{alignItems: 'center', justifyContent:'flex-end', flex:1 }}>
-                                <Text style={styles.loginTitle}>Inscription</Text>
-                                <Text style={styles.loginSubTitle}>Qui êtes vous ? </Text>
-                            </View>
-
-                            <View style={{alignItems: 'center', justifyContent:'space-around', flexDirection:'row', flex:1 }}>
-                                <View style={{alignItems: 'center'}}>
-                                    <Text style={styles.typeText}>Un locataire</Text> 
-                                    <TouchableWithoutFeedback onPress={this.handleClickLocataire}>
-                                        <Animated.Image source={require('../assets/locataire.png')} style={{width:this.roomerTypeStyle, height:this.roomerTypeStyle}} />
-                                    </TouchableWithoutFeedback>
-                                    
-                                </View>
-                                <View style={{alignItems: 'center'}}>
-                                    <Text style={styles.typeText}>Un propriétaire</Text>
-                                    <TouchableWithoutFeedback onPress={this.handleClickProprietaire}>
-                                        <Animated.Image source={require('../assets/proprietaire.png')} style={{width:this.ownerTypeStyle, height:this.ownerTypeStyle}} />
-                                    </TouchableWithoutFeedback>
-                                    
-                                </View>
-                            </View>
-
-                        
-                            <View style={styles.form}>
-
-                                <InputText 
-                                    onChangeText={(text) => this.setState({email:text}) } 
-                                    placeholder='Email' />
-
-                                    <InputText 
-                                    onChangeText={(text) => this.setState({lastName:text}) } 
-                                    placeholder='Nom' />
-
-                                <InputText 
-                                    onChangeText={(text) => this.setState({firstName:text}) } 
-                                    placeholder='Prénom' />
-
-                                <InputText 
-                                    onChangeText={(text) => this.setState({phoneNumber:text}) } 
-                                    placeholder='Téléphone' />
-
-                                <InputText 
-                                    onChangeText={(text) => this.setState({password:text}) } 
-                                    placeholder='Mot de passe'
-                                    secureTextEntry />
-
-                                <ButtonSubmit 
-                                    text="S'inscrire"
-                                    style={{marginTop:40}}
-                                    loading={ this.props.loadingAdd }
-                                    onPress={ this.handleRegister }
-                                    />
-                            </View>
-                        </KeyboardAvoidingView>
-
-                        <View style={{alignItems: 'center', justifyContent:'center',  flex:1}}>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('login')}>
-                                <Text style={styles.footerText}>Se connecter</Text>
-                            </TouchableOpacity>
+                    <KeyboardAvoidingView behavior="position" style={{alignItems: 'center', justifyContent:'center',flex:8}}>
+                        <View style={{alignItems: 'center', justifyContent:'flex-end', flex:1 }}>
+                            <Text style={styles.loginTitle}>Inscription</Text>
+                            <Text style={styles.loginSubTitle}>Qui êtes vous ? </Text>
                         </View>
-                    </ScrollView>
-                </ImageBackground>
-            </View>
-          : null
+
+                        <View style={{alignItems: 'center', justifyContent:'space-around', flexDirection:'row', flex:1 }}>
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={styles.typeText}>Un locataire</Text> 
+                                <TouchableWithoutFeedback onPress={this.handleClickLocataire}>
+                                    <Animated.Image source={require('../assets/locataire.png')} style={{width:this.roomerTypeStyle, height:this.roomerTypeStyle}} />
+                                </TouchableWithoutFeedback>
+                                
+                            </View>
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={styles.typeText}>Un propriétaire</Text>
+                                <TouchableWithoutFeedback onPress={this.handleClickProprietaire}>
+                                    <Animated.Image source={require('../assets/proprietaire.png')} style={{width:this.ownerTypeStyle, height:this.ownerTypeStyle}} />
+                                </TouchableWithoutFeedback>
+                                
+                            </View>
+                        </View>
+
+                    
+                        <View style={styles.form}>
+
+                            <InputText 
+                                onChangeText={(text) => this.setState({email:text}) } 
+                                placeholder='Email' />
+
+                                <InputText 
+                                onChangeText={(text) => this.setState({lastName:text}) } 
+                                placeholder='Nom' />
+
+                            <InputText 
+                                onChangeText={(text) => this.setState({firstName:text}) } 
+                                placeholder='Prénom' />
+
+                            <InputText 
+                                onChangeText={(text) => this.setState({phoneNumber:text}) } 
+                                placeholder='Téléphone' />
+
+                            <InputText 
+                                onChangeText={(text) => this.setState({password:text}) } 
+                                placeholder='Mot de passe'
+                                secureTextEntry />
+
+                            <ButtonSubmit 
+                                text="S'inscrire"
+                                style={{marginTop:40}}
+                                loading={ this.props.loadingAdd }
+                                onPress={ this.handleRegister }
+                                />
+                        </View>
+                    </KeyboardAvoidingView>
+
+                    <View style={{alignItems: 'center', justifyContent:'center',  flex:1}}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('login')}>
+                            <Text style={styles.footerText}>Se connecter</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+            </ImageBackground>
+        </View>
     );
   }
 }

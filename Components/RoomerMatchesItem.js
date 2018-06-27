@@ -42,7 +42,6 @@ export default RoomerMatchesItem;
 const styles= StyleSheet.create({
     container: {
         flex:               1,
-        elevation:          2,
         borderColor:        '#ccc',
         borderRadius:       2,
         borderWidth:        0,

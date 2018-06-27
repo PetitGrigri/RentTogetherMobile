@@ -20,7 +20,7 @@ class TabContent extends Component {
                     translucent
                     barStyle={ Platform.OS === 'ios'? 'dark-content' : 'light-content' }
                 />
-                <View style={[styles.container, this.props.styles]}>
+                <View style={[styles.container, this.props.style]}>
                     { this.props.children }
                 </View>
             </SafeAreaView>
@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     container: { 
         flex:               1,
         backgroundColor:    '#eee',
-        elevation: 5,
     },
     
   });
