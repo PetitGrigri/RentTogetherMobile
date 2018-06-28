@@ -14,13 +14,14 @@ class ConversationItem extends Component {
         createdDate:    PropTypes.string.isRequired,
         messages:       PropTypes.array.isRequired,
         participants:   PropTypes.array.isRequired,
+        title:          PropTypes.string.isRequired,
     }
 
     render() {
 
         console.log(this.props);
 
-        let { conversationId, createdDate, messages, participants } = this.props;
+        let { conversationId, createdDate, messages, participants, title } = this.props;
 
         //récupération de la date du dernier message ou de la date de création de la conversation
         createdDate             = isset(messages[0]) ? messages[0].createdDate : createdDate;
@@ -32,13 +33,13 @@ class ConversationItem extends Component {
 
 
         return (
-            <TouchableOpacity onPress={() => this.props.handlePress(conversationId)}>
+            <TouchableOpacity onPress={() => this.props.handlePress(conversationId, title)}>
                 <View style={ styles.row }>
                     <UserImage style={ styles.avatar } userId={ userParticipants[0].userId } />
                     <View style={styles.right}>
                         <View style={styles.rightTop}>
-                            <Text style={ styles.users }>
-                                { userParticipants[0].firstName } { userParticipants[0].lastName }
+                            <Text style={ styles.users } numberOfLines={1}>
+                                { this.props.title }
                             </Text>
                             <Text style={ styles.date }>
                                 { convertStringToDateFR(createdDate) }
@@ -84,19 +85,24 @@ const styles = StyleSheet.create({
     rightTop: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems:     'center',
         flex:1,
     },
     users: {
-        fontFamily: 'open-sans-regular', 
-        fontSize: 16,
-        color: '#000',
-        marginBottom: 4
+        fontFamily:     'open-sans-regular', 
+        fontSize:       16,
+        color:          '#000',
+        marginBottom:   4,
+        flex:           2,
     },
     date: {
-        fontFamily: 'open-sans-light', 
-        fontSize: 14,
-        color: '#333',
-        marginBottom: 4
+        fontFamily:     'open-sans-light', 
+        fontSize:       14,
+        color:          '#333',
+        marginBottom:   4,
+        width:          130,
+        textAlign:      'right'
+
     },
     secondaryText: { 
         color: '#333',

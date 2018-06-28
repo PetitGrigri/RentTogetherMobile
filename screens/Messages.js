@@ -12,7 +12,7 @@ class Messages extends Component {
 
     static navigationOptions = ({ navigation }) => {
         return {
-            title: 'test'
+            title: navigation.getParam('title'), 
         };
     };
 

@@ -16,9 +16,10 @@ class Conversations extends Component {
         super(props)
     }
     
-    handlePress = (conversationId) => {
+    handlePress = (conversationId, title) => {
         this.props.navigation.navigate('messages', {
             conversation:       this.props.conversations.filter(conversation => conversation.conversationId === conversationId)[0],
+            title:              title
         });
     }
 
@@ -32,10 +33,12 @@ class Conversations extends Component {
         let title =  conversation.item.participants
                         .filter((participant) =>  this.props.currentUser.userId != participant.userApiDto.userId )
                         .map(participant => participant.userApiDto)
-                        .reduce((accumulator, participant) => accumulator + `${participant.firstName} ${participant.lastName}`);
+                        .reduce((accumulator, participant) => { 
+                            let virgule = accumulator.length > 0 ? ', ' : '';
+                            return accumulator + virgule + `${participant.firstName} ${participant.lastName}`;
+                        } , '');
 
         console.log(title);
-
 
         /*
 
@@ -49,7 +52,7 @@ class Conversations extends Component {
 
 
 
-        return <ConversationItem {...conversation.item} handlePress={ this.handlePress } />
+        return <ConversationItem {...conversation.item} handlePress={ this.handlePress } title={ title }/>
     }
 
     render() {

@@ -18,8 +18,9 @@ const ApplicationNavigator = createStackNavigator({
         screen: Messages, 
         navigationOptions: {
             headerStyle: {
-                backgroundColor: '#ff8f00',
+                backgroundColor:    '#ff8f00',       
             },
+            headerTintColor:        '#fff'
         }
     }
 });

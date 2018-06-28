@@ -9,7 +9,7 @@ export default class componentName extends Component {
 
             <TouchableOpacity style={styles.button} onPress={this.props.onPress}>
                 { this.props.loadingSend 
-                    ?   <ActivityIndicator size="small" color='#fff' />
+                    ?   <ActivityIndicator size="small" color='#ff8f00' />
                     :   <Ionicons color={ this.props.active ? '#ff8f00'  : '#ccc' }name='md-send' size={32} />
                 }  
             </TouchableOpacity>
