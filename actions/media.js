@@ -5,7 +5,13 @@ import {saveUserMedia } from '../utils/fileSystem';
 export const 
     USER_GET_USER_IMAGE_REQUEST     = 'USER_GET_USER_IMAGE_REQUEST',  
     USER_GET_USER_IMAGE_SUCCESS     = 'USER_GET_USER_IMAGE_SUCCESS',  
-    USER_GET_USER_IMAGE_ERROR       = 'USER_GET_USER_IMAGE_ERROR'
+    USER_GET_USER_IMAGE_ERROR       = 'USER_GET_USER_IMAGE_ERROR',
+
+    USER_POST_USER_IMAGE_REQUEST    = 'USER_POST_USER_IMAGE_REQUEST',  
+    USER_POST_USER_IMAGE_SUCCESS    = 'USER_POST_USER_IMAGE_SUCCESS',  
+    USER_POST_USER_IMAGE_ERROR      = 'USER_POST_USER_IMAGE_ERROR'
+
+    
 ;
 
 export const handleGetUserMedia =  (userId) => {
@@ -66,3 +72,71 @@ export const handleGetUserMediaError = (userId, error) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Méthode destinée à l'envoie d'un message
+ * @param {int} conversationId la coonversation dans laquelle on envoie un message
+ * @param {message} message le message que l'on souhaite envoyer
+ */
+export const handleUploadUserMedia = (imageURI) => {
+    return function (dispatch, getState) {
+
+        console.log('action 1', imageURI);
+    
+
+        // On dispatch le fait qu'on envoie un message
+        dispatch({
+            type: USER_POST_USER_IMAGE_REQUEST
+        })
+
+        // Utilisation de l'api pour envoyer un message
+        api.postUploadUserImage(
+            getState().connection.user.token,
+            getState().connection.user.userId,
+            imageURI,
+            (message) => { dispatch(handleUploadUserMediaSucess(message)) },
+            (error) => { dispatch(handleUploadUserMediaError(error)) }
+        )
+        
+
+        console.log('action 3');
+    }
+}
+
+
+/**
+ * Méthode permettant d'informer que l'image a bien été uploadé
+ * @param {object} message 
+ */
+export const handleUploadUserMediaSucess = (message) => {
+
+    //retour de l'action
+    return {
+        type:       USER_POST_USER_IMAGE_SUCCESS,
+    } 
+};
+
+/**
+ * Méthode permettant d'indiquer que l'image n'a pas pu être uploadé
+ * @param {string} error le message d'erreur
+ */
+export const handleUploadUserMediaError = (error) => {
+    return {
+        type:   USER_POST_USER_IMAGE_ERROR,
+        error:  error
+    }
+};

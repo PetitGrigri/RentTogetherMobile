@@ -38,20 +38,6 @@ class Conversations extends Component {
                             return accumulator + virgule + `${participant.firstName} ${participant.lastName}`;
                         } , '');
 
-        console.log(title);
-
-        /*
-
-        TODO REPRENDRE ICI, POUR AVOIR UN TITRE DE CONVERSATION QU'ON POURRA TRANSMETTRE A l'ITEM
-        + 
-        DEPLACER ITEM DANS COMPONENT (IL n'AURA PLUS BESOIN DE REDUX)
-        +
-        LOADING BUTTON SEND EN ORANGE
-
-        */
-
-
-
         return <ConversationItem {...conversation.item} handlePress={ this.handlePress } title={ title }/>
     }
 

@@ -364,8 +364,6 @@ export const getMessages = function(token, conversationId, filter, callBackOk, c
 }
 
 
-
-
 /**
  * Fonction permettant de poster un message
  * 
@@ -378,7 +376,6 @@ export const getMessages = function(token, conversationId, filter, callBackOk, c
  */
 export const postMessage = function(token, userId, conversationId, message,  callBackOk, callBackError) {
 
-    console.log('API 0', token, userId, conversationId, message,  callBackOk, callBackError)
     // Le header contiendra le token d'authentification plus tard
     var myHeaders = new Headers({
         'Content-Type':     'application/json',
@@ -401,15 +398,12 @@ export const postMessage = function(token, userId, conversationId, message,  cal
         body: jsonMessageString
     };
 
-    console.log('API 1');
-
     fetch(url+ "/messages", options)
         .then(response => {
             if (response.ok === true) {
                 return response.json().catch(error => {
                     throw Error("Erreur de l'API.");
                 });
-                //TODO ici ajouter utilisateur
             } else {
                 throw Error(response.statusText);
             }
@@ -420,6 +414,54 @@ export const postMessage = function(token, userId, conversationId, message,  cal
         .catch(error => {
             callBackError(error.message);
         });
+}
 
-    console.log('API 2');
+
+/**
+ * Fonction permettant de poster un message
+ * 
+ * @param {string} user L'objet FormData correspondant à l'utilisateur
+ * 
+ * 
+ * 
+ * @param {function} callBackOk 
+ * @param {function} callBackError 
+ */
+export const postUploadUserImage = function(token, userId, imageURI, callBackOk, callBackError) {
+
+    var formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('file', {uri: imageURI , name: 'user.jpg', type: 'image/jpg'});
+
+
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':     'multipart/form-data',
+        'Authorization':    'Bearer '+token
+    });
+
+    //les paramètres de la requête
+    var options = {
+        method:  'POST',
+        headers: myHeaders,
+        mode:   'cors',
+        body:   formData
+    };
+
+    fetch(url+ "/media", options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(message => {
+            callBackOk(message);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
 }

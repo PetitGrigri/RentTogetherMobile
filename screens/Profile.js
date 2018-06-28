@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, SectionList, ScrollView, StatusBar } from 'react-native';
+import { StyleSheet, View, SectionList, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Text from  '../Components/Text';
-import { Foundation, MaterialCommunityIcons} from '@expo/vector-icons';
+import { Foundation, MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
 import Rating from '../Components/Rating';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { handleGetUserMedia } from '../actions/media';
+import { handleGetUserMedia, handleUploadUserMedia } from '../actions/media';
 import { connect } from 'react-redux'
 import { UserImage, UserImageBackground } from '../containers';
 
@@ -39,9 +39,9 @@ const itemRowCharacteristic = (props) => {
 
 }
 
-//TODO
-const titleHeader = (props) => {
-
+const titleHeader = (props)  => {
+    let {section: {title}} = props
+    return <Text h2 style={styles.titleProfile}>{ title }</Text>
 }
 
 class Profile extends Component {
@@ -57,7 +57,7 @@ class Profile extends Component {
 
     changeRadius = (nativeEvent) => {
         this.setState({avatarRadius: nativeEvent.layout.width / 2 })
-    }
+    };
 
     componentDidMount = () => {
         this.props.handleGetUserMedia(this.props.user.userId);
@@ -116,6 +116,44 @@ class Profile extends Component {
         }];
     }
 
+
+    pickAPhoto = async () => {
+
+        const { status } = await Expo.Permissions.getAsync(Expo.Permissions.CAMERA)
+        if (status !== 'granted') {
+            await Expo.Permissions.askAsync(Expo.Permissions.CAMERA)
+        }
+
+        let result = await Expo.ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+        });
+
+        console.log(result);
+
+
+        info = await Expo.FileSystem.getInfoAsync(result.uri, {size: true});
+        console.log('ORIGINALE', info);
+
+
+        let resultResized = await Expo.ImageManipulator.manipulate( result.uri, [{ resize: { width: 1000 }}], { format: 'jpg', compress: 0.8} );
+
+        console.log(resultResized)
+        
+
+        info = await Expo.FileSystem.getInfoAsync(resultResized.uri, {size: true});
+        console.log('REDIMENSIONNE', info);
+            
+        this.props.handleUploadUserMedia(resultResized.uri);
+
+
+    }
+
+
+
+
+
+
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -123,6 +161,16 @@ class Profile extends Component {
                     userId= { this.props.user.userId }
                     style= {[styles.imageHeader, { paddingTop: getStatusBarHeight() }  ]}
                     blurRadius= { 10 }>
+
+                    <View style={ [ styles.imageHeaderIcons , { top: getStatusBarHeight() }]} >
+                        { !this.props.loadingUpload 
+                            ?   <TouchableOpacity onPress={ this.pickAPhoto }>
+                                    <Ionicons color='#fff' name='ios-camera' size={32} />
+                                </TouchableOpacity>
+                            :   <ActivityIndicator size="small" color='#fff' />
+                        }
+                    </View>
+
                     <UserImage 
                         userId= { this.props.user.userId }
                         style={ [styles.imageAvatar, {borderRadius: this.state.avatarRadius} ] } 
@@ -135,9 +183,7 @@ class Profile extends Component {
                     <View style={styles.containerInformations}>
                         <SectionList
                             renderItem={({ item, index, section }) => <Text key={index}>{item}</Text>}
-                            renderSectionHeader={({section: {title}}) => (
-                                <Text h2 style={styles.titleProfile}>{title}</Text>
-                            )}
+                            renderSectionHeader={ (props) => titleHeader(props) }
                             sections={ this.getSections() }
                             keyExtractor={(item, index) => item + index}
                         />
@@ -153,16 +199,22 @@ const mapStateToProps = state => ({
     messageError:   state.media.messageError,
     image:          state.media.usersMedia[state.connection.user.userId] ? state.media.usersMedia[state.connection.user.userId] : null,
     user:           state.connection.user,
+    loadingUpload:  state.media.userMediaUpaloadLoading,
 });
 
 const mapDispatchToProps = dispatch => ({
-    handleGetUserMedia: (userId) => dispatch(handleGetUserMedia(userId)),
+    handleGetUserMedia:     (userId) => dispatch(handleGetUserMedia(userId)),
+    handleUploadUserMedia:  (imageURI) => dispatch(handleUploadUserMedia(imageURI)),
 });
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Profile);
+
+
+
+
 
 
 
@@ -233,6 +285,12 @@ const styles = StyleSheet.create({
         backgroundColor:    '#eee',
         height:             20,
         borderRadius:       10,
+    },
+    imageHeaderIcons: {
+        width:              '100%',
+        position:           'absolute',
+        padding:            16,
+        justifyContent:     'center',
+        alignItems:         'flex-end',
     }
-
 });
