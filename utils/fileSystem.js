@@ -9,7 +9,7 @@ const folderUserMedia = `${Expo.FileSystem.documentDirectory}users-media`;
  */
 export const saveUserMedia = async (userId, image) =>  {
     //création du dossier des images des utilisateurs s'il n'existe pas
-    let etatDossier = await createUserMediaFolderIfNotExist();
+    await createUserMediaFolderIfNotExist();
     
     // Création de l'URI de l'image
     let imageURI = `${folderUserMedia}/user_${userId}.png`;
@@ -23,11 +23,33 @@ export const saveUserMedia = async (userId, image) =>  {
     return imageURI
 };
 
+/**
+ * @param {id} userId 
+ * @param {blob} image 
+ */
+export const saveUserUpdatedMedia = async (userId, image) =>  {
+    //création du dossier des images des utilisateurs s'il n'existe pas
+    await createUserMediaFolderIfNotExist();
+    
+    var now = Date.now();
+
+    // Création de l'URI de l'image
+    //TODO Récupérer l'ancienne image vi REDUX
+    let imageURINew = `${folderUserMedia}/user_${userId}-${now}.png`;
+
+    //suppression de l'image précédente de l'utilisateur si elle existe
+
+
+    //écriture du contenu de l'image
+    await Expo.FileSystem.writeAsStringAsync(imageURINew, image);
+
+    return imageURINew
+};
 
 /**
  * Fonction permettant la crétion du dossier de média quand ce dernier n'existe pas
  */
-const createUserMediaFolderIfNotExist = async () => {
+export const createUserMediaFolderIfNotExist = async () => {
     //récupération des informations sur le dossier
     let folderInfo = await Expo.FileSystem.getInfoAsync(folderUserMedia)
 
@@ -43,7 +65,8 @@ const createUserMediaFolderIfNotExist = async () => {
 /**
  * Fonction permettant de supprimer l'image d'un utilisateur si elle existe déjà
  */
-const deleteUserMediaIfExist = async (imageURI) => {
+export const deleteUserMediaIfExist = async (imageURI) => {
+
     // Récupération des informations sur l'existence potentielle d'une image préalablement enregistré
     let imageURIInfo = await Expo.FileSystem.getInfoAsync(imageURI);
 

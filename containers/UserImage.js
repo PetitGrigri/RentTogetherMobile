@@ -21,7 +21,7 @@ class UserImage extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         // Si le store redux vient de récupérer l'URI de l'utilisateur qui nous interesse, alors on récupère le contenu de l'URI
-        if ((!isset(prevProps.imagesUsers[this.props.userId])) && (isset(this.props.imagesUsers[this.props.userId]))) {
+        if (prevProps.imagesUsers[this.props.userId] != this.props.imagesUsers[this.props.userId]) {
 
             getUserMedia(this.props.imagesUsers[this.props.userId], (imageContent) => { 
                 this.setState({ 

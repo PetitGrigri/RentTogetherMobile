@@ -450,16 +450,22 @@ export const postUploadUserImage = function(token, userId, imageURI, callBackOk,
 
     fetch(url+ "/media", options)
         .then(response => {
+            console.log('API 1', response);
             if (response.ok === true) {
-                return response.json().catch(error => {
-                    throw Error("Erreur de l'API.");
-                });
+                return response.blob();
             } else {
                 throw Error(response.statusText);
             }
         })
-        .then(message => {
-            callBackOk(message);
+        .then(blob => {
+            console.log('API 2');
+            var reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                callBackOk(reader.result)
+            }, false);
+
+            reader.readAsDataURL(blob);
         })
         .catch(error => {
             callBackError(error.message);

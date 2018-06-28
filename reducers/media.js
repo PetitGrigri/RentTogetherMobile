@@ -60,6 +60,8 @@ const media = (state = initialMediaState, action) => {
 
             return Object.assign({}, state, {
                 userMediaUpaloadLoading:    false,
+                usersMedia          : Object.assign({}, state.usersMedia, { [action.userId] : action.image })
+
             });
 
         case USER_POST_USER_IMAGE_ERROR : 

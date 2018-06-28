@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, SectionList, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, SectionList, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import Text from  '../Components/Text';
 import { Foundation, MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
 import Rating from '../Components/Rating';
@@ -7,7 +7,7 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { handleGetUserMedia, handleUploadUserMedia } from '../actions/media';
 import { connect } from 'react-redux'
 import { UserImage, UserImageBackground } from '../containers';
-
+import { Alert } from 'react-native';
 
 const itemRow = (props) => {
     let { index, item } = props;
@@ -119,39 +119,52 @@ class Profile extends Component {
 
     pickAPhoto = async () => {
 
-        const { status } = await Expo.Permissions.getAsync(Expo.Permissions.CAMERA)
-        if (status !== 'granted') {
+        // Demande de la permission camera
+        let cameraPermission = await Expo.Permissions.getAsync(Expo.Permissions.CAMERA)
+        if (cameraPermission.status !== 'granted') {
             await Expo.Permissions.askAsync(Expo.Permissions.CAMERA)
         }
 
+        // Demande de la permission camera (semble nécessaire pour iOS)
+        if (Platform.OS === 'ios') {
+            let cameraRollPermission= await Expo.Permissions.getAsync(Expo.Permissions.CAMERA_ROLL)
+            if (cameraRollPermission.status  !== 'granted') {
+                await Expo.Permissions.askAsync(Expo.Permissions.CAMERA_ROLL)
+            }
+        }
+
+
+        // Si on n'a pas de permission, on arrête là
+        if (((Platform.OS === 'ios') && ((cameraPermission.status  !== 'granted') || (cameraRollPermission.status  !== 'granted'))) ||
+            ((Platform.OS !== 'ios') && (cameraPermission.status  !== 'granted')) ) {
+                // Message d'erreur en cas de refus
+                Alert.alert(
+                    'Erreur',
+                    "Autorisation refusée",
+                    [
+                        {text: 'OK'},
+                    ],
+                    { cancelable: true }
+                )
+            return
+        }
+
+        // Si on a les permissions, on peu continuer à prendre une photo 
         let result = await Expo.ImagePicker.launchCameraAsync({
             allowsEditing: true,
             aspect: [1, 1],
         });
 
-        console.log(result);
-
-
-        info = await Expo.FileSystem.getInfoAsync(result.uri, {size: true});
-        console.log('ORIGINALE', info);
-
-
+        // Redimentionnement de la photo (et modificaiton de son type en jpg (plus léger pour le transport)
         let resultResized = await Expo.ImageManipulator.manipulate( result.uri, [{ resize: { width: 1000 }}], { format: 'jpg', compress: 0.8} );
 
-        console.log(resultResized)
-        
+        //debug au cas ou
+        //info = await Expo.FileSystem.getInfoAsync(resultResized.uri, {size: true});
+        //console.log('REDIMENSIONNE', info);
 
-        info = await Expo.FileSystem.getInfoAsync(resultResized.uri, {size: true});
-        console.log('REDIMENSIONNE', info);
-            
+        //transmission de la photo 
         this.props.handleUploadUserMedia(resultResized.uri);
-
-
     }
-
-
-
-
 
 
     render() {

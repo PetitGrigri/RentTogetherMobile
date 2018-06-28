@@ -1,5 +1,5 @@
 import * as api from '../api/api.js';
-import {saveUserMedia } from '../utils/fileSystem';
+import {saveUserMedia, saveUserUpdatedMedia, deleteUserMediaIfExist } from '../utils/fileSystem';
 
 //Types d'actions destinées à la connexion
 export const 
@@ -34,10 +34,10 @@ export const handleGetUserMedia =  (userId) => {
             async (userId, image) => { 
                 // Sauvegarde du contenu de l'image que l'on vient de récupérer, et récupération de son URI
                 let userImageURI =  await saveUserMedia(userId, image)
-                // Dispatch de l'URI
+                
                 dispatch(handleGetUserMediaSuccess(userId, userImageURI)) 
             },
-            (userId, error) => { dispatch(handleGetUserMediaError(userId, error)) }
+            (userId, error) => { dispatch(handleGetUserMediaError(error)) }
         )
     }
 };
@@ -95,25 +95,30 @@ export const handleGetUserMediaError = (userId, error) => {
 export const handleUploadUserMedia = (imageURI) => {
     return function (dispatch, getState) {
 
-        console.log('action 1', imageURI);
-    
-
         // On dispatch le fait qu'on envoie un message
         dispatch({
             type: USER_POST_USER_IMAGE_REQUEST
         })
 
+        //récupération de l'id de l'utilisateur, et de l'ancienne uri de son image
+        let userId          = getState().connection.user.userId;
+        let userOldImageURI = getState().media.usersMedia[userId];
+
+        console.log('userOldImageURI', userOldImageURI);
         // Utilisation de l'api pour envoyer un message
         api.postUploadUserImage(
             getState().connection.user.token,
-            getState().connection.user.userId,
+            userId,
             imageURI,
-            (message) => { dispatch(handleUploadUserMediaSucess(message)) },
+            async (image) => { 
+                // Sauvegarde du contenu de l'image que l'on vient de récupérer, et récupération de son URI
+                console.log('SAUVEGARDE DE LA NOUVELLE IMAGE ', userId);
+                let userImageURI =  await saveUserUpdatedMedia(userId, image)
+                // Dispatch de l'URI
+                dispatch(handleUploadUserMediaSuccess(userId, userOldImageURI, userImageURI)) 
+            },
             (error) => { dispatch(handleUploadUserMediaError(error)) }
         )
-        
-
-        console.log('action 3');
     }
 }
 
@@ -122,12 +127,21 @@ export const handleUploadUserMedia = (imageURI) => {
  * Méthode permettant d'informer que l'image a bien été uploadé
  * @param {object} message 
  */
-export const handleUploadUserMediaSucess = (message) => {
+export const handleUploadUserMediaSuccess = (userId, userOldImageURI, userImageURI) => {
+    console.log(userId, userOldImageURI, userImageURI);
+    return async function (dispatch, getState) {
 
-    //retour de l'action
-    return {
-        type:       USER_POST_USER_IMAGE_SUCCESS,
-    } 
+        console.log(userId, userOldImageURI, userImageURI);
+        // Suppression de l'ancienne image
+        await deleteUserMediaIfExist(userOldImageURI);
+
+        //retour de l'action
+        dispatch({
+            type:       USER_POST_USER_IMAGE_SUCCESS,
+            image:      userImageURI,
+            userId:     userId,
+        });
+    }
 };
 
 /**
