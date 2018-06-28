@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 import TabNavigator from './TabNavigator';
 import Messages from '../screens/Messages';
+import UpdateParam from '../screens/UpdateParam';
 
 const ApplicationNavigator = createStackNavigator({
     home: {
@@ -17,6 +18,16 @@ const ApplicationNavigator = createStackNavigator({
     messages: {
         screen: Messages, 
         navigationOptions: {
+            headerStyle: {
+                backgroundColor:    '#ff8f00',       
+            },
+            headerTintColor:        '#fff'
+        }
+    },
+    updateParam: { 
+        screen: UpdateParam, 
+        navigationOptions: {
+            title:  'Mes informations',
             headerStyle: {
                 backgroundColor:    '#ff8f00',       
             },

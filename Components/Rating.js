@@ -42,6 +42,7 @@ class Rating extends Component {
         let rating      = Math.ceil(((positionX-padding) / this.state.wrapperWith) * this.props.fractions);
 
         rating =(rating <= 0) ? 1 : rating
+        rating =(rating > 5) ? 5 : rating
 
         if (this.state.value != rating) {
             this.props.onChange(rating);

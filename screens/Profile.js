@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, SectionList, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import Text from  '../Components/Text';
-import { Foundation, MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
+import { Foundation, MaterialCommunityIcons, Entypo, Ionicons} from '@expo/vector-icons';
 import Rating from '../Components/Rating';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { handleGetUserMedia, handleUploadUserMedia } from '../actions/media';
@@ -40,8 +40,17 @@ const itemRowCharacteristic = (props) => {
 }
 
 const titleHeader = (props)  => {
-    let {section: {title}} = props
-    return <Text h2 style={styles.titleProfile}>{ title }</Text>
+    let {section: {title, onPress}} = props
+
+    return  <View style={ styles.titleSection }>
+                <Text h2 style={styles.titleProfile}>{ title }</Text>
+                { onPress 
+                    ?   <TouchableOpacity onPress={ onPress  }>
+                            <Entypo  color='#ccc' name='edit' size={ 18 } style={styles.editParam }/>
+                        </TouchableOpacity>
+                    :   null 
+                }
+            </View>
 }
 
 class Profile extends Component {
@@ -61,23 +70,24 @@ class Profile extends Component {
 
     componentDidMount = () => {
         this.props.handleGetUserMedia(this.props.user.userId);
-
     };
     
     getSections = () => {
         return [{   
             title: 'Mes informations', 
             data: [{
-                label : "Nom",
-                value: this.props.user.lastName,
+                label :     "Nom",
+                value:      this.props.user.lastName,
             }, {
-                label : "Prénom",
-                value: this.props.user.firstName,
+                label :     "Prénom",
+                value:      this.props.user.firstName,
+                
             }, {
-                label: "Email",
-                value: this.props.user.email,
+                label:      "Email",
+                value:      this.props.user.email,
             }], 
-            renderItem: itemRow 
+            renderItem: itemRow,
+            onPress: () => this.changeParam(),
         }, {   
             title: 'Mes recherches', 
             data: [{
@@ -117,6 +127,12 @@ class Profile extends Component {
     }
 
 
+    changeParam = () =>{
+        this.props.navigation.navigate('updateParam')
+        
+    }
+
+
     pickAPhoto = async () => {
 
         // Demande de la permission camera
@@ -146,7 +162,7 @@ class Profile extends Component {
                     ],
                     { cancelable: true }
                 )
-            return
+            return;
         }
 
         // Si on a les permissions, on peu continuer à prendre une photo 
@@ -154,6 +170,11 @@ class Profile extends Component {
             allowsEditing: true,
             aspect: [1, 1],
         });
+
+        // Si l'utilisateur a annulé, on quitte
+        if (result.cancelled === true) {
+            return;
+        }
 
         // Redimentionnement de la photo (et modificaiton de son type en jpg (plus léger pour le transport)
         let resultResized = await Expo.ImageManipulator.manipulate( result.uri, [{ resize: { width: 1000 }}], { format: 'jpg', compress: 0.8} );
@@ -262,6 +283,7 @@ const styles = StyleSheet.create({
     titleProfile: {
         fontFamily: 'open-sans-light', 
         color:      '#e65100',
+        flex:       1,
     },
     containerInformations: {
         margin: 16,
@@ -305,5 +327,14 @@ const styles = StyleSheet.create({
         padding:            16,
         justifyContent:     'center',
         alignItems:         'flex-end',
+    }, 
+    editParam: {
+        width:          30,
+        textAlign:      'right',
+
+    }, 
+    titleSection: {
+        flexDirection:  'row',
+        alignItems:     'center',
     }
 });

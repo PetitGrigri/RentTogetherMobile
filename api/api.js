@@ -189,8 +189,6 @@ export const putUser = function(user, token, callBackOk, callBackError) {
         'Authorization':'Bearer '+ token
     });
 
-    console.log(user);
-
     // Conversion de notre FormData en objet 
     var jsonUserString = JSON.stringify(user);
     
@@ -228,6 +226,52 @@ export const putUser = function(user, token, callBackOk, callBackError) {
         });
 }
 
+
+
+
+/**
+ * Fonction destinée à la modification d'un utilisateur
+ * 
+ * @param {user} user L'objet utilisateur à enregistrer
+ * @param {string} token Le token de l'utilisateur supprimé
+ * @param {function} callBackOk Le callback à utiliser lorsque l'utilisateur a été supprimé (ce dernier recevra l'id de l'utilisateur supprimé en paramêtre)
+ * @param {function} callBackError Le callback à utiliser lorsque l'utilisateur n'a pas été supprimé (ce dernier recevra un message d'erreur)
+ */
+export const patchUser = function(user, token, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+   var myHeaders = new Headers({
+       'Content-Type':'application/json',
+       'Authorization':'Bearer '+ token
+   });
+
+   // Conversion de notre FormData en objet 
+   var jsonUserString = JSON.stringify(user);
+   
+   console.log(jsonUserString);
+
+   //les paramêtres de la requête
+   var options = {
+       method: 'PATCH',
+       headers: myHeaders,
+       mode: 'cors',
+       cache: 'default',
+       body: jsonUserString
+   };
+
+   //réalisation de la requête
+   fetch(url+ "/Users/"+user.userId, options)
+       .then(response => {
+           if (response.ok === true) {
+               return response.json().catch(error => {
+                   throw Error("Erreur de l'API.");
+               });
+           } else {
+               throw Error(response.statusText);
+           }
+       })
+       .then(dataUser => callBackOk(dataUser))
+       .catch(error => callBackError(error.message));
+}
 
 
 
