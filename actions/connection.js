@@ -10,7 +10,10 @@ export const
     // Récupération d'un utilisateur avec son token 
     SIGN_IN_WITH_PREVIOUS_TOKEN_REQUEST    = 'SIGN_IN_WITH_PREVIOUS_TOKEN_REQUEST',
     SIGN_IN_WITH_PREVIOUS_TOKEN_SUCCESS    = 'SIGN_IN_WITH_PREVIOUS_TOKEN_SUCCESS',
-    SIGN_IN_WITH_PREVIOUS_TOKEN_ERROR      = 'SIGN_IN_WITH_PREVIOUS_TOKEN_ERROR'
+    SIGN_IN_WITH_PREVIOUS_TOKEN_ERROR      = 'SIGN_IN_WITH_PREVIOUS_TOKEN_ERROR',
+
+    // Déconnection
+    LOGOUT  = 'LOGOUT'
     ;
 
 // Le nom des variables que l'on pourrait utiliser pour la connexion
@@ -128,3 +131,10 @@ export const handleGetUserWithTokenError = (error) => {
         message:    error
     }
 }
+
+export const handleLogout = () => {
+    return {
+        type:       LOGOUT,
+    }
+}
+

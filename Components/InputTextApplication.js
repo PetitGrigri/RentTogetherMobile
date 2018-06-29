@@ -49,8 +49,8 @@ const inputTextStyle = StyleSheet.create({
         marginTop:          5,
     },
     formInput:{
-        marginLeft:     20,
-        marginRight:    20,
+        marginLeft:     8,
+        marginRight:    8,
         height:         40,
         fontFamily:     'open-sans-light',
         fontSize:       24,     

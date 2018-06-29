@@ -1,11 +1,15 @@
 import { 
     SIGN_IN_REQUEST, 
     SIGN_IN_ERROR, 
-    SIGN_IN_SUCESS, 
+    SIGN_IN_SUCESS,
+
     SIGN_IN_HIDE_ERROR,
+
     SIGN_IN_WITH_PREVIOUS_TOKEN_REQUEST,
     SIGN_IN_WITH_PREVIOUS_TOKEN_SUCCESS,
-    SIGN_IN_WITH_PREVIOUS_TOKEN_ERROR
+    SIGN_IN_WITH_PREVIOUS_TOKEN_ERROR,
+
+    LOGOUT,
  }from '../actions/connection.js'
 
 
@@ -61,6 +65,8 @@ const connection = (state = initialConnectionState, action) => {
             });
 
 
+
+
         case SIGN_IN_WITH_PREVIOUS_TOKEN_REQUEST:
             return Object.assign({}, state, {
                 loadingSignInToken: true,
@@ -77,6 +83,13 @@ const connection = (state = initialConnectionState, action) => {
             });
         
 
+        case LOGOUT:
+            return Object.assign({}, state, {
+                loadingSignIn :     false,
+                isAuthenticated :   false,
+                user:               {},
+            });
+            
         //autres 
         default : 
             return state;

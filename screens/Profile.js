@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, SectionList, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import Text from  '../Components/Text';
-import { Foundation, MaterialCommunityIcons, Entypo, Ionicons} from '@expo/vector-icons';
+import { Foundation, MaterialCommunityIcons, Entypo, Ionicons, SimpleLineIcons} from '@expo/vector-icons';
 import Rating from '../Components/Rating';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { handleGetUserMedia, handleUploadUserMedia } from '../actions/media';
+import { handleLogout } from '../actions/connection';
+import { TOKEN_NAME } from '../actions/connection';
 import { connect } from 'react-redux'
 import { UserImage, UserImageBackground } from '../containers';
 import { Alert } from 'react-native';
@@ -40,16 +42,17 @@ const itemRowCharacteristic = (props) => {
 }
 
 const titleHeader = (props)  => {
-    let {section: {title, onPress}} = props
+    let {section: {title, actionTitle, action}} = props
 
     return  <View style={ styles.titleSection }>
-                <Text h2 style={styles.titleProfile}>{ title }</Text>
-                { onPress 
-                    ?   <TouchableOpacity onPress={ onPress  }>
-                            <Entypo  color='#ccc' name='edit' size={ 18 } style={styles.editParam }/>
-                        </TouchableOpacity>
+                { (title && (!actionTitle)) ? <Text h2 style={styles.titleProfile}>{ title }</Text> : null }
+                { actionTitle 
+                    ?   <TouchableOpacity onPress= { actionTitle } style={styles.actionTitle}>
+                            <Text h2 style={styles.titleProfile}>{ title }</Text>
+                        </TouchableOpacity> 
                     :   null 
                 }
+                { action  ?   action  :   null  }
             </View>
 }
 
@@ -87,7 +90,7 @@ class Profile extends Component {
                 value:      this.props.user.email,
             }], 
             renderItem: itemRow,
-            onPress: () => this.changeParam(),
+            action: <TouchableOpacity onPress={ this.changeParam  }><Entypo  color='#aaa' name='edit' size={ 18 } style={styles.editParam }/></TouchableOpacity>
         }, {   
             title: 'Mes recherches', 
             data: [{
@@ -123,6 +126,11 @@ class Profile extends Component {
 
             ],
             renderItem: itemRowCharacteristic 
+        }, {
+            title:          'Se déconnecter',
+            actionTitle:    this.logout,
+            action:         <TouchableOpacity onPress={ this.logout }><SimpleLineIcons  color='#aaa' name='logout' size={ 18 } style={styles.editParam }/></TouchableOpacity>,
+            data:           [],
         }];
     }
 
@@ -188,6 +196,12 @@ class Profile extends Component {
     }
 
 
+    logout = () => {
+        Expo.SecureStore.deleteItemAsync(TOKEN_NAME)
+            .then(() => this.props.handleLogout())
+    }
+
+
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -239,6 +253,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     handleGetUserMedia:     (userId) => dispatch(handleGetUserMedia(userId)),
     handleUploadUserMedia:  (imageURI) => dispatch(handleUploadUserMedia(imageURI)),
+    handleLogout:           () => dispatch(handleLogout()),
 });
 
 export default connect(
@@ -336,5 +351,9 @@ const styles = StyleSheet.create({
     titleSection: {
         flexDirection:  'row',
         alignItems:     'center',
+        marginTop:      10,
+    },
+    actionTitle: {
+        flex:       1,
     }
 });

@@ -84,7 +84,7 @@ class UpdateParam extends Component {
                         <ButtonSubmit 
                             text="Enregistrer"
                             style={{marginTop:40}}
-                            /*loading={ this.props.loadingAdd }*/
+                            loading={ this.props.loadingAdd }
                             onPress={ this.handlePatchUser }
                         />
                     
@@ -98,6 +98,7 @@ class UpdateParam extends Component {
 const mapStateToProps = state => ({
     user:           state.connection.user,
     image:          state.media.usersMedia[state.connection.user.userId] ? state.media.usersMedia[state.connection.user.userId] : null,
+    loadingAdd:     state.utilisateurs.loadingAdd,
 });
 
 const mapDispatchToProps = dispatch => ({

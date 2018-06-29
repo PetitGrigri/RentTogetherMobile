@@ -8,18 +8,22 @@ export const
     USER_GET_USERS_ERROR    = 'USER_GET_USERS_ERROR',
     // Ajout d'un utilisateur
     USER_ADD_USER_REQUEST = 'USER_ADD_USER',
-    USER_ADD_USER_SUCCESS= 'USER_ADD_USER_SUCCESS',
-    USER_ADD_USER_ERROR= 'USER_ADD_USER_ERROR',
+    USER_ADD_USER_SUCCESS=  'USER_ADD_USER_SUCCESS',
+    USER_ADD_USER_ERROR=    'USER_ADD_USER_ERROR',
     // Suppression d'un utilisateur
-    USER_DELETE_USER_REQUEST = 'USER_DELETE_USER_REQUEST',
-    USER_DELETE_USER_SUCCESS= 'USER_DELETE_USER_SUCCESS',
-    USER_DELETE_USER_ERROR= 'USER_DELETE_USER_ERROR',
-    // Modification d'un utilisateur
-    USER_UPDATE_USER_REQUEST = 'USER_UPDATE_USER_REQUEST',
-    USER_UPDATE_USER_SUCCESS= 'USER_UPDATE_USER_SUCCESS',
-    USER_UPDATE_USER_ERROR= 'USER_UPDATE_USER_ERROR',
+    USER_DELETE_USER_REQUEST =  'USER_DELETE_USER_REQUEST',
+    USER_DELETE_USER_SUCCESS=   'USER_DELETE_USER_SUCCESS',
+    USER_DELETE_USER_ERROR=     'USER_DELETE_USER_ERROR',
+    // Modification d'un utilisateur (PUT)
+    USER_PUT_USER_REQUEST = 'USER_PUT_USER_REQUEST',
+    USER_PUT_USER_SUCCESS=  'USER_PUT_USER_SUCCESS',
+    USER_PUT_USER_ERROR=    'USER_PUT_USER_ERROR',
+    //Modification d'un utilisateur (PATCH)
+    USER_PATCH_USER_REQUEST =   'USER_PATCH_USER_REQUEST',
+    USER_PATCH_USER_SUCCESS=    'USER_PATCH_USER_SUCCESS',
+    USER_PATCH_USER_ERROR=      'USER_PATCH_USER_ERROR',
     // Suppression des messages d'erreurs ou de réussite
-    USER_USER_HIDE_MESSAGES= 'USER_USER_HIDE_MESSAGES',
+    USER_USER_HIDE_MESSAGES=        'USER_USER_HIDE_MESSAGES',
     USER_USER_HIDE_POPUP_MESSAGES = 'USER_USER_HIDE_POPUP_MESSAGES'
 
     ;
@@ -51,7 +55,6 @@ export const handleCreateUser= (user) => {
 export const handleCreateUserSuccess = (dataUser) => {
     return {
         type: USER_ADD_USER_SUCCESS,
-        message: "L'utilisateur a été crée",
         user: dataUser
     }
 };
@@ -167,24 +170,18 @@ export const handleRemoveUserError = (error) => {
     }
 }
 
-
 /**
  * Fonction permettant de retourner l'action nécessaire pour vider les messages
  */
-export const handleHideMessages = () => {
+export const handleHideError = () => {
     return {
-        type: USER_USER_HIDE_MESSAGES
+        type: USER_USER_HIDE_ERROR
     } 
 };
 
-/**
- * Fonction permettant de retourner l'action nécessaire pour vider les messages contenus dans la popup
- */
-export const handleHideMessagesPopup = () => {
-    return {
-        type: USER_USER_HIDE_POPUP_MESSAGES
-    } 
-};
+
+
+
 
 /**
  * Fonction destinée à la création d'un utilisateur en utilisant l'objet user passé en paramètre 
@@ -192,19 +189,19 @@ export const handleHideMessagesPopup = () => {
  * 
  * @param {object} user  
  */
-export const handleUpdateUser= (user) => {
+export const handlePutUser= (user) => {
     return function (dispatch, getState) {
 
         dispatch({
-            type: USER_UPDATE_USER_REQUEST, 
+            type: USER_PUT_USER_REQUEST, 
             userId: user.userId
         });
 
         api.putUser(
             user,
             getState().connection.user.token,
-            (dataUser) => { dispatch(handleUpdateUserSuccess(dataUser)) },
-            (error) => { dispatch(handleUpdateUserError(error)) }
+            (dataUser) => { dispatch(handlePutUserSuccess(dataUser)) },
+            (error) => { dispatch(handlePutUserError(error)) }
         )
     }
 }
@@ -212,9 +209,9 @@ export const handleUpdateUser= (user) => {
 /**
  * Fonction permettant de retourner l'action nécessaire à la prise en compte du succés de la création d'un utilisateur
  */
-export const handleUpdateUserSuccess = (user) => {
+export const handlePutUserSuccess = (user) => {
     return {
-        type: USER_UPDATE_USER_SUCCESS,
+        type: USER_PUT_USER_SUCCESS,
         message: "L'utilisateur a été modifié",
         user: user
     }
@@ -225,9 +222,9 @@ export const handleUpdateUserSuccess = (user) => {
  * 
  * @param {string} error le message d'erreur
  */
-export const handleUpdateUserError = (error) => {
+export const handlePutUserError = (error) => {
     return {
-        type: USER_UPDATE_USER_ERROR,
+        type: USER_PUT_USER_ERROR,
         message: error
     }
 }
