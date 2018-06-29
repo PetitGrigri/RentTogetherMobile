@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
         flex:               1,
         backgroundColor:    '#ff8f00',
         padding:            8,
-        minHeight:          50,
+        minHeight:          40,
 
     },
     messageLeft: {
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
         flex:               1,
         backgroundColor:    '#eee',
         padding:            8,
-        minHeight:          50,
+        minHeight:          40,
 
     },
     messageContent: {
