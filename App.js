@@ -9,12 +9,13 @@ import 'intl';
 import 'intl/locale-data/jsonp/fr';
 import { Font } from 'expo';
 
+
 //création du store redux
 const store = createStore(
   mainReducer,
   applyMiddleware(
       thunkMiddleware,    //permet d'avoir de propager de dispatcher des fonctions
-      logger,             //permet d'avoir un reporting de ce qu'il se passe 
+      //logger,             //permet d'avoir un reporting de ce qu'il se passe
   )
 );
 

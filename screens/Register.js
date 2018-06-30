@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { ScrollView, TouchableWithoutFeedback, TouchableOpacity, Animated, StyleSheet, Text, View, ImageBackground, Image, Dimensions, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { Alert, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Animated, StyleSheet, Text, View, ImageBackground, Image, Dimensions, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { connect } from 'react-redux'
-import { handleCreateUser } from '../actions/utilisateurs'
+import { handleCreateUser, handleHideError } from '../actions/utilisateurs'
 import InputText from '../Components/InputText';
 import ButtonSubmit from '../Components/ButtonSubmit';
+import { empty } from '../utils/check';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -27,6 +28,11 @@ class Register extends Component {
         this.roomerTypeStyle = new Animated.Value(SCREEN_WIDTH/6);
         this.ownerTypeStyle = new Animated.Value(SCREEN_WIDTH/8);
     }
+
+
+
+
+
     componentDidMount() {
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
@@ -38,17 +44,14 @@ class Register extends Component {
     }
 
     keyboardDidShow = () => {
-        console.log('keyboardDidShow');
         this.setState({displayTitle:false});
     }
 
     keyboardDidHide = () => {
-        console.log('keyboardDidHide');
         this.setState({displayTitle:true});
     }
 
     handleClickLocataire = () => {
-        console.log('LOCATAIRE');
         this.setState({
             isRoomer: true,
             isOwner: false
@@ -66,7 +69,6 @@ class Register extends Component {
     }
 
     handleClickProprietaire = () => {
-        console.log('PROPRIETAIRE');
         this.setState({
             isRoomer: false,
             isOwner: true
@@ -91,10 +93,37 @@ class Register extends Component {
             email:      this.state.email,
             firstName:  this.state.firstName,
             lastName:   this.state.lastName,
-            password:   this.state.password ? 1 : 0,
+            password:   this.state.password,
+            phoneNumber:this.state.phoneNumber,
+            isAdmin:    0,
             isRoomer:   this.state.isRoomer ? 1 : 0,
             isOwner:    this.state.isOwner ? 1 : 0
         })
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
+        if ((prevProps.loadingAdd != this.props.loadingAdd) && (empty(this.props.message_error))) {
+            Alert.alert(
+                'Bienvenue',
+                "Votre compte utilisateur vient d'être crée. Vous pouvez maintenant vous connecter",
+                [
+                    { text: 'OK', onPress: () => this.props.navigation.navigate('login') }
+                ],
+                { cancelable: false }
+            )
+        }
+        //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
+        if ((prevProps.loadingAdd != this.props.loadingAdd) && (!empty(this.props.message_error))) {
+            Alert.alert(
+                'Erreur',
+                this.props.message_error,
+                [
+                    { text: 'OK', onPress: () => this.props.handleHideError() },
+                ],
+                { cancelable: false }
+            )
+        }
     }
 
   render() {
@@ -181,13 +210,14 @@ class Register extends Component {
 
 
 const mapStateToProps = state => ({
-    loadingAdd: state.utilisateurs.loadingAdd,
-    message_popup_success: state.utilisateurs.message_popup_success,
-    message_popup_error: state.utilisateurs.message_popup_error,
+    loadingAdd:     state.utilisateurs.loadingAdd,
+    message_error:  state.utilisateurs.message_error,
+
 });
 
 const mapDispatchToProps = dispatch => ({
     handleCreateUser:  (dataFormulaire) => dispatch(handleCreateUser(dataFormulaire)),
+    handleHideError:    () => dispatch (handleHideError()),
 });
   
 export default connect(

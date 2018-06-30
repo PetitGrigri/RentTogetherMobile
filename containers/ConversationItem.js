@@ -18,9 +18,6 @@ class ConversationItem extends Component {
     }
 
     render() {
-
-        console.log(this.props);
-
         let { conversationId, createdDate, messages, participants, title } = this.props;
 
         //récupération de la date du dernier message ou de la date de création de la conversation

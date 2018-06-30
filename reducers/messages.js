@@ -5,7 +5,9 @@ import {
 
     MESSAGES_POST_REQUEST,
     MESSAGES_POST_SUCCESS,
-    MESSAGES_POST_ERROR
+    MESSAGES_POST_ERROR,
+
+    MESSAGES_CLEAN_REQUEST
 
  } from '../actions/messages';
 
@@ -25,7 +27,8 @@ const messages = (state = initialMessagesState, action) => {
         // Demande de récupération des messages
         case MESSAGES_GET_REQUEST: 
             return Object.assign({}, state, {
-                loadingMessages : true
+                messages:           [],
+                loadingMessages :   true
             });
 
         // Prise en compte de la récupération des messages
@@ -66,8 +69,10 @@ const messages = (state = initialMessagesState, action) => {
                 error:             action.message||"Erreur de connexion",
             });
                     
-
-
+        case MESSAGES_CLEAN_REQUEST: 
+            return Object.assign({}, state, {
+                messages:           [],
+            });
 
 
         //autres 

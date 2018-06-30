@@ -1,25 +1,33 @@
 import { 
+    // Gestion de la connexion
     SIGN_IN_REQUEST, 
     SIGN_IN_ERROR, 
     SIGN_IN_SUCESS,
-
-    SIGN_IN_HIDE_ERROR,
-
+    CONNECTION_HIDE_ERROR,
+    // Connexion d'un utilisateur avec son token 
     SIGN_IN_WITH_PREVIOUS_TOKEN_REQUEST,
     SIGN_IN_WITH_PREVIOUS_TOKEN_SUCCESS,
     SIGN_IN_WITH_PREVIOUS_TOKEN_ERROR,
-
+    // Modification de l'utilisateur (PATCH)
+    PATCH_CONNECTED_USER_REQUEST,
+    PATCH_CONNECTED_USER_SUCCESS,
+    PATCH_CONNECTED_USER_ERROR,
+     // Déconnexion
     LOGOUT,
- }from '../actions/connection.js'
 
+
+
+ }from '../actions/connection.js'
 
 //le state initial
 const initialConnectionState = {
     loadingSignIn :     false,
     loadingSignInToken: false,
+    loadingPatchUser:   false,
     isAuthenticated :   false,
     user:               {},
-    message :           "",
+    message_error :     "",
+    
 }
 
 
@@ -55,13 +63,13 @@ const connection = (state = initialConnectionState, action) => {
             return Object.assign({}, state, {
                 loadingSignIn : false,
                 isAuthenticated: false,
-                message: action.message||"Erreur de connexion",
+                message_error: action.message||"Erreur d'authentification",
             });
 
         //erreur lors de la connexion
-        case  SIGN_IN_HIDE_ERROR : 
+        case  CONNECTION_HIDE_ERROR : 
             return Object.assign({}, state, {
-                message: ""
+                message_error: ""
             });
 
 
@@ -85,11 +93,30 @@ const connection = (state = initialConnectionState, action) => {
 
         case LOGOUT:
             return Object.assign({}, state, {
-                loadingSignIn :     false,
-                isAuthenticated :   false,
+                loadingSignIn:      false,
+                isAuthenticated:    false,
                 user:               {},
             });
-            
+
+
+        case PATCH_CONNECTED_USER_REQUEST: 
+            return Object.assign({}, state, {
+                loadingPatchUser:    true,
+            });
+
+        case PATCH_CONNECTED_USER_SUCCESS:
+            return Object.assign({}, state, {
+                loadingPatchUser:   false,
+                user:               action.user
+            });
+        case PATCH_CONNECTED_USER_ERROR:
+            return Object.assign({}, state, {
+                loadingPatchUser:   false,
+                message_error:      action.message||"Vos données n'ont pas pu être actualisées",   
+            });
+
+
+
         //autres 
         default : 
             return state;

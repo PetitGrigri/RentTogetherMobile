@@ -17,10 +17,6 @@ import {
     USER_PUT_USER_SUCCESS,
     USER_PUT_USER_ERROR,
 
-    USER_PATCH_USER_REQUEST,
-    USER_PATCH_USER_SUCCESS,
-    USER_PATCH_USER_ERROR,
-    
 } from '../actions/utilisateurs'
 
 
@@ -57,6 +53,7 @@ const utilisateurs = (state = initialConnectionState, action) => {
         case  USER_ADD_USER_ERROR : 
             return Object.assign({}, state, {
                 loadingAdd : false,
+                message_error:  action.message||"Impossible de créer votre compte utilisateur, merci de vérifier votre saisie",
             });
         
 
@@ -134,7 +131,6 @@ const utilisateurs = (state = initialConnectionState, action) => {
             return Object.assign({}, state, {
                 loadingPutId:       null,
                 message_error:      action.message,
-                message_success:    ""
             });
 
         //autres 

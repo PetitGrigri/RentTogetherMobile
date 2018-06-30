@@ -27,10 +27,6 @@ const conversations = (state = initialConversationsState, action) => {
         // Prise en compte de la récupération des conversations
         case  CONVERSATIONS_GET_SUCCESS: 
 
-        
-           
-            console.log('conversations', action.conversations);
-
             //récupération des Id de tout les participants
             let participantsId = action.conversations.map((conversation) => {
                 return conversation.participants.map(participant => {

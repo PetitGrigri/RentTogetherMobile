@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import LoginNavigator from './LoginNavigator';
 import ApplicationNavigator from './ApplicationNavigator';
 import { handleConnectWithPreviousToken } from '../actions/connection';
-import { TOKEN_NAME } from '../actions/connection';
+import { TOKEN_NAME, USER_ID } from '../actions/connection';
+import { empty } from '../utils/check';
 
 class MainNavigator extends React.Component {
 
@@ -12,11 +13,19 @@ class MainNavigator extends React.Component {
      * Si c'est le cas, on tentera de se connecter avec
      */
     componentDidMount() {
-        let handleConnectWithPreviousToken = this.props.handleConnectWithPreviousToken;
 
-        Expo.SecureStore.getItemAsync(TOKEN_NAME)
-            .then((tokenValue) => handleConnectWithPreviousToken(tokenValue))
-        ;
+        Promise.all([
+            Expo.SecureStore.getItemAsync(TOKEN_NAME),
+            Expo.SecureStore.getItemAsync(USER_ID)
+        ]).then((values) => {
+            let tokenValue =    values[0];
+            let userId =        values[1];
+
+            if ((!empty(tokenValue)) && (!empty(userId))) {
+                this.props.handleConnectWithPreviousToken(tokenValue, userId);
+            }
+        });
+
     }
 
     /**
@@ -38,7 +47,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    handleConnectWithPreviousToken: (token) => dispatch(handleConnectWithPreviousToken(token)),
+    handleConnectWithPreviousToken: (token, userId) => dispatch(handleConnectWithPreviousToken(token, userId)),
 });
   
 export default connect(

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, SectionList, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { StyleSheet, View, SectionList, ScrollView, TouchableOpacity, ActivityIndicator, Platform, Image } from 'react-native';
 import Text from  '../Components/Text';
 import { Foundation, MaterialCommunityIcons, Entypo, Ionicons, SimpleLineIcons} from '@expo/vector-icons';
 import Rating from '../Components/Rating';
@@ -106,24 +106,44 @@ class Profile extends Component {
             data: [{
                 currentValue:       1,
                 fractions:          5,
-                activeComponent:    <Foundation color='#ff8f00' name='guide-dog' size={32} />,
-                unactiveComponent:  <Foundation color='#aaa' name='guide-dog' size={32}/>,
+                activeComponent:    <Image source={ require('../assets/icon/pets_ff8f00.png')} style={ styles.icon}/>,
+                unactiveComponent:  <Image source={ require('../assets/icon/pets_aaa.png')} style={ styles.icon}/>,
                 reviews:            ['Allergique', 'Je n\'en veux pas', 'Pas d\'avis', 'Un, ca ne me dérange pas', 'J\'adore las animaux'],
-                onChange:           (value) => console.log('animaux : ', value)
+                onChange:           (value) => console.log('pets : ', value)
             },{
                 currentValue:       1,
                 fractions:          5,
-                activeComponent:    <MaterialCommunityIcons color='#ff8f00' name='smoking' size={32} />,
-                unactiveComponent:  <MaterialCommunityIcons color='#aaa' name='smoking' size={32}/>,
-                onChange:           (value) => console.log('fumée : ', value)
+                activeComponent:    <Image source={ require('../assets/icon/smoke_ff8f00.png')} style={ styles.icon}/>,
+                unactiveComponent:  <Image source={ require('../assets/icon/smoke_aaa.png')} style={ styles.icon}/>,
+                onChange:           (value) => console.log('smoke : ', value)
             },{
                 currentValue:       1,
                 fractions:          5,
-                activeComponent:    <MaterialCommunityIcons color='#ff8f00' name='broom' size={32} />,
-                unactiveComponent:  <MaterialCommunityIcons color='#aaa' name='broom' size={32}/>,
-                onChange:           (value) => console.log('fumée : ', value)
+                activeComponent:    <Image source={ require('../assets/icon/clean_ff8f00.png')} style={ styles.icon}/>,
+                unactiveComponent:  <Image source={ require('../assets/icon/clean_aaa.png')} style={ styles.icon}/>,
+                onChange:           (value) => console.log('clean : ', value)
             },
-
+            {
+                currentValue:       1,
+                fractions:          5,
+                activeComponent:    <Image source={ require('../assets/icon/shelf_ff8f00.png')} style={ styles.icon}/>,
+                unactiveComponent:  <Image source={ require('../assets/icon/shelf_aaa.png')} style={ styles.icon}/>,
+                onChange:           (value) => console.log('shelf : ', value)
+            },
+            {
+                currentValue:       1,
+                fractions:          5,
+                activeComponent:    <Image source={ require('../assets/icon/party_ff8f00.png')} style={ styles.icon}/>,
+                unactiveComponent:  <Image source={ require('../assets/icon/party_aaa.png')} style={ styles.icon}/>,
+                onChange:           (value) => console.log('party : ', value)
+            },
+            {
+                currentValue:       1,
+                fractions:          5,
+                activeComponent:    <Image source={ require('../assets/icon/social_ff8f00.png')} style={ styles.icon}/>,
+                unactiveComponent:  <Image source={ require('../assets/icon/social_aaa.png')} style={ styles.icon}/>,
+                onChange:           (value) => console.log('social : ', value)
+            }
             ],
             renderItem: itemRowCharacteristic 
         }, {
@@ -142,7 +162,7 @@ class Profile extends Component {
 
 
     pickAPhoto = async () => {
-
+        
         // Demande de la permission camera
         let cameraPermission = await Expo.Permissions.getAsync(Expo.Permissions.CAMERA)
         if (cameraPermission.status !== 'granted') {
@@ -197,8 +217,7 @@ class Profile extends Component {
 
 
     logout = () => {
-        Expo.SecureStore.deleteItemAsync(TOKEN_NAME)
-            .then(() => this.props.handleLogout())
+        this.props.handleLogout()
     }
 
 
@@ -355,5 +374,9 @@ const styles = StyleSheet.create({
     },
     actionTitle: {
         flex:       1,
+    }, 
+    icon: {
+        height: 32, 
+        width: 32
     }
 });

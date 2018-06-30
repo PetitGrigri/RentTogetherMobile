@@ -22,18 +22,15 @@ class Login extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
-        if ((prevProps.message != this.props.message) && (!empty(this.props.message))) {
+        if ((prevProps.message_error != this.props.message_error) && (!empty(this.props.message_error))) {
             Alert.alert(
                 'Erreur',
-                this.props.message,
+                this.props.message_error,
                 [
-                    {text: 'OK'},
+                    {text: 'OK', onPress: () => this.props.handleHideError()},
                 ],
                 { cancelable: true }
             )
-        } else if ( !empty(this.props.message)) {
-            //on supprime le message d'erreur dans le state redux
-            this.props.handleHideError();
         }
     }
 
@@ -95,7 +92,7 @@ class Login extends Component {
 const mapStateToProps = state => ({
     loadingSignIn:      state.connection.loadingSignIn, 
     isAuthenticated:    state.connection.isAuthenticated, 
-    message:            state.connection.message,
+    message_error:      state.connection.message_error,
 });
 
 const mapDispatchToProps = dispatch => ({

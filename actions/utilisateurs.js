@@ -18,14 +18,9 @@ export const
     USER_PUT_USER_REQUEST = 'USER_PUT_USER_REQUEST',
     USER_PUT_USER_SUCCESS=  'USER_PUT_USER_SUCCESS',
     USER_PUT_USER_ERROR=    'USER_PUT_USER_ERROR',
-    //Modification d'un utilisateur (PATCH)
-    USER_PATCH_USER_REQUEST =   'USER_PATCH_USER_REQUEST',
-    USER_PATCH_USER_SUCCESS=    'USER_PATCH_USER_SUCCESS',
-    USER_PATCH_USER_ERROR=      'USER_PATCH_USER_ERROR',
-    // Suppression des messages d'erreurs ou de réussite
-    USER_USER_HIDE_MESSAGES=        'USER_USER_HIDE_MESSAGES',
-    USER_USER_HIDE_POPUP_MESSAGES = 'USER_USER_HIDE_POPUP_MESSAGES'
 
+    // Suppression des messages d'erreurs ou de réussite
+    USER_USER_HIDE_ERROR=        'USER_USER_HIDE_ERROR'
     ;
 
 /**
@@ -79,8 +74,6 @@ export const handleCreateUserError = (error) => {
  */
 export const handleGetUsers = () => {
 
-    console.log('handleGetUsers');
-
     return function (dispatch, getState) {
         dispatch({
             type: USER_GET_USERS_REQUEST, 
@@ -127,8 +120,6 @@ export const handleGetUserError = (error) => {
  * @param {int} id l'identifiant de l'utilisateur à supprimer 
  */
 export const handleDeleteUser= (id) => {
-
-    console.log('handleDeleteUser');
 
     return function (dispatch, getState) {
         dispatch({
@@ -212,7 +203,6 @@ export const handlePutUser= (user) => {
 export const handlePutUserSuccess = (user) => {
     return {
         type: USER_PUT_USER_SUCCESS,
-        message: "L'utilisateur a été modifié",
         user: user
     }
 };

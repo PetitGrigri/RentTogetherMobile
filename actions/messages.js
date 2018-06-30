@@ -10,7 +10,10 @@ export const
     //Types d'actions destinées à l'envoi d'un message'
     MESSAGES_POST_REQUEST   = 'MESSAGES_POST_REQUEST', 
     MESSAGES_POST_SUCCESS   = 'MESSAGES_POST_SUCCESS', 
-    MESSAGES_POST_ERROR     = 'MESSAGES_POST_ERROR'
+    MESSAGES_POST_ERROR     = 'MESSAGES_POST_ERROR',
+
+    // Cleaning 
+    MESSAGES_CLEAN_REQUEST = 'MESSAGES_CLEAN_REQUEST'
     ;
 
 /**
@@ -40,7 +43,6 @@ export const handleGetMessages = (conversationId, filter = { $orderby: 'createdD
  * @param {object} data 
  */
 export const handleGetMessagesSuccess = (dataMessages) => {
-
     //retour de l'action
     return {
         type:      MESSAGES_GET_SUCCESS,
@@ -67,15 +69,10 @@ export const handleGetMessagesError = (error) => {
 export const handlePostMessage = (conversationId, message) => {
     return function (dispatch, getState) {
 
-        console.log('action 1', conversationId, message);
-    
-
         // On dispatch le fait qu'on envoie un message
         dispatch({
             type: MESSAGES_POST_REQUEST
         })
-
-        console.log('action 2');
 
         // Utilisation de l'api pour envoyer un message
         api.postMessage(
@@ -86,8 +83,6 @@ export const handlePostMessage = (conversationId, message) => {
             (message) => { dispatch(handlePostMessageSuccess(message)) },
             (error) => { dispatch(handlePostMessageError(error)) }
         )
-
-        console.log('action 3');
     }
 }
 
@@ -115,3 +110,14 @@ export const handlePostMessageError = (error) => {
         error:  error
     }
 };
+
+/**
+ * Méthode permettant de supprimer du state,
+ * @param {string} error le message d'erreur
+ */
+export const handleCleanMessage = () => {
+    return {
+        type:   MESSAGES_CLEAN_REQUEST
+    }
+};
+

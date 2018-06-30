@@ -3,7 +3,6 @@ import {View, StatusBar, Text, TouchableNativeFeedback, StyleSheet, Animated} fr
 import { withNavigation } from 'react-navigation';
 
 const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight : 0;
-console.log(statusBarHeight);
 
 const tabs = [{
     title:  'Colocataires',

@@ -3,10 +3,10 @@ import { StatusBar, ScrollView, Platform, StyleSheet, FlatList, View, KeyboardAv
 import TabContent from '../Components/TabContent';
 import Bubble from '../Components/Bubble';
 import { connect } from 'react-redux';
-import { handleGetMessages, handlePostMessage } from '../actions/messages';
+import { handleGetMessages, handlePostMessage, handleCleanMessage } from '../actions/messages';
 import { PropTypes } from 'prop-types';
 import InputTextMessage from '../Components/InputTextMessage';
-
+import {empty, isset } from '../utils/check';
 
 class Messages extends Component {
 
@@ -38,15 +38,16 @@ class Messages extends Component {
     };
 
     componentWillUnmount () {
+        // On arrête l'écoute du clavier
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
         this.keyboardWillShowListener.remove();
         this.keyboardWillShowListener.remove();
+        //on vide la liste des messages (pour prévenir de certains bug)
+        this.props.handleCleanMessage();
     }
 
     keyboardDidShow = (event) => {
-        console.log('SHOW', event, Dimensions.get('window'));
-
         this.setState({
             messagePosition: event.endCoordinates.height
         })
@@ -55,29 +56,31 @@ class Messages extends Component {
     }
 
     keyboardDidHide = (event) => {
-        console.log('HIDE', event, Dimensions.get('window'));
          this.setState({
             messagePosition: 0
         })
     }
 
     keyboardWillShow = (event) => {
-        console.log('WILL SHOW', event, Dimensions.get('window'));
+        console.log('WILL SHOW //TODO ANIMATION APPLE', event, Dimensions.get('window'));
 
     }
 
     keyboardWillHide = (event) => {
-        console.log('WILL HIDE', event, Dimensions.get('window'));
+        console.log('WILL HIDE //TODO ANIMATION APPLE', event, Dimensions.get('window'));
 
     }
 
 
     getMessageItem = (message) => {
+        
+        //console.log(message.item.messageId);
         //récupération de l'utilisateur qui a écrit le message
         let user = this.state.conversation.participants.filter(participant => {
-            return (message.item.userId === participant.userApiDto.userId)
-        })[0].userApiDto;
+                return (message.item.userId === participant.userApiDto.userId)
+            })[0].userApiDto;
 
+        
         let alignRight= (this.props.userConnected.userId !== user.userId);
 
         
@@ -138,6 +141,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     handleGetMessages:     (conversationId)             => dispatch(handleGetMessages(conversationId)),
     handlePostMessage:     (conversationId, message)    => dispatch(handlePostMessage(conversationId, message)),
+    handleCleanMessage:    () => dispatch(handleCleanMessage()),
 });
 
   

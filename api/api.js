@@ -34,12 +34,8 @@ export const connectionAPI =  (login, password, callBackOk, callBackError) => {
         })
         .then(dataUser => {
             //tentative de connexion d'un administrateur :
-            if (!empty(dataUser.token) && !empty(dataUser.email) && !empty(dataUser.firstName) && !empty(dataUser.lastName) && !empty(dataUser.isAdmin)) {
-                if (dataUser.isAdmin === 1) {
-                    callBackOk(cleanUser(dataUser));
-                } else {
-                    throw Error("Vous n'êtes pas autorisez à accéder à l'application.");
-                }
+            if (!empty(dataUser.token) && !empty(dataUser.email)) {
+                callBackOk(cleanUser(dataUser));
             } else {
                 throw Error("Erreur de l'API");
             }
@@ -118,6 +114,8 @@ export const getUtilisateurs = function(token, filter, callBackOk, callBackError
         cache: 'default'
     };
 
+    console.log(urlWithParams(url+ "/Users", filter));
+
     fetch(urlWithParams(url+ "/Users", filter), options)
         .then(response => {
             if (response.ok === true) {
@@ -136,6 +134,52 @@ export const getUtilisateurs = function(token, filter, callBackOk, callBackError
         });
 }
 
+
+/**
+ * Méthode destinée à récupérer un utilisateur
+ * 
+ * @param {string} token Le token de l'utilisateur connecté
+ * @param {string||int} userId L'id de l'utilisateur
+ * @param {function} callBackOk Le callback à utiliser quand on aura récupérer la liste des utilisateurs (la liste des utilisateurs sera transmise en paramètre)
+ * @param {function} callBackError Le callback à utiliser quand la récupération de la liste des utilisateurs n'est pas possibles (L'erreur sera transmise en paramètre)
+ */
+export const getSingleUtilisateur = function(token, userId, callBackOk, callBackError) {
+
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+token
+    });
+
+
+    //les paramêtres de la requête
+    var options = {
+        method:     'GET',
+        headers:    myHeaders,
+        mode:       'cors',
+        cache:      'default'
+    };
+
+    //l'url à utiliser pour récupérer l'utilisateur
+    let urlUsers = `${url}/Users/${userId}`;
+
+    fetch(urlUsers, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataUsers => {
+            callBackOk(dataUsers);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
 
 /**
  * Fonction destinée à la suppression d'un utilisateur
@@ -237,7 +281,10 @@ export const putUser = function(user, token, callBackOk, callBackError) {
  * @param {function} callBackOk Le callback à utiliser lorsque l'utilisateur a été supprimé (ce dernier recevra l'id de l'utilisateur supprimé en paramêtre)
  * @param {function} callBackError Le callback à utiliser lorsque l'utilisateur n'a pas été supprimé (ce dernier recevra un message d'erreur)
  */
-export const patchUser = function(user, token, callBackOk, callBackError) {
+export const patchUser = function(token, user, callBackOk, callBackError) {
+
+    console.log(token, user, callBackOk, callBackError);
+
     // Le header contiendra le token d'authentification plus tard
    var myHeaders = new Headers({
        'Content-Type':'application/json',
@@ -251,15 +298,15 @@ export const patchUser = function(user, token, callBackOk, callBackError) {
 
    //les paramêtres de la requête
    var options = {
-       method: 'PATCH',
-       headers: myHeaders,
-       mode: 'cors',
-       cache: 'default',
-       body: jsonUserString
+       method:      'PATCH',
+       headers:     myHeaders,
+       mode:        'cors',
+       cache:       'default',
+       body:        jsonUserString
    };
 
    //réalisation de la requête
-   fetch(url+ "/Users/"+user.userId, options)
+   fetch(url+ "/Users", options)
        .then(response => {
            if (response.ok === true) {
                return response.json().catch(error => {
@@ -293,7 +340,6 @@ export const getUserMedia = function(token, userId, callBackOk, callBackError) {
    //réalisation de la requête
    fetch(url+ "/media/"+userId, options)
         .then(response => {
-
             if (response.ok === true) {
                 return response.blob();
             } else {
@@ -311,7 +357,7 @@ export const getUserMedia = function(token, userId, callBackOk, callBackError) {
             //reader.readAsText(blob);
         })
         .catch(error => {
-            console.log('API KO', error);
+            console.log("Image inexistante");
             callBackError(userId, error.message);
         });
 }

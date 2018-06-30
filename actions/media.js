@@ -1,5 +1,6 @@
 import * as api from '../api/api.js';
-import {saveUserMedia, saveUserUpdatedMedia, deleteUserMediaIfExist } from '../utils/fileSystem';
+import { saveUserMedia, saveUserUpdatedMedia, deleteUserMediaIfExist } from '../utils/fileSystem';
+import { isset } from '../utils/check';
 
 //Types d'actions destinées à la connexion
 export const 
@@ -104,7 +105,6 @@ export const handleUploadUserMedia = (imageURI) => {
         let userId          = getState().connection.user.userId;
         let userOldImageURI = getState().media.usersMedia[userId];
 
-        console.log('userOldImageURI', userOldImageURI);
         // Utilisation de l'api pour envoyer un message
         api.postUploadUserImage(
             getState().connection.user.token,
@@ -128,12 +128,12 @@ export const handleUploadUserMedia = (imageURI) => {
  * @param {object} message 
  */
 export const handleUploadUserMediaSuccess = (userId, userOldImageURI, userImageURI) => {
-    console.log(userId, userOldImageURI, userImageURI);
     return async function (dispatch, getState) {
 
-        console.log(userId, userOldImageURI, userImageURI);
-        // Suppression de l'ancienne image
-        await deleteUserMediaIfExist(userOldImageURI);
+        // Suppression de l'ancienne image (si on en a bien une)
+        if (isset(userOldImageURI)) {
+            await deleteUserMediaIfExist(userOldImageURI);
+        } 
 
         //retour de l'action
         dispatch({

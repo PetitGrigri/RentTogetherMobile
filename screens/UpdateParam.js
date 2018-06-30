@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 import Text from  '../Components/Text';
 import ButtonSubmit from '../Components/ButtonSubmit';
 import InputTextApplication from '../Components/InputTextApplication';
 import { connect } from 'react-redux'
 import { UserImage, UserImageBackground } from '../containers';
-import { handleGetUserMedia, handleUploadUserMedia } from '../actions/media';
+import { handlePatchConnectedUser } from '../actions/connection';
+import { empty } from '../utils/check';
+import {handleHideError } from '../actions/connection';
 
 class UpdateParam extends Component {
 
@@ -15,8 +17,34 @@ class UpdateParam extends Component {
         this.state = {
             firstName:  this.props.user.firstName,
             lastName:   this.props.user.lastName,
-            phone:      this.props.user.phone,
+            phoneNumber:this.props.user.phoneNumber,
             email:      this.props.user.email,
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
+        if ((prevProps.message_error != this.props.message_error) && (!empty(this.props.message_error))) {
+            Alert.alert(
+                'Erreur',
+                this.props.message_error,
+                [
+                    {text: 'OK', onPress: () => this.props.handleHideError()},
+                ],
+                { cancelable: true }
+            );
+        }
+        //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
+        if ((prevProps.loadingPatchUser != this.props.loadingPatchUser) && (empty(this.props.message_error))) {
+            Alert.alert(
+                '',
+                "Vos données personnelles ont été mise à jour",
+                [
+                    {text: 'OK', onPress: () => this.props.navigation.goBack()},
+                ],
+                { cancelable: true }
+            );
+
         }
     }
 
@@ -24,86 +52,86 @@ class UpdateParam extends Component {
         this.setState({avatarRadius: nativeEvent.layout.width / 2 })
     };
 
-    componentDidMount = () => {
-        this.props.handleGetUserMedia(this.props.user.userId);
-    };
-
     handlePatchUser = ()  => {
 
-        this.props.handlePatchUser({
-            email:      this.state.email,
-            firstName:  this.state.firstName,
-            lastName:   this.state.lastName,
-            phone:      this.state.phone,
-        })
+        this.props.handlePatchConnectedUser({
+            email:          this.state.email,
+            firstName:      this.state.firstName,
+            lastName:       this.state.lastName,
+            phoneNumber:    this.state.phoneNumber,
+        });
     }
 
     render() {
         
         return (
-            <ScrollView style={styles.container}>
-                <UserImageBackground
-                    userId= { this.props.user.userId }
-                    style= { styles.imageHeader }
-                    blurRadius= { 10 }>
+            <View>
+                <ScrollView                 scrollEnabled={false}
+                keyboardShouldPersistTaps="handled">
+                    <KeyboardAvoidingView behavior="position">
+                        <UserImageBackground
+                            userId= { this.props.user.userId }
+                            style= { styles.imageHeader }
+                            blurRadius= { 10 }>
 
-                    <UserImage 
-                        userId= { this.props.user.userId }
-                        style={ [styles.imageAvatar, {borderRadius: this.state.avatarRadius} ] } 
-                        onLayout={(event) => this.changeRadius(event.nativeEvent)}  
-                    />
-                </UserImageBackground>
-                
-                <View style={styles.cardBottomTop} />
-                    <View style={styles.containerInformations}>
+                            <UserImage 
+                                userId= { this.props.user.userId }
+                                style={ [styles.imageAvatar, {borderRadius: this.state.avatarRadius} ] } 
+                                onLayout={(event) => this.changeRadius(event.nativeEvent)}  
+                            />
+                        </UserImageBackground>
+                        
+                        <View style={styles.cardBottomTop} />
+                        <View style={styles.containerInformations}>
 
-                    <Text h1 style= {styles.titleProfile}>Mes informations</Text>
+                            <Text h1 style= {styles.titleProfile}>Mes informations</Text>
 
-                    <View style={ styles.inputWrapper}>
-                        <InputTextApplication 
-                            onChangeText={(text) => this.setState({ firstName:text }) } 
-                            value={ this.state.firstName }
-                            placeholder='Prénom'/>
+                            <View style={ styles.inputWrapper}>
 
-                        <InputTextApplication 
-                            onChangeText={(text) => this.setState({ lastName:text }) } 
-                            value={ this.state.lastName }
-                            placeholder='Nom'/>
-                            
-                        <InputTextApplication 
-                            onChangeText={(text) => this.setState({ phone:text }) }
-                            value={ this.state.phone }
-                            placeholder='Téléphone'/>
+                                <InputTextApplication 
+                                    onChangeText={(text) => this.setState({ firstName:text }) } 
+                                    value={ this.state.firstName }
+                                    placeholder='Prénom'/>
 
-                        <InputTextApplication 
-                            onChangeText={(text) => this.setState({ email:text }) }
-                            value={ this.state.email }
-                            placeholder='Email'/>
+                                <InputTextApplication 
+                                    onChangeText={(text) => this.setState({ lastName:text }) } 
+                                    value={ this.state.lastName }
+                                    placeholder='Nom'/>
+                                    
+                                <InputTextApplication 
+                                    onChangeText={(text) => this.setState({ phoneNumber:text }) }
+                                    value={ this.state.phoneNumber }
+                                    placeholder='Téléphone'/>
 
+                                <InputTextApplication 
+                                    onChangeText={(text) => this.setState({ email:text }) }
+                                    value={ this.state.email }
+                                    placeholder='Email'/>
 
-                        <ButtonSubmit 
-                            text="Enregistrer"
-                            style={{marginTop:40}}
-                            loading={ this.props.loadingAdd }
-                            onPress={ this.handlePatchUser }
-                        />
-                    
-                    </View>
-                </View>
-            </ScrollView>
+                                <ButtonSubmit 
+                                    text="Enregistrer"
+                                    style={{marginTop:40}}
+                                    loading={ this.props.loadingPatchUser }
+                                    onPress={ this.handlePatchUser }
+                                />
+                            </View>
+                        </View>
+                    </KeyboardAvoidingView>
+                </ScrollView>
+            </View>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    user:           state.connection.user,
-    image:          state.media.usersMedia[state.connection.user.userId] ? state.media.usersMedia[state.connection.user.userId] : null,
-    loadingAdd:     state.utilisateurs.loadingAdd,
+    user:               state.connection.user,
+    loadingPatchUser:   state.connection.loadingPatchUser,
+    message_error:      state.connection.message_error
 });
 
 const mapDispatchToProps = dispatch => ({
-    handleGetUserMedia:     (userId) => dispatch(handleGetUserMedia(userId)),
-    //handlePatchUser:        (userId) => dispatch(handlePatchUser(userId)),
+    handlePatchConnectedUser:   (userData) => dispatch(handlePatchConnectedUser(userData)),
+    handleHideError:            () => dispatch(handleHideError()),
 });
 
 export default connect(

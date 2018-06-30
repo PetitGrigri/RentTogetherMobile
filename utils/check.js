@@ -2,13 +2,18 @@
  * Fonction permettant de savoir si la variable passée en paramètre existe
  * @param {*} item 
  */
-export const isset = (variable) =>  (!(typeof variable === 'undefined'));
+export const isset = (variable) =>  (variable !== null) && (!(typeof variable === 'undefined'));
 
 /**
  * Fonction mermettant de savoir si la variable passée en paramètre est vide
  * @param {*} item 
  */
 export const empty = (variable) =>  {
+    
+    if (variable === null) {
+        return true;
+    }
+
     switch (typeof variable) {
 
         //cas d'un objet qui n'est pas définis

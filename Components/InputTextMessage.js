@@ -17,7 +17,6 @@ class InputTextMessage extends Component {
     }
 
     onSend = () => {
-        console.log('inputTextMessage', this.state.value);
         if (( this.props.onSend ) && ( this.state.value.length > 0 )) {
             this.props.onSend(this.state.value);
         }
