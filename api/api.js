@@ -612,3 +612,99 @@ export const getCharacteristicsReferential = function(token, callBackOk, callBac
 
 
 
+/**
+ * Cette fonction permet de récupérer la personalité d'un utilisateur
+ * @param {string} token 
+ * @param {int} userId 
+ * @param {function} callBackOk 
+ * @param {function} callBackError 
+ */
+export const getPersonnalityUser = function(token, userId, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+    let myHeaders = new Headers({
+        'Content-Type':     'application/json',
+        'Authorization':    'Bearer '+token
+    });
+
+    //les paramètres de la requête
+    let options = {
+        method:     'GET',
+        headers:    myHeaders,
+        mode:       'cors',
+        cache:      'default'
+    };
+
+    let urlPersonalities = `${url}/Personalities/${userId}`;
+
+    fetch(urlPersonalities, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataPersonality => {
+            callBackOk(dataPersonality);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
+
+
+
+
+
+
+/**
+ * Fonction destinée à la modification des caractéristiques d'un utilisateur
+ * 
+ * @param {string} token Le token de l'utilisateur connecté
+ * @param {array} personality la ou les personalités d'un utlisateur à modifier
+ * @param {int} userId l'id de l'utilisateur à mettre à jour
+ * @param {function} callBackOk Le callback à utiliser lorsque la personalité de l'utilisateur a été mis à jour
+ * @param {function} callBackError Le callback à utiliser lorsque la personalité de l'utilisateur n'a pas pu être mis à jour
+ */
+export const patchPersonalityUser = function(token, personality, userId, callBackOk, callBackError) {
+
+    console.log(token, personality, callBackOk, callBackError);
+
+    // Le header contiendra le token d'authentification plus tard
+   var myHeaders = new Headers({
+       'Content-Type':'application/json',
+       'Authorization':'Bearer '+ token
+   });
+
+   // Conversion de notre FormData en objet 
+   var jsonPersonalityString = JSON.stringify(personality);
+   
+   console.log(jsonPersonalityString);
+
+   //les paramêtres de la requête
+   var options = {
+       method:      'PATCH',
+       headers:     myHeaders,
+       mode:        'cors',
+       cache:       'default',
+       body:        jsonPersonalityString
+   };
+
+   let urlUrlPersonality = `${url}/Personalities/${userId}`;
+
+   //réalisation de la requête
+   fetch(urlUrlPersonality, options)
+       .then(response => {
+           if (response.ok === true) {
+               return response.json().catch(error => {
+                   throw Error("Erreur de l'API.");
+               });
+           } else {
+               throw Error(response.statusText);
+           }
+       })
+       .then(dataPersonality => callBackOk(dataPersonality))
+       .catch(error => callBackError(error.message));
+}

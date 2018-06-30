@@ -12,21 +12,33 @@ import {
     PATCH_CONNECTED_USER_REQUEST,
     PATCH_CONNECTED_USER_SUCCESS,
     PATCH_CONNECTED_USER_ERROR,
+    // Récupération de la personalité de l'utilisateur connecté
+    GET_PERSONALITY_CONNECTED_USER_REQUEST,
+    GET_PERSONALITY_CONNECTED_USER_SUCCESS,
+    GET_PERSONALITY_CONNECTED_USER_ERROR,
+    // Récupération de la personalité de l'utilisateur connecté
+    PATCH_PERSONALITY_CONNECTED_USER_REQUEST,
+    PATCH_PERSONALITY_CONNECTED_USER_SUCCESS,
+    PATCH_PERSONALITY_CONNECTED_USER_ERROR,
+    
      // Déconnexion
     LOGOUT,
 
 
 
- }from '../actions/connection.js'
+ }from '../actions/connection'
 
 //le state initial
 const initialConnectionState = {
-    loadingSignIn :     false,
-    loadingSignInToken: false,
-    loadingPatchUser:   false,
-    isAuthenticated :   false,
-    user:               {},
-    message_error :     "",
+    loadingSignIn :         false,
+    loadingSignInToken:     false,
+    loadingPatchUser:       false,
+    loadingGetPersonality:  false,
+    loadingPatchPersonality:false,
+    isAuthenticated:        false,
+    user:                   {},
+    personality:            [],
+    message_error :         "",
     
 }
 
@@ -58,7 +70,7 @@ const connection = (state = initialConnectionState, action) => {
                 user: userState
             });
 
-        //erreur lors de la connexion
+        // Erreur lors de la connexion
         case  SIGN_IN_ERROR : 
             return Object.assign({}, state, {
                 loadingSignIn : false,
@@ -66,7 +78,7 @@ const connection = (state = initialConnectionState, action) => {
                 message_error: action.message||"Erreur d'authentification",
             });
 
-        //erreur lors de la connexion
+        // Erreur lors de la connexion
         case  CONNECTION_HIDE_ERROR : 
             return Object.assign({}, state, {
                 message_error: ""
@@ -75,6 +87,30 @@ const connection = (state = initialConnectionState, action) => {
 
 
 
+        // Récupération de la personalité d'un utilisateur
+        case GET_PERSONALITY_CONNECTED_USER_REQUEST: 
+            return Object.assign({}, state, {
+                loadingGetPersonality : true
+            });
+
+        // Réussite de la récupération de la personnalité de l'utilisateur connecté
+        case GET_PERSONALITY_CONNECTED_USER_SUCCESS:
+            return Object.assign({}, state, {
+                loadingGetPersonality :     false,
+                personality:                action.dataPersonality.personalityValueApiDtos
+            });
+
+        // Echec de la récupération de la personnalité de l'utilisateur connecté
+        case GET_PERSONALITY_CONNECTED_USER_ERROR:
+            return Object.assign({}, state, {
+                loadingGetPersonality : false,
+                message_error:          action.error||"Erreur lors de la récupération de vos caractéristiques"
+            });
+
+
+
+
+        // Connexion à partir du token précédent
         case SIGN_IN_WITH_PREVIOUS_TOKEN_REQUEST:
             return Object.assign({}, state, {
                 loadingSignInToken: true,
@@ -90,7 +126,7 @@ const connection = (state = initialConnectionState, action) => {
                 loadingSignInToken:     false,
             });
         
-
+        // Déconnexion de l'utilisateur
         case LOGOUT:
             return Object.assign({}, state, {
                 loadingSignIn:      false,
@@ -98,7 +134,7 @@ const connection = (state = initialConnectionState, action) => {
                 user:               {},
             });
 
-
+        // Mise à jour de la personalité d'un utilisateur
         case PATCH_CONNECTED_USER_REQUEST: 
             return Object.assign({}, state, {
                 loadingPatchUser:    true,
@@ -115,8 +151,23 @@ const connection = (state = initialConnectionState, action) => {
                 message_error:      action.message||"Vos données n'ont pas pu être actualisées",   
             });
 
+        // Mise à jour de l'utilisateur connecté
+        case PATCH_PERSONALITY_CONNECTED_USER_REQUEST: 
+            return Object.assign({}, state, {
+                loadingPatchPersonality:    true,
+            });
 
-
+        case PATCH_PERSONALITY_CONNECTED_USER_SUCCESS:
+            return Object.assign({}, state, {
+                loadingPatchPersonality:   false,
+                personality:               action.personality
+            });
+        case PATCH_PERSONALITY_CONNECTED_USER_ERROR:
+            return Object.assign({}, state, {
+                loadingPatchPersonality:    false,
+                message_error:              action.message||"Vos données n'ont pas pu être actualisées",   
+            });
+            
         //autres 
         default : 
             return state;

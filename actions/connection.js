@@ -6,9 +6,9 @@ export const
     SIGN_IN_REQUEST     = 'SIGN_IN_REQUEST', 
     SIGN_IN_SUCESS      = 'SIGN_IN_SUCESS',
     SIGN_IN_ERROR       = 'SIGN_IN_ERROR',
+    //permet de cacher les messages d'erreurs ou de succés
     CONNECTION_HIDE_ERROR  =    'CONNECTION_HIDE_ERROR',
     CONNECTION_HIDE_SUCCESS  =  'CONNECTION_HIDE_ERROR',
-
     // Récupération d'un utilisateur avec son token 
     SIGN_IN_WITH_PREVIOUS_TOKEN_REQUEST    = 'SIGN_IN_WITH_PREVIOUS_TOKEN_REQUEST',
     SIGN_IN_WITH_PREVIOUS_TOKEN_SUCCESS    = 'SIGN_IN_WITH_PREVIOUS_TOKEN_SUCCESS',
@@ -17,6 +17,16 @@ export const
     PATCH_CONNECTED_USER_REQUEST =   'PATCH_CONNECTED_USER_REQUEST',
     PATCH_CONNECTED_USER_SUCCESS=    'PATCH_CONNECTED_USER_SUCCESS',
     PATCH_CONNECTED_USER_ERROR=      'PATCH_CONNECTED_USER_ERROR',
+    // Récupération de la personalité de l'utilisateur connecté
+    GET_PERSONALITY_CONNECTED_USER_REQUEST =    'GET_PERSONALITY_CONNECTED_USER_REQUEST',
+    GET_PERSONALITY_CONNECTED_USER_SUCCESS =    'GET_PERSONALITY_CONNECTED_USER_SUCCESS',
+    GET_PERSONALITY_CONNECTED_USER_ERROR =      'GET_PERSONALITY_CONNECTED_USER_ERROR',
+
+    // Récupération de la personalité de l'utilisateur connecté
+    PATCH_PERSONALITY_CONNECTED_USER_REQUEST =    'PATCH_PERSONALITY_CONNECTED_USER_REQUEST',
+    PATCH_PERSONALITY_CONNECTED_USER_SUCCESS =    'PATCH_PERSONALITY_CONNECTED_USER_SUCCESS',
+    PATCH_PERSONALITY_CONNECTED_USER_ERROR =      'PATCH_PERSONALITY_CONNECTED_USER_ERROR',
+    
     // Déconnexion
     LOGOUT  = 'LOGOUT'
     ;
@@ -52,7 +62,7 @@ export const handleSignIn = (login, password) => {
  * Méthode permettant de retourner l'action nécessaire à redux pour connaitre l'utilisateur connecté
  * @param {object} data 
  */
-export const handleSignInSuccess = (data) => {
+const handleSignInSuccess = (data) => {
     //création d'un objet user sans son mot de passe
     var dataUser = Object.assign({}, data);
     delete dataUser.password;
@@ -72,7 +82,7 @@ export const handleSignInSuccess = (data) => {
  * Méthode permettat de retourner l'action nécessaire à redux pour gérer une erreur d'authentification
  * @param {string} error le message d'erreur
  */
-export const handleSignInError = (error) => {
+const handleSignInError = (error) => {
     return {
         type: SIGN_IN_ERROR,
         message: error
@@ -119,7 +129,7 @@ export const handleConnectWithPreviousToken = (token, userId) => {
  * Ici on reçoit un array d'utilisateurs qui ne contiendra qu'un seul utilisateur
  * @param {Array} dataUser un tableau d'utilisateurs
  */
-export const handleGetUserWithTokenSuccess = (dataUser) => {
+const handleGetUserWithTokenSuccess = (dataUser) => {
     
     if (!dataUser.result)
         console.log('ATTENTION result SUPPRIME ! !  !! ! !! !!!! handleGetUserWithTokenSuccess');
@@ -130,7 +140,7 @@ export const handleGetUserWithTokenSuccess = (dataUser) => {
     }
 }
 
-export const handleGetUserWithTokenError = (error) => {
+const handleGetUserWithTokenError = (error) => {
 
     // Suppression de token et de l'id de l'ancien utilisateur connecté
     Expo.SecureStore.deleteItemAsync(TOKEN_NAME);
@@ -185,17 +195,97 @@ export const handlePatchConnectedUser = (userData) => {
     }
 }
 
-
-export const handlePatchConectedUserSuccess = (user) => {
+const handlePatchConectedUserSuccess = (user) => {
     return {
         type:       PATCH_CONNECTED_USER_SUCCESS,
         user:       user
     }
 }
 
-export const handlePatchConectedUserError = (error) => {
+const handlePatchConectedUserError = (error) => {
     return {
         type:       PATCH_CONNECTED_USER_ERROR,
+        message:    error
+    }
+}
+
+
+
+/**
+ * Fonction permettant de récupérer la personnalité de l'utilisateur connecté
+ */
+export const handleGetPersonalityConnectedUser= () => {
+    return function (dispatch, getState) {
+        //on dispatch l'état de la recherche des messages
+        dispatch({
+            type: GET_PERSONALITY_CONNECTED_USER_REQUEST
+        })
+        
+        //utilisations de l'api pour récupérer les messages
+        api.getPersonnalityUser(
+            getState().connection.user.token,
+            getState().connection.user.userId,
+            (data) => { dispatch(handleGetPersonalitySuccess(data)) },
+            (error) => { dispatch(handleGetPersonalityError(error)) }
+        )
+    }
+};
+
+/**
+ * Fonction permettant de transmettre la personnalité de l'utilisateur connecté
+ * @param {object} dataPersonality 
+ */
+const handleGetPersonalitySuccess = (dataPersonality) => {
+    //retour de l'action
+    return {
+        type:            GET_PERSONALITY_CONNECTED_USER_SUCCESS,
+        dataPersonality: dataPersonality
+    } 
+};
+
+/**
+ * Fonction permettant de transmettre l'erreur qu'il y a eu lors de la récupération de la personalité de l'utilisateur connecté
+ * @param {string} error le message d'erreur
+ */
+const handleGetPersonalityError = (error) => {
+    return {
+        type:   GET_PERSONALITY_CONNECTED_USER_ERROR,
+        error:  error
+    }
+};
+
+
+
+
+
+export const handlePatchConnectedUserPersonality = (personality) => {
+    return function (dispatch, getState) {
+        //on dispatch le fait qu'on se connecte via  un token
+        dispatch({
+            type: PATCH_PERSONALITY_CONNECTED_USER_REQUEST, 
+        });
+        
+        // Récupération de l'utilisateur via un token
+        api.patchPersonalityUser (
+            getState().connection.user.token,
+            personality,
+            getState().connection.user.userId,
+            (dataUser) => dispatch(handlePatchConnectedUserPersonalitySuccess(dataUser)),
+            (error) => dispatch(handlePatchConnectedUserPersonalityError(error))
+        )
+    }
+}
+
+const handlePatchConnectedUserPersonalitySuccess = (personality) => {
+    return {
+        type:           PATCH_PERSONALITY_CONNECTED_USER_SUCCESS,
+        personality:    personality
+    }
+}
+
+const handlePatchConnectedUserPersonalityError = (error) => {
+    return {
+        type:       PATCH_PERSONALITY_CONNECTED_USER_ERROR,
         message:    error
     }
 }

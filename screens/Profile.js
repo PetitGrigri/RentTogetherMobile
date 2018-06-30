@@ -5,11 +5,15 @@ import { Entypo, Ionicons, SimpleLineIcons} from '@expo/vector-icons';
 import Rating from '../Components/Rating';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { handleGetUserMedia, handleUploadUserMedia } from '../actions/media';
-import { handleLogout } from '../actions/connection';
+import { handleLogout, handleGetPersonalityConnectedUser, handlePatchConnectedUserPersonality } from '../actions/connection';
 import { connect } from 'react-redux'
 import { UserImage, UserImageBackground } from '../containers';
 import { Alert } from 'react-native';
 import { handleGetReferentialCharacteristics } from '../actions/referentielCaracteristiques';
+import { isset, empty } from '../utils/check';
+import {handleHideError } from '../actions/connection';
+
+
 
 const itemRow = (props) => {
     let { index, item } = props;
@@ -33,9 +37,65 @@ const itemRowLocation = (props) => {
 
 const itemRowCharacteristic = (props) => {
     let { index, item } = props;
+
+    
+    let activeComponent =   <View />;
+    let unactiveComponent = <View />;
+
+    switch(item.characteristicsReferencial.name) {
+        case "Animaux":
+            activeComponent =   animaux_actif;
+            unactiveComponent=  animaux_inactif;
+            break;
+
+        case "Fete":
+            activeComponent =   fete_actif
+            unactiveComponent=  fete_inactif
+            break;
+        
+        case "Fumeur":
+            activeComponent =   fumeur_actif;
+            unactiveComponent=  fumeur_inactif;
+            break;
+        
+        case "Rangement":
+            activeComponent =   rangement_actif;
+            unactiveComponent=  rangement_inactif;
+            break;
+
+        case "Hygiene":
+            activeComponent =   hygiene_actif;
+            unactiveComponent=  hygiene_inactif;
+            break;
+
+        case "Social":
+            activeComponent =   social_actif;
+            unactiveComponent=  social_inactif;
+            break;
+        default: 
+            break;
+    }
+
+    let itemProps = {
+        fractions:          5,
+        currentValue:       item.personality.value,
+        activeComponent:    activeComponent,
+        unactiveComponent:  unactiveComponent,
+        reviews:            [
+            item.characteristicsReferencial.description1,
+            item.characteristicsReferencial.description2,
+            item.characteristicsReferencial.description3,
+            item.characteristicsReferencial.description4,
+            item.characteristicsReferencial.description5,
+        ],
+        onChange:  (rating) => item.onChange(rating)
+    }
+
+
+    //return null
     return (
-        <View key={index} style={styles.itemRowCharacteristic}>
-            <Rating {...item} />
+        <View key={ `personality-${item.characteristicsReferencial.personalityValueId}` } style={styles.itemRowCharacteristic}>
+            <Rating {...itemProps} />
         </View>
     );
 
@@ -61,8 +121,10 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            avatarRadius: 0,
-            imageUser: null
+            avatarRadius:           0,
+            imageUser:              null,
+            personality:            [],
+            personalityToUpdate:    false,
         }
     }
 
@@ -71,12 +133,101 @@ class Profile extends Component {
         this.setState({avatarRadius: nativeEvent.layout.width / 2 })
     };
 
-    componentDidMount = () => {
+    componentWillMount = () => {
         this.props.handleGetUserMedia(this.props.user.userId);
         this.props.handleGetReferentialCharacteristics();
+        this.props.handleGetPersonalityConnectedUser();
     };
     
+    componentDidUpdate = (prevProps, prevState) => {
+
+        // Si lors de la mise à jour du composant, on n'a plus de chargement de référentiel de charactéristiques 
+        // et qu'à l'état précédent, l'un des deux était en chargement, alors on set le state des personality.
+        if (!this.props.loadingGetPersonality && !this.props.loadingCharacteristicsReferential && 
+            (prevProps.loadingGetPersonality || prevProps.loadingCharacteristicsReferential) )  {
+                console.log('MISE A JOUR DE LA PERSONALITY DE L UTILISATEUR', 
+                    this.props.loadingGetPersonality, 
+                    this.props.loadingCharacteristicsReferential,
+                    prevProps.loadingGetPersonality,
+                    prevProps.loadingCharacteristicsReferential
+                )
+            this.setState({
+                personality: this.props.personality
+            });
+        }
+
+        if (prevProps.loadingPatchPersonality && !this.props.loadingPatchPersonality && (empty(this.props.message_error))) {
+            Alert.alert(
+                '',
+                "Vos caractéristiques ont étés mise à jour",
+                [
+                    {text: 'OK'}
+                ],
+                { cancelable: true }
+            );
+        }
+
+        if (prevProps.loadingPatchPersonality && !this.props.loadingPatchPersonality && (!empty(this.props.message_error))) {
+            Alert.alert(
+                'Erreur',
+                this.props.message_error
+                [
+                    {text: 'OK', onPress: () => this.props.handleHideError()}
+                ],
+                { cancelable: true }
+            );
+        }
+
+    }
+    changePersonality = (personalityElementToUpdate, rating) =>{
+        console.log('CHANGEMENT DE ', personalityElementToUpdate, rating);
+
+        console.log('AVANT 0', this.state.personality);
+
+        let newPersonality = this.state.personality.map(oldPersonalityElement => {
+            if  (oldPersonalityElement.personalityValueId !== personalityElementToUpdate.personalityValueId) {
+                //console.log('   différent', oldPersonalityElement.personalityValueId, personalityElementToUpdate.personalityValueId)
+                return oldPersonalityElement;
+            } else {
+                //console.log('   égaux', oldPersonalityElement.personalityValueId, personalityElementToUpdate.personalityValueId)
+                return Object.assign({}, personalityElementToUpdate, {value: rating});
+            }
+        }); 
+
+        this.setState({
+            personalityToUpdate:    true,
+            personality:            newPersonality
+        });
+    }
+
+    saveUpdatedPersonality = () => {
+
+        console.log('TO UPDATE');
+        this.setState({ personalityToUpdate : false });
+        this.props.handlePatchConnectedUserPersonality(this.state.personality);
+
+    }
+
+
     getSections = () => {
+
+       let sectionPersonality = [];
+       if ( this.state.personality.length > 0 ) {
+            console.log('JE DOIS GENERER L AFFICHAGE DES CARACTERISTIQUES DE L UTILISATEUR');
+            // Création d'un tableau contenant l'une des personalité de l'utilisateur, 
+            this.state.personality.forEach(personalityElement => {
+                if (isset(this.props.characteristicsReferencial[personalityElement.personalityReferencialId])) {
+                    sectionPersonality.push({
+                        characteristicsReferencial : this.props.characteristicsReferencial[personalityElement.personalityReferencialId],
+                        personality:                 personalityElement, 
+                        onChange:                    (rating) => this.changePersonality(personalityElement, rating),
+                    });
+                }
+            });
+        }
+
+        console.log('getSections', sectionPersonality);
+
         return [{   
             title: 'Mes informations', 
             data: [{
@@ -104,49 +255,13 @@ class Profile extends Component {
             renderItem: itemRowLocation
         }, {
             title: 'Mes caractéristiques', 
-            data: [{
-                currentValue:       1,
-                fractions:          5,
-                activeComponent:    <Image source={ require('../assets/icon/pets_ff8f00.png')} style={ styles.icon}/>,
-                unactiveComponent:  <Image source={ require('../assets/icon/pets_aaa.png')} style={ styles.icon}/>,
-                reviews:            ['Allergique', 'Je n\'en veux pas', 'Pas d\'avis', 'Un, ca ne me dérange pas', 'J\'adore las animaux'],
-                onChange:           (value) => console.log('pets : ', value)
-            },{
-                currentValue:       1,
-                fractions:          5,
-                activeComponent:    <Image source={ require('../assets/icon/smoke_ff8f00.png')} style={ styles.icon}/>,
-                unactiveComponent:  <Image source={ require('../assets/icon/smoke_aaa.png')} style={ styles.icon}/>,
-                onChange:           (value) => console.log('smoke : ', value)
-            },{
-                currentValue:       1,
-                fractions:          5,
-                activeComponent:    <Image source={ require('../assets/icon/clean_ff8f00.png')} style={ styles.icon}/>,
-                unactiveComponent:  <Image source={ require('../assets/icon/clean_aaa.png')} style={ styles.icon}/>,
-                onChange:           (value) => console.log('clean : ', value)
-            },
-            {
-                currentValue:       1,
-                fractions:          5,
-                activeComponent:    <Image source={ require('../assets/icon/shelf_ff8f00.png')} style={ styles.icon}/>,
-                unactiveComponent:  <Image source={ require('../assets/icon/shelf_aaa.png')} style={ styles.icon}/>,
-                onChange:           (value) => console.log('shelf : ', value)
-            },
-            {
-                currentValue:       1,
-                fractions:          5,
-                activeComponent:    <Image source={ require('../assets/icon/party_ff8f00.png')} style={ styles.icon}/>,
-                unactiveComponent:  <Image source={ require('../assets/icon/party_aaa.png')} style={ styles.icon}/>,
-                onChange:           (value) => console.log('party : ', value)
-            },
-            {
-                currentValue:       1,
-                fractions:          5,
-                activeComponent:    <Image source={ require('../assets/icon/social_ff8f00.png')} style={ styles.icon}/>,
-                unactiveComponent:  <Image source={ require('../assets/icon/social_aaa.png')} style={ styles.icon}/>,
-                onChange:           (value) => console.log('social : ', value)
-            }
-            ],
-            renderItem: itemRowCharacteristic 
+            data: sectionPersonality,
+            action: (this.state.personalityToUpdate && !this.props.loadingPatchPersonality) 
+                ?   <TouchableOpacity onPress={ this.saveUpdatedPersonality  }><Entypo  color='#aaa' name='save' size={ 18 } style={styles.editParam }/></TouchableOpacity>
+                :   (this.props.loadingGetPersonality || this.props.loadingCharacteristicsReferential || this.props.loadingPatchPersonality) 
+                    ? <ActivityIndicator size="small" color='#aaa' /> 
+                    : null,
+            renderItem: itemRowCharacteristic
         }, {
             title:          'Se déconnecter',
             actionTitle:    this.logout,
@@ -214,7 +329,7 @@ class Profile extends Component {
 
 
     logout = () => {
-        this.props.handleLogout()
+        this.props.handleLogout();
     }
 
 
@@ -259,11 +374,17 @@ class Profile extends Component {
 }
 
 const mapStateToProps = state => ({
-    loadingGet:     state.media.loadingGet,
-    messageError:   state.media.messageError,
-    image:          state.media.usersMedia[state.connection.user.userId] ? state.media.usersMedia[state.connection.user.userId] : null,
-    user:           state.connection.user,
-    loadingUpload:  state.media.userMediaUpaloadLoading,
+    loadingGet:                         state.media.loadingGet,
+    messageError:                       state.media.messageError,
+    image:                              state.media.usersMedia[state.connection.user.userId] ? state.media.usersMedia[state.connection.user.userId] : null,
+    user:                               state.connection.user,
+    personality:                        state.connection.personality,
+    loadingUpload:                      state.media.userMediaUpaloadLoading,
+    loadingGetPersonality:              state.connection.loadingGetPersonality,
+    loadingPatchPersonality:            state.connection.loadingPatchPersonality,
+    loadingCharacteristicsReferential:  state.referentielCaracteristiques.loadingGetReferential,
+    characteristicsReferencial:         state.referentielCaracteristiques.characteristicsReferencial,
+    message_error:                      state.connection.message_error,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -271,6 +392,9 @@ const mapDispatchToProps = dispatch => ({
     handleUploadUserMedia:                  (imageURI) => dispatch(handleUploadUserMedia(imageURI)),
     handleLogout:                           () => dispatch(handleLogout()),
     handleGetReferentialCharacteristics:    () => dispatch(handleGetReferentialCharacteristics()),
+    handleGetPersonalityConnectedUser:      () => dispatch(handleGetPersonalityConnectedUser()),
+    handlePatchConnectedUserPersonality:    (personality) => dispatch(handlePatchConnectedUserPersonality(personality)),
+    handleHideError:                        () => dispatch(handleHideError()),
 });
 
 export default connect(
@@ -378,3 +502,17 @@ const styles = StyleSheet.create({
         width: 32
     }
 });
+
+const
+    animaux_actif =     <Image source={ require('../assets/icon/pets_ff8f00.png')} style={ styles.icon}/>,
+    animaux_inactif =   <Image source={ require('../assets/icon/pets_aaa.png')} style={ styles.icon}/>,
+    fete_actif =        <Image source={ require('../assets/icon/party_ff8f00.png')} style={ styles.icon}/>,
+    fete_inactif =      <Image source={ require('../assets/icon/party_aaa.png')} style={ styles.icon}/>,
+    fumeur_actif =      <Image source={ require('../assets/icon/smoke_ff8f00.png')} style={ styles.icon}/>,
+    fumeur_inactif =    <Image source={ require('../assets/icon/smoke_aaa.png')} style={ styles.icon}/>,
+    rangement_actif =   <Image source={ require('../assets/icon/shelf_ff8f00.png')} style={ styles.icon}/>,
+    rangement_inactif = <Image source={ require('../assets/icon/shelf_aaa.png')} style={ styles.icon}/>,
+    hygiene_actif =     <Image source={ require('../assets/icon/clean_ff8f00.png')} style={ styles.icon}/>,
+    hygiene_inactif =   <Image source={ require('../assets/icon/clean_aaa.png')} style={ styles.icon}/>,
+    social_actif =      <Image source={ require('../assets/icon/social_ff8f00.png')} style={ styles.icon}/>,
+    social_inactif =    <Image source={ require('../assets/icon/social_aaa.png')} style={ styles.icon}/>;

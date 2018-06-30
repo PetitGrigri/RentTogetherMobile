@@ -47,7 +47,6 @@ const referentielCaracteristiques = (state = initialMessagesState, action) => {
 
         //autres 
         default : 
-            console.log('TROLOLO');
             return state;
     }
 }
