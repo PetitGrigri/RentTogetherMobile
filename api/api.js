@@ -365,13 +365,14 @@ export const getUserMedia = function(token, userId, callBackOk, callBackError) {
 
 
 
-
-
-
-
-
-
-
+/**
+ * Fonction permettant de récupérer les conversation d'un utilisateur
+ * @param {string} token 
+ * @param {int} userId 
+ * @param {object} filter 
+ * @param {function} callBackOk 
+ * @param {function} callBackError 
+ */
 export const getConversations = function(token, userId, filter, callBackOk, callBackError) {
     // Le header contiendra le token d'authentification plus tard
     let myHeaders = new Headers({
@@ -408,12 +409,18 @@ export const getConversations = function(token, userId, filter, callBackOk, call
         .catch(error => {
             callBackError(error.message);
         });
-    
 }
 
 
 
-
+/**
+ * Fonction permettant de récupérer la liste des messages d'une conversation
+ * @param {string} token 
+ * @param {int} conversationId 
+ * @param {object} filter 
+ * @param {function} callBackOk 
+ * @param {function} callBackError 
+ */
 export const getMessages = function(token, conversationId, filter, callBackOk, callBackError) {
     // Le header contiendra le token d'authentification plus tard
     let myHeaders = new Headers({
@@ -455,12 +462,11 @@ export const getMessages = function(token, conversationId, filter, callBackOk, c
 
 
 /**
- * Fonction permettant de poster un message
- * 
- * @param {string} user L'objet FormData correspondant à l'utilisateur
- * 
- * 
- * 
+ * Fonction permettant d'ajouter un nouveau message dans une conversation
+ * @param {string} token 
+ * @param {int} userId 
+ * @param {int} conversationId 
+ * @param {string} message 
  * @param {function} callBackOk 
  * @param {function} callBackError 
  */
@@ -508,12 +514,10 @@ export const postMessage = function(token, userId, conversationId, message,  cal
 
 
 /**
- * Fonction permettant de poster un message
- * 
- * @param {string} user L'objet FormData correspondant à l'utilisateur
- * 
- * 
- * 
+ * Fonction permettant d'uploader une Image d'utilisateur
+ * @param {string} token 
+ * @param {int} userId 
+ * @param {string} imageURI 
  * @param {function} callBackOk 
  * @param {function} callBackError 
  */
@@ -561,3 +565,50 @@ export const postUploadUserImage = function(token, userId, imageURI, callBackOk,
             callBackError(error.message);
         });
 }
+
+
+
+
+/**
+ * Cette fonction permet de récupérer la liste des référentiels des charactéristiques. 
+ * @param {string} token 
+ * @param {function} callBackOk 
+ * @param {function} callBackError 
+ */
+export const getCharacteristicsReferential = function(token, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+    let myHeaders = new Headers({
+        'Content-Type':     'application/json',
+        'Authorization':    'Bearer '+token
+    });
+
+    //les paramètres de la requête
+    let options = {
+        method:     'GET',
+        headers:    myHeaders,
+        mode:       'cors',
+        cache:      'default'
+    };
+
+    let urlCharacteristicsReferential = `${url}/PersonalitiesDetails`;
+
+    fetch(urlCharacteristicsReferential, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataCharacteristicsReferential => {
+            callBackOk(dataCharacteristicsReferential);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
+
+
+

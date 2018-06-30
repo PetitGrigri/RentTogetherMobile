@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, SectionList, ScrollView, TouchableOpacity, ActivityIndicator, Platform, Image } from 'react-native';
 import Text from  '../Components/Text';
-import { Foundation, MaterialCommunityIcons, Entypo, Ionicons, SimpleLineIcons} from '@expo/vector-icons';
+import { Entypo, Ionicons, SimpleLineIcons} from '@expo/vector-icons';
 import Rating from '../Components/Rating';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { handleGetUserMedia, handleUploadUserMedia } from '../actions/media';
 import { handleLogout } from '../actions/connection';
-import { TOKEN_NAME } from '../actions/connection';
 import { connect } from 'react-redux'
 import { UserImage, UserImageBackground } from '../containers';
 import { Alert } from 'react-native';
+import { handleGetReferentialCharacteristics } from '../actions/referentielCaracteristiques';
 
 const itemRow = (props) => {
     let { index, item } = props;
@@ -73,6 +73,7 @@ class Profile extends Component {
 
     componentDidMount = () => {
         this.props.handleGetUserMedia(this.props.user.userId);
+        this.props.handleGetReferentialCharacteristics();
     };
     
     getSections = () => {
@@ -157,7 +158,6 @@ class Profile extends Component {
 
     changeParam = () =>{
         this.props.navigation.navigate('updateParam')
-        
     }
 
 
@@ -170,13 +170,10 @@ class Profile extends Component {
         }
 
         // Demande de la permission camera (semble nécessaire pour iOS)
-        if (Platform.OS === 'ios') {
-            let cameraRollPermission= await Expo.Permissions.getAsync(Expo.Permissions.CAMERA_ROLL)
-            if (cameraRollPermission.status  !== 'granted') {
-                await Expo.Permissions.askAsync(Expo.Permissions.CAMERA_ROLL)
-            }
+        let cameraRollPermission= await Expo.Permissions.getAsync(Expo.Permissions.CAMERA_ROLL)
+        if (cameraRollPermission.status  !== 'granted') {
+            await Expo.Permissions.askAsync(Expo.Permissions.CAMERA_ROLL)
         }
-
 
         // Si on n'a pas de permission, on arrête là
         if (((Platform.OS === 'ios') && ((cameraPermission.status  !== 'granted') || (cameraRollPermission.status  !== 'granted'))) ||
@@ -270,9 +267,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    handleGetUserMedia:     (userId) => dispatch(handleGetUserMedia(userId)),
-    handleUploadUserMedia:  (imageURI) => dispatch(handleUploadUserMedia(imageURI)),
-    handleLogout:           () => dispatch(handleLogout()),
+    handleGetUserMedia:                     (userId) => dispatch(handleGetUserMedia(userId)),
+    handleUploadUserMedia:                  (imageURI) => dispatch(handleUploadUserMedia(imageURI)),
+    handleLogout:                           () => dispatch(handleLogout()),
+    handleGetReferentialCharacteristics:    () => dispatch(handleGetReferentialCharacteristics()),
 });
 
 export default connect(
