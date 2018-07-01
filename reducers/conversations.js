@@ -1,7 +1,10 @@
 import { 
+    //Types d'actions destinées à la récupération des conversations
     CONVERSATIONS_GET_REQUEST, 
     CONVERSATIONS_GET_SUCCESS, 
     CONVERSATIONS_GET_ERROR, 
+    // Action de nettoyage des conversations quand on se déconnecte
+    CONVERSATIONS_LOGOUT
  } from '../actions/conversations';
 
 import { isset } from '../utils/check';
@@ -51,6 +54,15 @@ const conversations = (state = initialConversationsState, action) => {
             return Object.assign({}, state, {
                 loadingConversations :  false,
                 message:                action.message||"Erreur de connexion",
+            });
+
+        // Quand un utilisateur se déconnecte, on nettoie toutes les conversations présente pour que le prochain n'y ai plus accès
+        case CONVERSATIONS_LOGOUT: 
+            return Object.assign({}, state, {
+                loadingConversations :  false,
+                conversations:          [],
+                participantsId:         [],
+                message:                "",
             });
 
         //autres 

@@ -638,10 +638,17 @@ export const getPersonnalityUser = function(token, userId, callBackOk, callBackE
 
     fetch(urlPersonalities, options)
         .then(response => {
+            // Réponse normale ou tout s'est bien passé
             if (response.ok === true) {
                 return response.json().catch(error => {
                     throw Error("Erreur de l'API.");
                 });
+            // Réponse 404 ou l'utilisateur n'a pas encore de personalité
+            } else if (response.status === 404) {
+                return {
+                    personalityValueApiDtos:[]
+                };
+            // Erreur
             } else {
                 throw Error(response.statusText);
             }
@@ -692,10 +699,10 @@ export const patchPersonalityUser = function(token, personality, userId, callBac
        body:        jsonPersonalityString
    };
 
-   let urlUrlPersonality = `${url}/Personalities/${userId}`;
+   let urlPersonality = `${url}/Personalities/${userId}`;
 
    //réalisation de la requête
-   fetch(urlUrlPersonality, options)
+   fetch(urlPersonality, options)
        .then(response => {
            if (response.ok === true) {
                return response.json().catch(error => {
@@ -707,4 +714,55 @@ export const patchPersonalityUser = function(token, personality, userId, callBac
        })
        .then(dataPersonality => callBackOk(dataPersonality))
        .catch(error => callBackError(error.message));
+}
+
+
+
+/**
+ * Fonction permettant de créer un utilisateur
+ * 
+ * @param {object} user L'objet FormData correspondant à l'utilisateur
+ * @param {function} callBackOk 
+ * @param {function} callBackError 
+ */
+export const postPersonalityUser= function(token, personality, userId,  callBackOk, callBackError) {
+    console.log(1, token, personality, userId,  callBackOk, callBackError);
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+ token
+    });
+
+    // Conversion de notre FormData en objet 
+    var jsonPersonalityString = JSON.stringify(personality);
+
+    //les paramètres de la requête
+    var options = {
+        method: 'POST',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default',
+        body: jsonPersonalityString
+    };
+
+    let urlPersonality = `${url}/Personalities/${userId}`;
+    console.log(1, urlPersonality, jsonPersonalityString, options);
+
+    fetch(urlPersonality, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+                //TODO ici ajouter utilisateur
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataPersonality => {
+            callBackOk(dataPersonality);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
 }

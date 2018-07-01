@@ -25,6 +25,8 @@ class MatchesLocations extends Component {
     }
 
     render() {
+        return <View />;
+        //TODO Continuer
         return (
             <FlatList
                 data={listeConversations}

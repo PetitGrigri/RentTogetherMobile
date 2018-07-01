@@ -7,6 +7,8 @@ export const
     CONVERSATIONS_GET_SUCCESS   = 'CONVERSATIONS_GET_SUCCESS', 
     CONVERSATIONS_GET_ERROR     = 'CONVERSATIONS_GET_ERROR'
 
+    // Action de nettoyage des conversations quand on se déconnecte
+    CONVERSATIONS_LOGOUT =    'CONVERSATIONS_LOGOUT'
     ;
 
 /**
@@ -52,5 +54,15 @@ export const handleGetConversationsError = (error) => {
     return {
         type:       CONVERSATIONS_GET_ERROR,
         message:    error
+    }
+};
+
+/**
+ * Méthode permettant d'indiquer qu'il y a eu une erreur lors de la récupération des conversations
+ * @param {string} error le message d'erreur
+ */
+export const handleLogout = () => {
+    return {
+        type:       CONVERSATIONS_LOGOUT
     }
 };

@@ -5,7 +5,8 @@ import { Entypo, Ionicons, SimpleLineIcons} from '@expo/vector-icons';
 import Rating from '../Components/Rating';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { handleGetUserMedia, handleUploadUserMedia } from '../actions/media';
-import { handleLogout, handleGetPersonalityConnectedUser, handlePatchConnectedUserPersonality } from '../actions/connection';
+import { handleLogout, handleGetPersonalityConnectedUser, handlePatchConnectedUserPersonality, handlePostConnectedUserPersonality } from '../actions/connection';
+import { handleLogout as handleLogoutConversations } from '../actions/conversations';
 import { connect } from 'react-redux'
 import { UserImage, UserImageBackground } from '../containers';
 import { Alert } from 'react-native';
@@ -116,6 +117,10 @@ const titleHeader = (props)  => {
             </View>
 }
 
+
+
+
+
 class Profile extends Component {
 
     constructor(props) {
@@ -145,17 +150,52 @@ class Profile extends Component {
         // et qu'à l'état précédent, l'un des deux était en chargement, alors on set le state des personality.
         if (!this.props.loadingGetPersonality && !this.props.loadingCharacteristicsReferential && 
             (prevProps.loadingGetPersonality || prevProps.loadingCharacteristicsReferential) )  {
-                console.log('MISE A JOUR DE LA PERSONALITY DE L UTILISATEUR', 
-                    this.props.loadingGetPersonality, 
-                    this.props.loadingCharacteristicsReferential,
-                    prevProps.loadingGetPersonality,
-                    prevProps.loadingCharacteristicsReferential
-                )
-            this.setState({
-                personality: this.props.personality
-            });
+
+            // Si l'utilisateur connecté n'a pas de personnalité après la récupération du référentiel de caractéristiques et de la personnalité de ce dernier, on l'initialise
+            if (empty(this.props.personality)) {
+                this.initEmptyPersonality();
+            // Sinon, on met à jour le state personality de ce composant (qu'on pourra modifier jusqu'à sa sauvegarde)
+            } else {
+                this.setState({ personality: this.props.personality });
+            }
         }
 
+        // Si l'on vient d'insérer la personalité d'un utilisateur alors on remet à jour le state pour qu'il prenne en compte les personalité enregistré (et leur id)
+        if (prevProps.loadingPostPersonality && !this.props.loadingPostPersonality && (empty(this.props.message_error))) {
+
+            Alert.alert(
+                '',
+                "Vos caractéristiques sont enregistrées",
+                [
+                    {text: 'OK', onPress: () => {
+                        this.setState({
+                            personality:            this.props.personality,
+                            personalityToUpdate:    false
+                        });
+                    }}
+                ],
+                { cancelable: false }
+            );   
+
+
+        }
+
+        // Si il y a eu une erreur lors de l'insertion de la personalité d'un utilisateur
+        if (prevProps.loadingPostPersonality && !this.props.loadingPostPersonality && (!empty(this.props.message_error))) {
+            this.setState({
+                personalityToUpdate:    false
+            })
+            Alert.alert(
+                'Erreur',
+                this.props.message_error,
+                [
+                    {text: 'OK', onPress: () => this.props.handleHideError() }
+                ],
+                { cancelable: false }
+            );   
+        }
+        
+        //OK
         if (prevProps.loadingPatchPersonality && !this.props.loadingPatchPersonality && (empty(this.props.message_error))) {
             Alert.alert(
                 '',
@@ -163,33 +203,29 @@ class Profile extends Component {
                 [
                     {text: 'OK'}
                 ],
-                { cancelable: true }
+                { cancelable: false }
             );
         }
 
+        //OK
         if (prevProps.loadingPatchPersonality && !this.props.loadingPatchPersonality && (!empty(this.props.message_error))) {
             Alert.alert(
                 'Erreur',
-                this.props.message_error
+                this.props.message_error,
                 [
-                    {text: 'OK', onPress: () => this.props.handleHideError()}
+                    {text: 'OK', onPress: () => this.props.handleHideError() }
                 ],
-                { cancelable: true }
-            );
+                { cancelable: false }
+            );            
         }
-
     }
-    changePersonality = (personalityElementToUpdate, rating) =>{
-        console.log('CHANGEMENT DE ', personalityElementToUpdate, rating);
 
-        console.log('AVANT 0', this.state.personality);
+    changePersonality = (personalityElementToUpdate, rating) =>{
 
         let newPersonality = this.state.personality.map(oldPersonalityElement => {
-            if  (oldPersonalityElement.personalityValueId !== personalityElementToUpdate.personalityValueId) {
-                //console.log('   différent', oldPersonalityElement.personalityValueId, personalityElementToUpdate.personalityValueId)
+            if  (oldPersonalityElement.personalityReferencialId !== personalityElementToUpdate.personalityReferencialId) {
                 return oldPersonalityElement;
             } else {
-                //console.log('   égaux', oldPersonalityElement.personalityValueId, personalityElementToUpdate.personalityValueId)
                 return Object.assign({}, personalityElementToUpdate, {value: rating});
             }
         }); 
@@ -202,18 +238,23 @@ class Profile extends Component {
 
     saveUpdatedPersonality = () => {
 
-        console.log('TO UPDATE');
         this.setState({ personalityToUpdate : false });
-        this.props.handlePatchConnectedUserPersonality(this.state.personality);
+
+        // Si on doit insérer les personalités pour la première fois 
+        if (empty(this.props.personality)) {
+            this.props.handlePostConnectedUserPersonality(this.state.personality);
+        } 
+        // Si on doit mettre à jour les personalités
+        else {
+            this.props.handlePatchConnectedUserPersonality(this.state.personality);
+        }
 
     }
 
 
     getSections = () => {
-
        let sectionPersonality = [];
        if ( this.state.personality.length > 0 ) {
-            console.log('JE DOIS GENERER L AFFICHAGE DES CARACTERISTIQUES DE L UTILISATEUR');
             // Création d'un tableau contenant l'une des personalité de l'utilisateur, 
             this.state.personality.forEach(personalityElement => {
                 if (isset(this.props.characteristicsReferencial[personalityElement.personalityReferencialId])) {
@@ -225,8 +266,6 @@ class Profile extends Component {
                 }
             });
         }
-
-        console.log('getSections', sectionPersonality);
 
         return [{   
             title: 'Mes informations', 
@@ -258,7 +297,7 @@ class Profile extends Component {
             data: sectionPersonality,
             action: (this.state.personalityToUpdate && !this.props.loadingPatchPersonality) 
                 ?   <TouchableOpacity onPress={ this.saveUpdatedPersonality  }><Entypo  color='#aaa' name='save' size={ 18 } style={styles.editParam }/></TouchableOpacity>
-                :   (this.props.loadingGetPersonality || this.props.loadingCharacteristicsReferential || this.props.loadingPatchPersonality) 
+                :   (this.props.loadingGetPersonality || this.props.loadingCharacteristicsReferential || this.props.loadingPatchPersonality || this.props.loadingPostPersonality) 
                     ? <ActivityIndicator size="small" color='#aaa' /> 
                     : null,
             renderItem: itemRowCharacteristic
@@ -275,6 +314,49 @@ class Profile extends Component {
         this.props.navigation.navigate('updateParam')
     }
 
+    /**
+     * Dans le cas ou un utilisateur n'a pas de personnalité, on lui initialise une personalité vide (et on l'informe qu'il doit les sauvegarder)
+     */
+    initEmptyPersonality = () => {
+        // Message d'information
+        Alert.alert(
+            'Vos caractéristiques',
+            "Vos caractéristiques ne sont pas encore configurées. \nNous vous invitons à les configurer pour que vous puissiez trouver d'autres colocataires",
+            [
+                { text: 'OK', onPress: () => {
+                    this.setState({
+                        personality: [{
+                            personalityReferencialId : 1,
+                            value : 3
+                        },
+                        {
+                            personalityReferencialId : 2,
+                            value : 3
+                        },
+                        {
+                            personalityReferencialId : 4,
+                            value: 3
+                        },
+                        {
+                            personalityReferencialId: 5,
+                            value: 3
+                        },
+                        {
+                            personalityReferencialId : 6,
+                            value: 3
+                        },
+                        {
+                            personalityReferencialId : 7,
+                            value: 3
+                        }],
+                        personalityToUpdate: true
+                    });
+                }}
+            ],
+            { cancelable: false }
+        )
+        
+    }
 
     pickAPhoto = async () => {
         
@@ -330,6 +412,7 @@ class Profile extends Component {
 
     logout = () => {
         this.props.handleLogout();
+        this.props.handleLogoutConversations();
     }
 
 
@@ -382,6 +465,7 @@ const mapStateToProps = state => ({
     loadingUpload:                      state.media.userMediaUpaloadLoading,
     loadingGetPersonality:              state.connection.loadingGetPersonality,
     loadingPatchPersonality:            state.connection.loadingPatchPersonality,
+    loadingPostPersonality:             state.connection.loadingPostPersonality,
     loadingCharacteristicsReferential:  state.referentielCaracteristiques.loadingGetReferential,
     characteristicsReferencial:         state.referentielCaracteristiques.characteristicsReferencial,
     message_error:                      state.connection.message_error,
@@ -394,23 +478,15 @@ const mapDispatchToProps = dispatch => ({
     handleGetReferentialCharacteristics:    () => dispatch(handleGetReferentialCharacteristics()),
     handleGetPersonalityConnectedUser:      () => dispatch(handleGetPersonalityConnectedUser()),
     handlePatchConnectedUserPersonality:    (personality) => dispatch(handlePatchConnectedUserPersonality(personality)),
+    handlePostConnectedUserPersonality:     (personality) => dispatch(handlePostConnectedUserPersonality(personality)),
     handleHideError:                        () => dispatch(handleHideError()),
+    handleLogoutConversations:              () => dispatch(handleLogoutConversations()),
 });
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Profile);
-
-
-
-
-
-
-
-
-
-
 
 
 

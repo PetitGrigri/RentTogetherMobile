@@ -16,10 +16,14 @@ import {
     GET_PERSONALITY_CONNECTED_USER_REQUEST,
     GET_PERSONALITY_CONNECTED_USER_SUCCESS,
     GET_PERSONALITY_CONNECTED_USER_ERROR,
-    // Récupération de la personalité de l'utilisateur connecté
+    // Mise à jour de la personalité de l'utilisateur connecté
     PATCH_PERSONALITY_CONNECTED_USER_REQUEST,
     PATCH_PERSONALITY_CONNECTED_USER_SUCCESS,
     PATCH_PERSONALITY_CONNECTED_USER_ERROR,
+    // Enregistrement de la personalité de l'utilisateur connecté
+    POST_PERSONALITY_CONNECTED_USER_REQUEST,
+    POST_PERSONALITY_CONNECTED_USER_SUCCESS,
+    POST_PERSONALITY_CONNECTED_USER_ERROR,
     
      // Déconnexion
     LOGOUT,
@@ -35,10 +39,12 @@ const initialConnectionState = {
     loadingPatchUser:       false,
     loadingGetPersonality:  false,
     loadingPatchPersonality:false,
+    loadingPostPersonality: false,
     isAuthenticated:        false,
     user:                   {},
     personality:            [],
     message_error :         "",
+    //TODO message_success:        "",
     
 }
 
@@ -132,6 +138,7 @@ const connection = (state = initialConnectionState, action) => {
                 loadingSignIn:      false,
                 isAuthenticated:    false,
                 user:               {},
+                personality:        {},
             });
 
         // Mise à jour de la personalité d'un utilisateur
@@ -143,7 +150,7 @@ const connection = (state = initialConnectionState, action) => {
         case PATCH_CONNECTED_USER_SUCCESS:
             return Object.assign({}, state, {
                 loadingPatchUser:   false,
-                user:               action.user
+                user:               action.user,
             });
         case PATCH_CONNECTED_USER_ERROR:
             return Object.assign({}, state, {
@@ -160,14 +167,36 @@ const connection = (state = initialConnectionState, action) => {
         case PATCH_PERSONALITY_CONNECTED_USER_SUCCESS:
             return Object.assign({}, state, {
                 loadingPatchPersonality:   false,
-                personality:               action.personality
+                personality:               action.personality,
             });
         case PATCH_PERSONALITY_CONNECTED_USER_ERROR:
             return Object.assign({}, state, {
                 loadingPatchPersonality:    false,
                 message_error:              action.message||"Vos données n'ont pas pu être actualisées",   
             });
-            
+
+        // Enregistrement de la personnalité d'un utilisateur
+        case POST_PERSONALITY_CONNECTED_USER_REQUEST: 
+            return Object.assign({}, state, {
+                loadingPostPersonality:    true,
+            });
+
+        case POST_PERSONALITY_CONNECTED_USER_SUCCESS:
+            return Object.assign({}, state, {
+                loadingPostPersonality:   false,
+                personality:               action.personality
+            });
+        case POST_PERSONALITY_CONNECTED_USER_ERROR:
+            return Object.assign({}, state, {
+                loadingPostPersonality:    false,
+                message_error:              action.message||"Vos caractéristiques n'ont pas pu être sauvegardées",   
+            });
+
+
+
+
+
+
         //autres 
         default : 
             return state;

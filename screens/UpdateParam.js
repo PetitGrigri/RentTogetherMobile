@@ -23,8 +23,8 @@ class UpdateParam extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
-        if ((prevProps.message_error != this.props.message_error) && (!empty(this.props.message_error))) {
+        // Si on a une erreur lors de la mise à jour de l'utilisateur
+        if (prevProps.loadingPatchUser && !this.props.loadingPatchUser && (!empty(this.props.message_error))) {
             Alert.alert(
                 'Erreur',
                 this.props.message_error,
@@ -34,8 +34,8 @@ class UpdateParam extends Component {
                 { cancelable: true }
             );
         }
-        //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
-        if ((prevProps.loadingPatchUser != this.props.loadingPatchUser) && (empty(this.props.message_error))) {
+        // Si l'on n'a pas d'erreur lors de la mise à jour de l'utilisateur
+        if (prevProps.loadingPatchUser && !this.props.loadingPatchUser && (empty(this.props.message_error))) {
             Alert.alert(
                 '',
                 "Vos données personnelles ont été mise à jour",

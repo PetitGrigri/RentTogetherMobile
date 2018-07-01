@@ -103,7 +103,7 @@ class Register extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
-        if ((prevProps.loadingAdd != this.props.loadingAdd) && (empty(this.props.message_error))) {
+        if (prevProps.loadingAdd && !this.props.loadingAdd && (empty(this.props.message_error))) {
             Alert.alert(
                 'Bienvenue',
                 "Votre compte utilisateur vient d'être crée. Vous pouvez maintenant vous connecter",
@@ -114,7 +114,7 @@ class Register extends Component {
             )
         }
         //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
-        if ((prevProps.loadingAdd != this.props.loadingAdd) && (!empty(this.props.message_error))) {
+        if (prevProps.loadingAdd && !this.props.loadingAdd && (!empty(this.props.message_error)))  {
             Alert.alert(
                 'Erreur',
                 this.props.message_error,

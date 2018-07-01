@@ -26,7 +26,10 @@ export const
     PATCH_PERSONALITY_CONNECTED_USER_REQUEST =    'PATCH_PERSONALITY_CONNECTED_USER_REQUEST',
     PATCH_PERSONALITY_CONNECTED_USER_SUCCESS =    'PATCH_PERSONALITY_CONNECTED_USER_SUCCESS',
     PATCH_PERSONALITY_CONNECTED_USER_ERROR =      'PATCH_PERSONALITY_CONNECTED_USER_ERROR',
-    
+    // Enregistrement de la personalité de l'utilisateur connecté
+    POST_PERSONALITY_CONNECTED_USER_REQUEST =   'POST_PERSONALITY_CONNECTED_USER_REQUEST',
+    POST_PERSONALITY_CONNECTED_USER_SUCCESS =   'POST_PERSONALITY_CONNECTED_USER_SUCCESS',
+    POST_PERSONALITY_CONNECTED_USER_ERROR =     'POST_PERSONALITY_CONNECTED_USER_ERROR',
     // Déconnexion
     LOGOUT  = 'LOGOUT'
     ;
@@ -287,5 +290,55 @@ const handlePatchConnectedUserPersonalityError = (error) => {
     return {
         type:       PATCH_PERSONALITY_CONNECTED_USER_ERROR,
         message:    error
+    }
+}
+
+
+
+
+
+
+/**
+ * Fonction destinée à la création d'un utilisateur en utilisant l'objet user passé en paramètre 
+ * Plusieurs actions seront emises pour informer redux de l'état en cours
+ * 
+ * @param {object} user  
+ */
+export const handlePostConnectedUserPersonality= (personality) => {
+    return function (dispatch, getState) {
+
+        dispatch({
+            type: POST_PERSONALITY_CONNECTED_USER_REQUEST, 
+        });
+
+        api.postPersonalityUser(
+            getState().connection.user.token,
+            personality,
+            getState().connection.user.userId,
+            (dataUser) => { dispatch(handlePostConnectedUserPersonalitySuccess(dataUser)) },
+            (error) => { dispatch(handlePostConnectedUserPersonalityError(error)) }
+        )
+    }
+}
+
+/**
+ * Fonction permettant de retourner l'action nécessaire à la prise en compte du succés de la création d'un utilisateur
+ */
+const handlePostConnectedUserPersonalitySuccess = (dataPersonality) => {
+    return {
+        type: POST_PERSONALITY_CONNECTED_USER_SUCCESS,
+        personality: dataPersonality
+    }
+};
+
+/**
+ * Fonction permettant de retourner l'action nécessaire à la prise en compte l'échec de la création d'un utilisateur
+ * 
+ * @param {string} error le message d'erreur
+ */
+const handlePostConnectedUserPersonalityError = (error) => {
+    return {
+        type: POST_PERSONALITY_CONNECTED_USER_ERROR,
+        message: error
     }
 }
