@@ -12,7 +12,7 @@ import { Alert } from 'react-native';
 import { handleGetReferentialCharacteristics } from '../actions/referentielCaracteristiques';
 import { isset, empty } from '../utils/check';
 import {handleHideError } from '../actions/connection';
-import { ItemRow, ItemRowLocation, ItemRowPersonality, TitleHeader } from '../Components/Profile';
+import { ItemRow, ItemRowLocation, ItemRowPersonality, TitleHeader, ItemRowDescription } from '../Components/Profile';
 import { handleGetConnectedUserLocation } from '../actions/locations';
 
 class Profile extends Component {
@@ -176,6 +176,13 @@ class Profile extends Component {
             }], 
             renderItem: (props) => <ItemRow {...props} />,
             action: <TouchableOpacity onPress={ this.changeParam  }><Entypo  color='#aaa' name='edit' size={ 18 } style={styles.editParam }/></TouchableOpacity>
+        },{   
+            title: 'Ma description', 
+            data: [{
+                value:      this.props.user.description,
+            }], 
+            renderItem: (props) => <ItemRowDescription {...props} />,
+            action: <TouchableOpacity onPress={ this.changeDescription  }><Entypo  color='#aaa' name='edit' size={ 18 } style={styles.editParam }/></TouchableOpacity>
         }, {   
             title: 'Mes recherches', 
             data: [{
@@ -209,9 +216,14 @@ class Profile extends Component {
 
 
     changeParam = () =>{
-        this.props.navigation.navigate('updateParam')
+        this.props.navigation.navigate('updateParam');
     }
 
+    changeDescription = () =>{
+        this.props.navigation.navigate('updateDescription');
+    }
+
+    
     /**
      * Dans le cas ou un utilisateur n'a pas de personnalité, on lui initialise une personalité vide (et on l'informe qu'il doit les sauvegarder)
      */

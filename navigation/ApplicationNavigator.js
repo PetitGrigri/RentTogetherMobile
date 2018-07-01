@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation';
 import TabNavigator from './TabNavigator';
 import Messages from '../screens/Messages';
 import UpdateParam from '../screens/UpdateParam';
+import UpdateDescription from '../screens/UpdateDescription';
 
 const ApplicationNavigator = createStackNavigator({
     home: {
@@ -33,7 +34,18 @@ const ApplicationNavigator = createStackNavigator({
             },
             headerTintColor:        '#fff'
         }
-    }
+    },
+    updateDescription: { 
+        screen: UpdateDescription, 
+        navigationOptions: {
+            title:  'Ma description',
+            headerStyle: {
+                backgroundColor:    '#ff8f00',       
+            },
+            headerTintColor:        '#fff'
+        }
+    },
+    
 });
 
 export default ApplicationNavigator;
