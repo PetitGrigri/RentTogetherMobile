@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, SectionList, ScrollView, TouchableOpacity, ActivityIndicator, Platform, Image } from 'react-native';
+import { StyleSheet, View, SectionList, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import Text from  '../Components/Text';
 import { Entypo, Ionicons, SimpleLineIcons} from '@expo/vector-icons';
-import Rating from '../Components/Rating';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { handleGetUserMedia, handleUploadUserMedia } from '../actions/media';
 import { handleLogout, handleGetPersonalityConnectedUser, handlePatchConnectedUserPersonality, handlePostConnectedUserPersonality } from '../actions/connection';
@@ -13,76 +12,7 @@ import { Alert } from 'react-native';
 import { handleGetReferentialCharacteristics } from '../actions/referentielCaracteristiques';
 import { isset, empty } from '../utils/check';
 import {handleHideError } from '../actions/connection';
-import { getImagesFromPersonalReferentialName } from '../utils/rating';
-
-
-const itemRow = (props) => {
-    let { index, item } = props;
-    return (
-        <View key={index} style={styles.itemRow}>
-            <Text style={styles.itemRowLabel} >{item.label}</Text>
-            <Text style={styles.itemRowValue}  >{item.value}</Text>
-        </View>
-    );
-}
-
-const itemRowLocation = (props) => {
-    let { index, item } = props;
-    return (
-        <View key={index} style={styles.itemRow}>
-            <Text style={styles.itemRowLabel} >{item.codePostal}</Text>
-            <Text style={styles.itemRowValue}  >{item.city}</Text>
-        </View>
-    );
-}
-
-const itemRowCharacteristic = (props) => {
-    let { item } = props;
-
-    
-    let images = getImagesFromPersonalReferentialName(item.characteristicsReferencial.name);
-
-    let itemProps = {
-        fractions:          5,
-        currentValue:       item.personality.value,
-        activeComponent:    images.activeComponent,
-        unactiveComponent:  images.unactiveComponent,
-        reviews:            [
-            item.characteristicsReferencial.description1,
-            item.characteristicsReferencial.description2,
-            item.characteristicsReferencial.description3,
-            item.characteristicsReferencial.description4,
-            item.characteristicsReferencial.description5,
-        ],
-        onChange:  (rating) => item.onChange(rating)
-    }
-
-    //return null
-    return (
-        <View key={ `personality-${item.characteristicsReferencial.personalityValueId}` } style={styles.itemRowCharacteristic}>
-            <Rating {...itemProps} />
-        </View>
-    );
-
-}
-
-const titleHeader = (props)  => {
-    let {section: {title, actionTitle, action}} = props
-
-    return  <View style={ styles.titleSection }>
-                { (title && (!actionTitle)) ? <Text h2 style={styles.titleProfile}>{ title }</Text> : null }
-                { actionTitle 
-                    ?   <TouchableOpacity onPress= { actionTitle } style={styles.actionTitle}>
-                            <Text h2 style={styles.titleProfile}>{ title }</Text>
-                        </TouchableOpacity> 
-                    :   null 
-                }
-                { action  ?   action  :   null  }
-            </View>
-}
-
-
-
+import { ItemRow, ItemRowLocation, ItemRowPersonality, TitleHeader } from '../Components/Profile';
 
 
 class Profile extends Component {
@@ -96,7 +26,6 @@ class Profile extends Component {
             personalityToUpdate:    false,
         }
     }
-
 
     changeRadius = (nativeEvent) => {
         this.setState({avatarRadius: nativeEvent.layout.width / 2 })
@@ -244,7 +173,7 @@ class Profile extends Component {
                 label:      "Email",
                 value:      this.props.user.email,
             }], 
-            renderItem: itemRow,
+            renderItem: (props) => <ItemRow {...props} />,
             action: <TouchableOpacity onPress={ this.changeParam  }><Entypo  color='#aaa' name='edit' size={ 18 } style={styles.editParam }/></TouchableOpacity>
         }, {   
             title: 'Mes recherches', 
@@ -255,7 +184,7 @@ class Profile extends Component {
                 codePostal: "45000",
                 city: "Orléans"
             }],
-            renderItem: itemRowLocation
+            renderItem: (props) => <ItemRowLocation {...props} />
         }, {
             title: 'Mes caractéristiques', 
             data: sectionPersonality,
@@ -264,7 +193,7 @@ class Profile extends Component {
                 :   (this.props.loadingGetPersonality || this.props.loadingCharacteristicsReferential || this.props.loadingPatchPersonality || this.props.loadingPostPersonality) 
                     ? <ActivityIndicator size="small" color='#aaa' /> 
                     : null,
-            renderItem: itemRowCharacteristic
+            renderItem: (props) => <ItemRowPersonality {...props} />
         }, {
             title:          'Se déconnecter',
             actionTitle:    this.logout,
@@ -409,7 +338,7 @@ class Profile extends Component {
                     <View style={styles.containerInformations}>
                         <SectionList
                             renderItem={({ item, index, section }) => <Text key={index}>{item}</Text>}
-                            renderSectionHeader={ (props) => titleHeader(props) }
+                            renderSectionHeader={ (props) => <TitleHeader {...props} />}
                             sections={ this.getSections() }
                             keyExtractor={(item, index) => item + index}
                         />
@@ -453,7 +382,6 @@ export default connect(
 )(Profile);
 
 
-
 const styles = StyleSheet.create({
     container: {
         backgroundColor:    '#eee',
@@ -476,38 +404,8 @@ const styles = StyleSheet.create({
         borderWidth:    4,
         borderColor:    '#fff',
     },
-    titleProfile: {
-        fontFamily: 'open-sans-light', 
-        color:      '#e65100',
-        flex:       1,
-    },
     containerInformations: {
         margin: 16,
-    },
-    itemRow: {
-        padding:        12,
-        marginLeft:     4,
-        marginRight:    4,
-        flexDirection:  'row',
-        justifyContent: 'flex-start',
-        alignItems:     'center',
-    },
-    itemRowLabel: {
-        fontFamily:     'open-sans-light', 
-        fontSize:       12,
-        flex:           1,
-    }, 
-    itemRowValue: {
-        fontFamily:     'open-sans-light', 
-        fontSize :      16,
-        flex:           2,
-        textAlign:      'right'
-    },
-    itemRowCharacteristic: {
-        padding:        12,
-        marginLeft:     4,
-        marginRight:    4,
-        flex:           1,
     },
     cardBottomTop: {
         position:           'relative',
@@ -529,11 +427,6 @@ const styles = StyleSheet.create({
         textAlign:      'right',
 
     }, 
-    titleSection: {
-        flexDirection:  'row',
-        alignItems:     'center',
-        marginTop:      10,
-    },
     actionTitle: {
         flex:       1,
     }

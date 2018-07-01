@@ -27,7 +27,7 @@ class RoomerCard extends Component
 
     render() {
 
-        let { targetUser, matchDetailApiDtos } = this.props;
+        let { targetUser, matchDetailApiDtos, average } = this.props;
         return (
             <View style={ styles.card }>
                 <View style={styles.cardTop} />
@@ -48,7 +48,7 @@ class RoomerCard extends Component
                                     <Text h2 style={styles.textWhite}>xx ans</Text>
                                 </View>
                                 <View style={{width:'25%', padding: 5, alignItems: 'flex-end'}}>
-                                    <Text h2 style={styles.textWhite}>xx%</Text>
+                                    <Text h2 style={styles.textWhite}>{ average } %</Text>
                                 </View>
                             </View>
                             <View style={{flex:1, alignItems:'center', justifyContent: 'center'}}>
