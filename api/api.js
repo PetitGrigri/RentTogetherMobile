@@ -768,7 +768,7 @@ export const postPersonalityUser= function(token, personality, userId,  callBack
 }
 
 /**
- * Méthode destinée à récupérer la liste des colloataires potentiels
+ * Méthode destinée à récupérer la liste des collocataires potentiels
  * 
  * @param {string} token Le token de l'utilisateur connecté
  * @param {int} userId L'id de l'utilisateur connecté
@@ -807,6 +807,53 @@ export const getLocatairesPotentiels = function(token, userId, filter, callBackO
         })
         .then(dataPotentialRoomers => {
             callBackOk(dataPotentialRoomers);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
+
+
+
+
+
+/**
+ * Méthode destinée à récupérer la liste des localisations souhaités par l'utilisateur
+ * 
+ * @param {string} token Le token de l'utilisateur connecté
+ * @param {int} userId L'id de l'utilisateur connecté
+ * @param {function} callBackOk Le callback à utiliser quand on aura récupérer la liste des utilisateurs (la liste des utilisateurs sera transmise en paramètre)
+ * @param {function} callBackError Le callback à utiliser quand la récupération de la liste des utilisateurs n'est pas possibles (L'erreur sera transmise en paramètre)
+ */
+export const getConnectedUserLocation = function(token, userId, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+token
+    });
+
+    //les paramêtres de la requête
+    var options = {
+        method: 'GET',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default'
+    };
+
+    let urlTargetLocations = `${url}/TargetLocations/${userId}`;
+
+    fetch(urlTargetLocations, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataLocations => {
+            callBackOk(dataLocations);
         })
         .catch(error => {
             callBackError(error.message);

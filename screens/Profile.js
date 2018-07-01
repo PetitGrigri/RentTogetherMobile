@@ -13,7 +13,7 @@ import { handleGetReferentialCharacteristics } from '../actions/referentielCarac
 import { isset, empty } from '../utils/check';
 import {handleHideError } from '../actions/connection';
 import { ItemRow, ItemRowLocation, ItemRowPersonality, TitleHeader } from '../Components/Profile';
-
+import { handleGetConnectedUserLocation } from '../actions/locations';
 
 class Profile extends Component {
 
@@ -35,6 +35,7 @@ class Profile extends Component {
         this.props.handleGetUserMedia(this.props.user.userId);
         this.props.handleGetReferentialCharacteristics();
         this.props.handleGetPersonalityConnectedUser();
+        this.props.handleGetConnectedUserLocation();
     };
     
     componentDidUpdate = (prevProps, prevState) => {
@@ -184,7 +185,11 @@ class Profile extends Component {
                 codePostal: "45000",
                 city: "Orléans"
             }],
-            renderItem: (props) => <ItemRowLocation {...props} />
+            renderItem: (props) => <ItemRowLocation {...props} />,
+            
+            action: this.props.loadingGetLocations
+                ?   <ActivityIndicator size="small" color='#aaa' /> 
+                :   null,
         }, {
             title: 'Mes caractéristiques', 
             data: sectionPersonality,
@@ -362,6 +367,8 @@ const mapStateToProps = state => ({
     loadingCharacteristicsReferential:  state.referentielCaracteristiques.loadingGetReferential,
     characteristicsReferencial:         state.referentielCaracteristiques.characteristicsReferencial,
     message_error:                      state.connection.message_error,
+    loadingGetLocations:                state.locations.loadingGetLocations,
+    locations:                          state.locations.locations,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -374,6 +381,7 @@ const mapDispatchToProps = dispatch => ({
     handlePostConnectedUserPersonality:     (personality) => dispatch(handlePostConnectedUserPersonality(personality)),
     handleHideError:                        () => dispatch(handleHideError()),
     handleLogoutConversations:              () => dispatch(handleLogoutConversations()),
+    handleGetConnectedUserLocation:         () => dispatch(handleGetConnectedUserLocation()),
 });
 
 export default connect(
