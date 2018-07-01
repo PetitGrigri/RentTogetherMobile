@@ -181,10 +181,7 @@ export const handlePatchConnectedUser = (userData) => {
  
         let userDataPatch = {
             "userId":       getState().connection.user.userId,
-            "firstName":    userData.firstName ? userData.firstName : null,
-            "lastName":     userData.firstName ? userData.lastName : null,
-            "email":        userData.firstName ? userData.email : null,
-            "phoneNumber":  userData.phoneNumber ? userData.phoneNumber : null,
+            ...userData
            };
 
         
