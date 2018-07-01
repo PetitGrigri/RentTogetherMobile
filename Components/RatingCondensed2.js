@@ -5,23 +5,21 @@ import { PropTypes } from 'prop-types';
 class RatingCondensed2 extends Component {
 
     static propTypes = {
-        fractions:      PropTypes.number.isRequired,
-        value:          PropTypes.number.isRequired,
-        icon:           PropTypes.object.isRequired,
+        fractions:          PropTypes.number.isRequired,
+        currentValue:       PropTypes.number.isRequired,
+        activeComponent:    PropTypes.object.isRequired,
+        unactiveComponent:  PropTypes.object.isRequired,
     }
 
     render() {
         let stars = [];
 
-        for (var i = 1; i <= this.props.fractions; i++) {
-            //mise en place du style des "étoiles"
-            let style = (i <= this.props.value) ? styles.iconSelected : styles.iconUnselected;
-            let props = { 
-                key:    i,
-                style:  style,
-            }
+        stars.push()
 
-            stars.push(React.cloneElement(this.props.icon,   props))
+        for (var i = 1; i <= this.props.fractions; i++) {
+            stars.push( (i <= this.props.currentValue) 
+                ?   React.cloneElement(this.props.activeComponent, {key: i, style: { width: 20, height: 20 }} )
+                :   React.cloneElement(this.props.unactiveComponent, {key: i, style: { width: 20, height: 20 }} ));
         }
         return (
             <View style={styles.container}>
@@ -40,28 +38,20 @@ const styles = StyleSheet.create({
         backgroundColor:    '#ff8f00',
         width:              140,
         height:             40,
-        padding:            2,
+        padding:            1,
         borderRadius:       20,
-        margin: 2
+        margin:             2
     }, 
     containerWhite: {
         backgroundColor:    '#fff',
-        width:              136,
-        height:             36,
+        width:              138,
+        height:             38,
         padding:            5,
         paddingLeft:        10,
-        paddingRight:        10,
-        borderRadius:       18,
+        paddingRight:       10,
+        borderRadius:       19,
         flexDirection:      'row',
         justifyContent:     'space-between',
         alignItems:         'center',
-    },
-    iconSelected: {
-        color:      '#ff8f00',
-        fontSize:   24,
-    }, 
-    iconUnselected: {
-        color:      '#aaa',
-        fontSize:   24,
-    }, 
+    }
 })

@@ -3,10 +3,16 @@ import { ImageBackground, StyleSheet, View, Image } from 'react-native';
 import Text from '../Components/Text';
 import PropTypes from 'prop-types';
 import RatingCondensed2 from './RatingCondensed2';
-
+import { UserImage, UserImageBackground } from '../containers'
+import { getImagesFromPersonalReferentialName } from '../utils/rating';
 
 class RoomerCard extends Component 
 {
+    static propTypes= {
+        targetUser:         PropTypes.object.isRequired,
+        matchDetailApiDtos: PropTypes.array.isRequired,
+    }
+
     constructor(props) {
         super(props);
 
@@ -20,60 +26,58 @@ class RoomerCard extends Component
     }
 
     render() {
+
+        let { targetUser, matchDetailApiDtos } = this.props;
         return (
             <View style={ styles.card }>
                 <View style={styles.cardTop} />
-                <Image  
+                <UserImage  
                     style={ [styles.avatar,{borderRadius: this.state.avatarRadius} ] } 
-                    source={ this.props.image }
+                    userId= { targetUser.userId}
                     onLayout={(event) => this.changeRadius(event.nativeEvent)}  />
                     
                 <View style={ styles.cardTopInformation}>
-                    <ImageBackground
+                    <UserImageBackground
                         blurRadius={ 10 } 
                         style={styles.backgroundAvatar } 
-                        source={ this.props.image }>
+                        userId= { targetUser.userId} >
 
                         <View style={{width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.2)'}}>
                             <View style={{flex:1, alignItems:'flex-start', justifyContent: 'space-between', flexDirection:  'row',}}>
                                     <View style={{width:'25%', padding: 5}}>
-                                    <Text h2 style={styles.textWhite}>{ this.props.age} ans</Text>
+                                    <Text h2 style={styles.textWhite}>xx ans</Text>
                                 </View>
                                 <View style={{width:'25%', padding: 5, alignItems: 'flex-end'}}>
-                                    <Text h2 style={styles.textWhite}>{ this.props.pourcentage } %</Text>
+                                    <Text h2 style={styles.textWhite}>xx%</Text>
                                 </View>
                             </View>
                             <View style={{flex:1, alignItems:'center', justifyContent: 'center'}}>
-                                <Text h1 style= {styles.textWhite}>{ this.props.name }</Text>
+                                <Text h1 style= {styles.textWhite}>{ targetUser.firstName } { targetUser.lastName }</Text>
                             </View>
                         </View>
-                    </ImageBackground>
+                    </UserImageBackground>
                     <View style={styles.cardBottomTop} />
                 </View>
                 <View style={ styles.cardBottom }>
                     
                     <Text style={ styles.textDescription }>
-                        { this.props.description }
+                        { targetUser.description }
                     </Text>
 
                     <View style={{ flexDirection: 'row', alignSelf: 'flex-start', justifyContent: 'space-around' , flexWrap: 'wrap' }} >
-                        { this.props.characteristics.map((characteristic, index) => <RatingCondensed2 key={index} {...characteristic} />)}
+                        { matchDetailApiDtos.map((personality, index) => {
+                            let images = getImagesFromPersonalReferentialName(personality.detailPersonalityApiDto.name);
+                            return <RatingCondensed2 key={index} fractions={ 5 }  currentValue={ personality.value } activeComponent= { images.activeComponent } unactiveComponent={ images.unactiveComponent} />
+                        })}
+
+
+
+                        { /* this.props.characteristics.map((characteristic, index) => <RatingCondensed2 key={index} {...characteristic} />) */}
                     </View>
                 </View>
             </View>
         );
     }
-}
-
-RoomerCard.propTypes = {
-    age:            PropTypes.number.isRequired,
-    description:    PropTypes.string.isRequired,
-    name:           PropTypes.string.isRequired,
-    pourcentage:    PropTypes.number.isRequired,
-};
-
-RoomerCard.defaultProps = {
-    image: require("../assets/tests/troll.jpg"),
 }
 
 export default RoomerCard;    

@@ -13,7 +13,7 @@ import { Alert } from 'react-native';
 import { handleGetReferentialCharacteristics } from '../actions/referentielCaracteristiques';
 import { isset, empty } from '../utils/check';
 import {handleHideError } from '../actions/connection';
-
+import { getImagesFromPersonalReferentialName } from '../utils/rating';
 
 
 const itemRow = (props) => {
@@ -37,51 +37,16 @@ const itemRowLocation = (props) => {
 }
 
 const itemRowCharacteristic = (props) => {
-    let { index, item } = props;
+    let { item } = props;
 
     
-    let activeComponent =   <View />;
-    let unactiveComponent = <View />;
-
-    switch(item.characteristicsReferencial.name) {
-        case "Animaux":
-            activeComponent =   animaux_actif;
-            unactiveComponent=  animaux_inactif;
-            break;
-
-        case "Fete":
-            activeComponent =   fete_actif
-            unactiveComponent=  fete_inactif
-            break;
-        
-        case "Fumeur":
-            activeComponent =   fumeur_actif;
-            unactiveComponent=  fumeur_inactif;
-            break;
-        
-        case "Rangement":
-            activeComponent =   rangement_actif;
-            unactiveComponent=  rangement_inactif;
-            break;
-
-        case "Hygiene":
-            activeComponent =   hygiene_actif;
-            unactiveComponent=  hygiene_inactif;
-            break;
-
-        case "Social":
-            activeComponent =   social_actif;
-            unactiveComponent=  social_inactif;
-            break;
-        default: 
-            break;
-    }
+    let images = getImagesFromPersonalReferentialName(item.characteristicsReferencial.name);
 
     let itemProps = {
         fractions:          5,
         currentValue:       item.personality.value,
-        activeComponent:    activeComponent,
-        unactiveComponent:  unactiveComponent,
+        activeComponent:    images.activeComponent,
+        unactiveComponent:  images.unactiveComponent,
         reviews:            [
             item.characteristicsReferencial.description1,
             item.characteristicsReferencial.description2,
@@ -91,7 +56,6 @@ const itemRowCharacteristic = (props) => {
         ],
         onChange:  (rating) => item.onChange(rating)
     }
-
 
     //return null
     return (
@@ -572,23 +536,5 @@ const styles = StyleSheet.create({
     },
     actionTitle: {
         flex:       1,
-    }, 
-    icon: {
-        height: 32, 
-        width: 32
     }
 });
-
-const
-    animaux_actif =     <Image source={ require('../assets/icon/pets_ff8f00.png')} style={ styles.icon}/>,
-    animaux_inactif =   <Image source={ require('../assets/icon/pets_aaa.png')} style={ styles.icon}/>,
-    fete_actif =        <Image source={ require('../assets/icon/party_ff8f00.png')} style={ styles.icon}/>,
-    fete_inactif =      <Image source={ require('../assets/icon/party_aaa.png')} style={ styles.icon}/>,
-    fumeur_actif =      <Image source={ require('../assets/icon/smoke_ff8f00.png')} style={ styles.icon}/>,
-    fumeur_inactif =    <Image source={ require('../assets/icon/smoke_aaa.png')} style={ styles.icon}/>,
-    rangement_actif =   <Image source={ require('../assets/icon/shelf_ff8f00.png')} style={ styles.icon}/>,
-    rangement_inactif = <Image source={ require('../assets/icon/shelf_aaa.png')} style={ styles.icon}/>,
-    hygiene_actif =     <Image source={ require('../assets/icon/clean_ff8f00.png')} style={ styles.icon}/>,
-    hygiene_inactif =   <Image source={ require('../assets/icon/clean_aaa.png')} style={ styles.icon}/>,
-    social_actif =      <Image source={ require('../assets/icon/social_ff8f00.png')} style={ styles.icon}/>,
-    social_inactif =    <Image source={ require('../assets/icon/social_aaa.png')} style={ styles.icon}/>;

@@ -46,17 +46,11 @@ class Carousel extends Component {
             },
             onPanResponderRelease: (evt, gestureState) => { 
 
-                console.log(gestureState.dx)
-
                 let nextTranslation = this.state.position * this.state.cardWidth;
 
                 if ((gestureState.dx < 20 ) && (this.state.position < (this.state.imagesCount-1))) {
 
-                    console.log("NEXT");
-                    console.log(this.state.position);
                     nextTranslation = -this.state.cardWidth * (this.state.position + 1);
-
-                    console.log("prochaine position : ", nextTranslation);
 
                     Animated.timing(
                         this.state.translation,
@@ -69,11 +63,7 @@ class Carousel extends Component {
 
                 } else if ((gestureState.dx > -20 ) && (this.state.position > 0)){
 
-                    console.log("PREVIOUS");
-                    console.log(this.state.position);
                     nextTranslation = -(this.state.position-1)  * this.state.cardWidth;
-
-                    console.log("prochaine position : ", nextTranslation);
 
                     Animated.timing(
                         this.state.translation,

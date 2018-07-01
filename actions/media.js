@@ -112,7 +112,6 @@ export const handleUploadUserMedia = (imageURI) => {
             imageURI,
             async (image) => { 
                 // Sauvegarde du contenu de l'image que l'on vient de récupérer, et récupération de son URI
-                console.log('SAUVEGARDE DE LA NOUVELLE IMAGE ', userId);
                 let userImageURI =  await saveUserUpdatedMedia(userId, image)
                 // Dispatch de l'URI
                 dispatch(handleUploadUserMediaSuccess(userId, userOldImageURI, userImageURI)) 
