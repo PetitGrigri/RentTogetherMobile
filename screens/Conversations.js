@@ -26,6 +26,11 @@ class Conversations extends Component {
     componentDidMount = () => {
         this.props.handleGetConversations();
     };
+
+    handleRefresh = () => {
+        console.log('REFRESH NEEDED');
+        this.props.handleGetConversations();
+    }
     
     getConversationItem = (conversation) => {
 
@@ -49,8 +54,8 @@ class Conversations extends Component {
                     keyExtractor={item => `${item.conversationId}`}
                     ItemSeparatorComponent={ () => <View style={ styles.separator } /> }
                     renderItem={(conversation) =>  this.getConversationItem(conversation)}
-                    refreshing={false}
-                    onRefresh={() => console.log('refresh')}
+                    refreshing={ this.props.loadingConversations }
+                    onRefresh={() => this.handleRefresh() }
                     onEndReached={() => console.log('loadNext') }
                     refreshing={this.props.loadingConversations}
                 />

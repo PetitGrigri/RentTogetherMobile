@@ -24,7 +24,8 @@ const conversations = (state = initialConversationsState, action) => {
         // Demande de récupération des conversations
         case CONVERSATIONS_GET_REQUEST: 
             return Object.assign({}, state, {
-                loadingConversations : true
+                loadingConversations :  true,
+                conversations:          []
             });
 
         // Prise en compte de la récupération des conversations
