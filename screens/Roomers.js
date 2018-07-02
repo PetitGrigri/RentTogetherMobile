@@ -5,7 +5,7 @@ import TabContent from '../Components/TabContent';
 import RoomerCard from '../Components/RoomerCard';
 import SwipeCards from 'react-native-swipe-cards'
 import { connect } from 'react-redux';
-import { handleGetLocatairesPotentiels, handlePostMatchValidation } from '../actions/matches'
+import { handleGetLocatairesPotentiels, handlePostMatchLocataire } from '../actions/matches'
 
 class Roomers extends Component {
 
@@ -59,7 +59,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     handleGetLocatairesPotentiels:     (filter) => dispatch(handleGetLocatairesPotentiels(filter)),
-    handlePostMatchValidation:         (matchId, targetUserId, statusValidation) => dispatch(handlePostMatchValidation(matchId, targetUserId, statusValidation)),
+    handlePostMatchLocataire:         (matchId, targetUserId, statusValidation) => dispatch(handlePostMatchLocataire(matchId, targetUserId, statusValidation)),
 });
   
 export default connect(

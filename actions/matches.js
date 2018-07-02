@@ -87,7 +87,7 @@ export const handleLogout = () => {
  * @param {int} conversationId la coonversation dans laquelle on envoie un message
  * @param {message} message le message que l'on souhaite envoyer
  */
-export const handlePostMatchValidation = (matchId, targetUserId, statusValidation) => {
+export const handlePostMatchLocataire = (matchId, targetUserId, statusValidation) => {
     return function (dispatch, getState) {
 
         // On dispatch le fait qu'on envoie un message
@@ -103,8 +103,8 @@ export const handlePostMatchValidation = (matchId, targetUserId, statusValidatio
             targetUserId,
             matchId,
             statusValidation,
-            (message) => { dispatch(handlePostMatchValidationSuccess(message)) },
-            (error) => { dispatch(handlePostMatchValidationError(error)) }
+            (message) => { dispatch(handlePostMatchLocataireSuccess(message)) },
+            (error) => { dispatch(handlePostMatchLocataireError(error)) }
         )
     }
 }
@@ -114,7 +114,7 @@ export const handlePostMatchValidation = (matchId, targetUserId, statusValidatio
  * Méthode permettant d'informer que le message a bien été envoyé
  * @param {object} message 
  */
-export const handlePostMatchValidationSuccess = (dataMatch) => {
+export const handlePostMatchLocataireSuccess = (dataMatch) => {
 
     //retour de l'action
     return {
@@ -127,7 +127,7 @@ export const handlePostMatchValidationSuccess = (dataMatch) => {
  * Méthode permettant d'indiquer qu'il y a eu une erreur lors de la récupération des messages
  * @param {string} error le message d'erreur
  */
-export const handlePostMatchValidationError = (error) => {
+export const handlePostMatchLocataireError = (error) => {
     return {
         type:   POTENTIAL_ROOMER_POST_ERROR,
         error:  error
