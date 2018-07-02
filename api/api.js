@@ -909,10 +909,8 @@ export const postConversation= function(token, callBackOk, callBackError) {
         });
 }
 
-//TODO
 
 /**
- * /**
  * Fonction permettant d'ajouter des participants à une conversation'
  * @param {*} token 
  * @param {*} conversationId 
@@ -962,6 +960,61 @@ export const postParticipantsConversation= function(token, conversationId, parti
         })
         .then( dataParticipants => {
             callBackOk(dataParticipants);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
+
+
+
+
+
+
+
+
+export const postMatchValidation= function(token, userId, targetUserId, matchId, statusValidation, callBackOk, callBackError) {
+
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+ token
+    });
+
+    // l'objet pour créer une conversation par défaut (plus tard on aura peut être d'autres types de conversations)
+    var jsonMatchValidationString = JSON.stringify({
+        "matchId": matchId,
+        "userId": userId,
+        "targetUserId": targetUserId,
+        "statusUser": statusValidation
+    });
+
+    //les paramètres de la requête
+    var options = {
+        method: 'POST',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default',
+        body: jsonMatchValidationString
+    };
+
+    let urlMatchValidation = `${url}/Matches`;
+
+    console.log(urlMatchValidation, jsonMatchValidationString);
+
+    fetch(urlMatchValidation, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+                //TODO ici ajouter utilisateur
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataMatch => {
+            callBackOk(dataMatch);
         })
         .catch(error => {
             callBackError(error.message);

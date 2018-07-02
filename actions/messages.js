@@ -111,6 +111,8 @@ export const handlePostMessageError = (error) => {
     }
 };
 
+
+
 /**
  * Méthode permettant de supprimer du state,
  * @param {string} error le message d'erreur

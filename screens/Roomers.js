@@ -4,19 +4,24 @@ import Text from '../Components/Text';
 import TabContent from '../Components/TabContent';
 import RoomerCard from '../Components/RoomerCard';
 import SwipeCards from 'react-native-swipe-cards'
-import { Foundation, MaterialCommunityIcons} from '@expo/vector-icons';
 import { connect } from 'react-redux';
-import { handleGetLocatairesPotentiels } from '../actions/matches'
+import { handleGetLocatairesPotentiels, handlePostMatchValidation } from '../actions/matches'
 
 class Roomers extends Component {
 
-    handleYup = () => {
-        console.log('Oui');
+    handleYup = (card) => {
+        console.log('Oui', card.matchId, card.targetUser.userId, 1);
+        this.props.handlePostMatchValidation(card.matchId, card.targetUser.userId, 1)
+        
+
     }
 
-    handleNope = () => {
-        console.log('Non');
+    handleNope = (card) => {
+        console.log('Non', card.matchId, card.targetUser.userId, 2);
+        this.props.handlePostMatchValidation(card.matchId, card.targetUser.userId, 2)
     }
+
+
     componentWillMount() {
         this.props.handleGetLocatairesPotentiels();
     }
@@ -49,10 +54,12 @@ const mapStateToProps = state => ({
     loadingGetLocatairesPotentiels :    state.matches.loadingGetLocatairesPotentiels,
     locatairesPotentiels:               state.matches.locatairesPotentiels,
     message_error:                      state.matches.message_error,
+    loadingPostLocatairesPotentiels:    state.matches.loadingPostLocatairesPotentiels,
 });
 
 const mapDispatchToProps = dispatch => ({
     handleGetLocatairesPotentiels:     (filter) => dispatch(handleGetLocatairesPotentiels(filter)),
+    handlePostMatchValidation:         (matchId, targetUserId, statusValidation) => dispatch(handlePostMatchValidation(matchId, targetUserId, statusValidation)),
 });
   
 export default connect(
