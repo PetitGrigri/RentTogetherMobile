@@ -4,7 +4,7 @@ import RoomerMatchesItem from '../Components/RoomerMatchesItem';
 import { handlePostConversation } from '../actions/conversations';
 import { connect } from 'react-redux';
 import { empty } from '../utils/check';
-
+import { generateTitleConversation } from '../utils/conversations'
 const matchesRoomers = [{
     id: 1,
     user: {
@@ -68,9 +68,23 @@ class MatchesRoomers extends Component {
 
     componentDidUpdate = (prevProps, prevState) => {
         if (prevProps.loadingPostConversations && !this.props.loadingPostConversations && empty(this.props.message_error)) {
+
+
             this.setState({
                 userIdConversationInProgress: null
             });
+
+            let title = generateTitleConversation(this.props.createdConversation, this.props.currentUser);
+
+            console.log('CONVERSATION CREATED CONVERSATION CREATED', this.props.createdConversation, title);
+
+            
+            this.props.navigation.navigate('messages', {
+                conversation:       this.props.createdConversation,
+                title:              title
+            });
+
+
         } else if (prevProps.loadingPostConversations && !this.props.loadingPostConversations && !empty(this.props.message_error)) {
             this.setState({
                 userIdConversationInProgress: null
@@ -142,6 +156,7 @@ const mapStateToProps = state => ({
     loadingPostConversations :  state.conversations.loadingPostConversations, 
     currentUser:                state.connection.user,
     message_error:              state.conversations.message,
+    createdConversation:        state.conversations.createdConversation,
 });
 
 const mapDispatchToProps = dispatch => ({

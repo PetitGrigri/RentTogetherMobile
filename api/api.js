@@ -960,8 +960,8 @@ export const postParticipantsConversation= function(token, conversationId, parti
                 throw Error(response.statusText);
             }
         })
-        .then( dataConversation => {
-            callBackOk(dataConversation);
+        .then( dataParticipants => {
+            callBackOk(dataParticipants);
         })
         .catch(error => {
             callBackError(error.message);

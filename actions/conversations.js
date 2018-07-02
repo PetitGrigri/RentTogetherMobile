@@ -129,7 +129,7 @@ export const handlePostParticipantsConversation = (token, conversation, particip
             token,
             conversation.conversationId,
             participants,
-            (message) => { dispatch(handlePostConversationSuccess(message)) },
+            (dataParticipants) => { dispatch(handlePostConversationSuccess(conversation, dataParticipants)) },
             (error) => { dispatch(handlePostConversationError(error)) }
         )
     };
@@ -139,9 +139,18 @@ export const handlePostParticipantsConversation = (token, conversation, particip
  * Méthode permettant d'indiquer qu'il y a eu une erreur lors de la récupération des messages
  * @param {string} error le message d'erreur
  */
-const handlePostConversationSuccess = (conversation) => {
-    return {
-        type:   CONVERSATIONS_POST_SUCCESS,
+const handlePostConversationSuccess = (conversation, dataParticipants) => {
+    return function (dispatch, getState) {
+
+        console.log('SUCCESS SUCCESS SUCCESS', );
+        console.log('TODO TODO TODO TODO');
+        console.log(conversation, dataParticipants);
+
+        dispatch({
+            type:           CONVERSATIONS_POST_SUCCESS,
+            conversation:   conversation, 
+            participants:   dataParticipants,
+        });
     };
 };
 

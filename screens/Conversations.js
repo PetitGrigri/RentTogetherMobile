@@ -28,7 +28,6 @@ class Conversations extends Component {
     };
 
     handleRefresh = () => {
-        console.log('REFRESH NEEDED');
         this.props.handleGetConversations();
     }
     

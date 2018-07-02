@@ -23,6 +23,7 @@ const initialConversationsState = {
     conversations:              [],
     participantsId:             [],     //servira à récupérer les images des utilisateurs
     message:                    "",
+    createdConversation:        null
 }
 
 
@@ -85,8 +86,16 @@ const conversations = (state = initialConversationsState, action) => {
             });
 
         case CONVERSATIONS_POST_SUCCESS:
+
+            let createdConversation = Object.assign({}, action.conversation);
+
+            createdConversation.participants = action.participants;
+
+            console.log('CONVERSATIONS_POST_SUCCESS REDUCER', createdConversation)
+            
             return Object.assign({}, state, {
-                loadingPostConversations :  false
+                loadingPostConversations :  false,
+                createdConversation:        createdConversation
             });
 
         case CONVERSATIONS_POST_ERROR:

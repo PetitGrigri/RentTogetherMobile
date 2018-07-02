@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Image, View } from 'react-native'
 
-
-
 const styles = StyleSheet.create({
     icon: {
         height: 32, 
