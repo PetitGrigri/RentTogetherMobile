@@ -1,111 +1,90 @@
 import React, { Component } from 'react';
 import { View, StyleSheet,FlatList, Text } from 'react-native';
 import RoomerMatchesItem from '../Components/RoomerMatchesItem';
+import { handlePostConversation } from '../actions/conversations';
+import { connect } from 'react-redux';
+import { empty } from '../utils/check';
 
 const matchesRoomers = [{
     id: 1,
     user: {
-        firstName: "Thomasine ",
-        lastName: "Chinn",
+        userId:     28,
+        firstName:  "Test",
+        lastName:   "Un",
     }
 }, 
 {
-    id: 6,
+    id: 3,
     user: {
-        firstName: "Marlene",
-        lastName: "Faz",
+        userId:     29,
+        firstName:  "Test",
+        lastName:   "Deux",
     }
 }, 
 {
-    id: 9,
+    id: 5,
     user: {
-        firstName: "Amal ",
-        lastName: "Bohland",
-    }
-}, 
-{
-    id: 12,
-    user: {
-        firstName: "Mindy",
-        lastName: "Hasan",
+        userId:     30,
+        firstName:  "Test",
+        lastName:   "Trois",
     }
 }, 
 {
     id: 10,
     user: {
-        firstName: "Jean ",
-        lastName: "Eichman",
+        userId:     31,
+        firstName:  "Test",
+        lastName:   "Quatre",
+    }
+}, 
+{
+    id: 18,
+    user: {
+        userId:     32,
+        firstName:  "Test",
+        lastName:   "Cinq",
     }
 }, 
 {
     id: 17,
     user: {
-        firstName: "Clarice",
-        lastName: "Silveira",
-    }
-}, 
-{
-    id: 20,
-    user: {
-        firstName: "Isela",
-        lastName: "Tutor",
-    }
-}, 
-{
-    id: 37,
-    user: {
-        firstName: "David",
-        lastName: "Marrufo",
-    }
-}, 
-{
-    id: 60,
-    user: {
-        firstName: "Arminda",
-        lastName: "Stainback",
-    }
-}, 
-{
-    id: 89,
-    user: {
-        firstName: "Beatrice",
-        lastName: "Noack",
-    }
-}, 
-{
-    id: 99,
-    user: {
-        firstName: "Jermaine",
-        lastName: "Lavoie",
-    }
-}, 
-{
-    id: 101,
-    user: {
-        firstName: "Lina",
-        lastName: "Risley",
-    }
-}, 
-{
-    id: 103,
-    user: {
-        firstName: "Laila",
-        lastName: "Vert",
+        userId:     33,
+        firstName:  "Test",
+        lastName:   "Six",
     }
 }];
 
 class MatchesRoomers extends Component {
 
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            userIdConversationInProgress: null,
+        };
+    }
     componentDidMount() {
 
     }
 
+    componentDidUpdate = (prevProps, prevState) => {
+        if (prevProps.loadingPostConversations && !this.props.loadingPostConversations && empty(this.props.message_error)) {
+            this.setState({
+                userIdConversationInProgress: null
+            });
+        } else if (prevProps.loadingPostConversations && !this.props.loadingPostConversations && !empty(this.props.message_error)) {
+            this.setState({
+                userIdConversationInProgress: null
+            });
+        }
+    }
+
+
     getData = () =>{
-        let matchesRoomersCards = matchesRoomers
+        let matchesRoomersCards = matchesRoomers;
         let lastRowItemsCount = matchesRoomers.length % 2;
 
-        if (lastRowItemsCount < 2) {
+
+        if (lastRowItemsCount == 1) {
             matchesRoomersCards.push({ 
                 id:     'empty',
                 isEmpty:  true
@@ -116,18 +95,32 @@ class MatchesRoomers extends Component {
         
     }
 
-    handlePress = () => {
-        console.log('handlePress');
+    handleCreateConversation = (userId) => {
+        this.setState({
+            userIdConversationInProgress: userId,
+        })
+
+        this.props.handlePostConversation([this.props.currentUser.userId, userId])
+    }
+
+    getMatcheItem = (matche) => {
+        return (matche.item.isEmpty === true) 
+            ? <View style={styles.emptyContainer} /> 
+            : <RoomerMatchesItem 
+                key={ matche.item.id } {...matche.item} 
+                handleCreateConversation={ this.handleCreateConversation } 
+                loadingCreateConversation={ matche.item.user.userId == this.state.userIdConversationInProgress }
+                />
     }
 
     render() {
         let roomersCards    = this.getData();
-        let handlePress     = this.handlePress;
+
         return (
             <FlatList
                 data={ roomersCards }
                 keyExtractor={item => `${item.id}`}
-                renderItem={(roomerCard) => (roomerCard.item.isEmpty === true) ? <View style={styles.emptyContainer} /> : <RoomerMatchesItem {...roomerCard.item} handlePress={ handlePress }/> } 
+                renderItem={ (matche) => this.getMatcheItem(matche) } 
                 refreshing={false}
                 onRefresh={() => console.log('refresh')}
                 numColumns={ 2 }
@@ -144,4 +137,18 @@ const styles = StyleSheet.create({
     },
 })
 
-export default MatchesRoomers;
+
+const mapStateToProps = state => ({
+    loadingPostConversations :  state.conversations.loadingPostConversations, 
+    currentUser:                state.connection.user,
+    message_error:              state.conversations.message,
+});
+
+const mapDispatchToProps = dispatch => ({
+    handlePostConversation:     (participantsId) => dispatch(handlePostConversation(participantsId)),
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MatchesRoomers);

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import  { View, StyleSheet, Text, } from 'react-native';
+import  { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Avatar from './Avatar';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
+
 
 class RoomerMatchesItem extends Component {
     static propTypes = {
@@ -20,24 +21,32 @@ class RoomerMatchesItem extends Component {
     }
 
     render() {
+        let { user, handleCreateConversation, loadingCreateConversation } = this.props;
+
         return (
             <View style={ styles.container } >
                 <Avatar 
 
                 />
-                <Text style={ styles.roomer}>{ this.props.user.firstName } { this.props.user.lastName }</Text>
+                <Text style={ styles.roomer}>{ user.firstName } { user.lastName } </Text>
                 
                 <View style={styles.iconesWraper} >
                     <Ionicons name='ios-home' style={ styles.icon } size={24} />
                     <View style= {styles.separator} />
-                    <Ionicons name='ios-mail-outline' style={ styles.icon } size={24} />
+                    {loadingCreateConversation 
+                        ?   <ActivityIndicator size="small" color='#aaa' /> 
+                        :   <TouchableOpacity onPress={ () => handleCreateConversation(user.userId) }>
+                                <Ionicons name='ios-mail-outline' style={ styles.icon } size={24} />
+                            </TouchableOpacity>
+                    }
+                    
                 </View>
             </View>
         );
     }
 }
-
-export default RoomerMatchesItem;
+  
+export default RoomerMatchesItem
 
 const styles= StyleSheet.create({
     container: {

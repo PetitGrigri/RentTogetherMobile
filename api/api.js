@@ -746,7 +746,6 @@ export const postPersonalityUser= function(token, personality, userId,  callBack
     };
 
     let urlPersonality = `${url}/Personalities/${userId}`;
-    console.log(1, urlPersonality, jsonPersonalityString, options);
 
     fetch(urlPersonality, options)
         .then(response => {
@@ -854,6 +853,115 @@ export const getConnectedUserLocation = function(token, userId, callBackOk, call
         })
         .then(dataLocations => {
             callBackOk(dataLocations);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
+
+
+
+/**
+ * Fonction permettant de créer une conversation
+ * 
+ * @param {string} token le token de l'utilisateur connecté
+ * @param {function} callBackOk 
+ * @param {function} callBackError 
+ */
+export const postConversation= function(token, callBackOk, callBackError) {
+
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+ token
+    });
+
+    // l'objet pour créer une conversation par défaut (plus tard on aura peut être d'autres types de conversations)
+    var jsonPersonalityString = JSON.stringify({"type": 0});
+
+    //les paramètres de la requête
+    var options = {
+        method: 'POST',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default',
+        body: jsonPersonalityString
+    };
+
+    let urlConversation = `${url}/Conversations`;
+
+    fetch(urlConversation, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+                //TODO ici ajouter utilisateur
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataConversation => {
+            callBackOk(dataConversation);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
+
+//TODO
+
+/**
+ * /**
+ * Fonction permettant d'ajouter des participants à une conversation'
+ * @param {*} token 
+ * @param {*} conversationId 
+ * @param {*} participantsId 
+ * @param {*} callBackOk 
+ * @param {*} callBackError 
+ */
+export const postParticipantsConversation= function(token, conversationId, participantsId, callBackOk, callBackError) {
+
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+ token
+    });
+
+    var objectParticipants = participantsId.map(participantId => {
+        return { 
+            userId:           participantId,
+            conversationId:   conversationId
+        }
+    });
+
+    // l'objet pour créer une conversation par défaut (plus tard on aura peut être d'autres types de conversations)
+    var jsonParticipants = JSON.stringify(objectParticipants);
+
+    //les paramètres de la requête
+    var options = {
+        method: 'POST',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default',
+        body: jsonParticipants
+    };
+
+    let urlParticipant = `${url}/participants`;
+
+    fetch(urlParticipant, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+                //TODO ici ajouter utilisateur
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then( dataConversation => {
+            callBackOk(dataConversation);
         })
         .catch(error => {
             callBackError(error.message);

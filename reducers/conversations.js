@@ -3,6 +3,13 @@ import {
     CONVERSATIONS_GET_REQUEST, 
     CONVERSATIONS_GET_SUCCESS, 
     CONVERSATIONS_GET_ERROR, 
+
+    //Types d'actions destinées à la récupération des conversations
+    CONVERSATIONS_POST_REQUEST,
+    CONVERSATIONS_ADD_PARTICIPANTS_POST_REQUEST,
+    CONVERSATIONS_POST_SUCCESS,
+    CONVERSATIONS_POST_ERROR,
+
     // Action de nettoyage des conversations quand on se déconnecte
     CONVERSATIONS_LOGOUT
  } from '../actions/conversations';
@@ -11,10 +18,11 @@ import { isset } from '../utils/check';
 
 //le state initial
 const initialConversationsState = {
-    loadingConversations :  false,
-    conversations:          [],
-    participantsId:         [],     //servira à récupérer les images des utilisateurs
-    message:                "",
+    loadingConversations :      false,
+    loadingPostConversations :  false,
+    conversations:              [],
+    participantsId:             [],     //servira à récupérer les images des utilisateurs
+    message:                    "",
 }
 
 
@@ -30,7 +38,6 @@ const conversations = (state = initialConversationsState, action) => {
 
         // Prise en compte de la récupération des conversations
         case  CONVERSATIONS_GET_SUCCESS: 
-
             //récupération des Id de tout les participants
             let participantsId = action.conversations.map((conversation) => {
                 return conversation.participants.map(participant => {
@@ -42,7 +49,6 @@ const conversations = (state = initialConversationsState, action) => {
 
                 return [...accumulator, ...notYetAddedUsersId];
             }) || [];
-
 
             return Object.assign({}, state, {
                 loadingConversations : false,
@@ -65,6 +71,32 @@ const conversations = (state = initialConversationsState, action) => {
                 participantsId:         [],
                 message:                "",
             });
+
+
+
+        case CONVERSATIONS_POST_REQUEST:
+            return Object.assign({}, state, {
+                loadingPostConversations :  true
+            });
+
+        case CONVERSATIONS_ADD_PARTICIPANTS_POST_REQUEST:
+            return Object.assign({}, state, {
+                loadingPostConversations :  true
+            });
+
+        case CONVERSATIONS_POST_SUCCESS:
+            return Object.assign({}, state, {
+                loadingPostConversations :  false
+            });
+
+        case CONVERSATIONS_POST_ERROR:
+            return Object.assign({}, state, {
+                loadingPostConversations :  false,
+                message:                    action.error
+            });
+
+
+            
 
         //autres 
         default : 

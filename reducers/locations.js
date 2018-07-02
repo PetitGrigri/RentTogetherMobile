@@ -9,7 +9,7 @@ import {
 //le state initial
 const initialLocationsState = {
     loadingGetLocations :    false,
-    locations:               {},
+    locations:               [],
     message_error:           "",
 }
 
@@ -35,7 +35,7 @@ const locations = (state = initialLocationsState, action) => {
         case  CONNECTED_USER_LOCATION_GET_ERROR : 
             return Object.assign({}, state, {
                 loadingGetLocations :    false,
-                locations:               {},
+                locations:               [],
                 message_error:           action.message||"Erreur lors de la récupération de vos recherches",
             });
 

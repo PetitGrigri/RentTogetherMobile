@@ -5,7 +5,13 @@ export const
     //Types d'actions destinées à la récupération des conversations
     CONVERSATIONS_GET_REQUEST   = 'CONVERSATIONS_GET_REQUEST', 
     CONVERSATIONS_GET_SUCCESS   = 'CONVERSATIONS_GET_SUCCESS', 
-    CONVERSATIONS_GET_ERROR     = 'CONVERSATIONS_GET_ERROR'
+    CONVERSATIONS_GET_ERROR     = 'CONVERSATIONS_GET_ERROR',
+
+    //Types d'actions destinées à la récupération des conversations
+    CONVERSATIONS_POST_REQUEST   =                  'CONVERSATIONS_POST_REQUEST', 
+    CONVERSATIONS_ADD_PARTICIPANTS_POST_REQUEST =   'CONVERSATIONS_ADD_PARTICIPANTS_POST_REQUEST',
+    CONVERSATIONS_POST_SUCCESS   =                  'CONVERSATIONS_POST_SUCCESS', 
+    CONVERSATIONS_POST_ERROR     =                  'CONVERSATIONS_POST_ERROR',
 
     // Action de nettoyage des conversations quand on se déconnecte
     CONVERSATIONS_LOGOUT =    'CONVERSATIONS_LOGOUT'
@@ -66,3 +72,105 @@ export const handleLogout = () => {
         type:       CONVERSATIONS_LOGOUT
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 
+ * Méthode destinée à la création d'une nouvelle conversation
+ * @param {array} participants Les participants d'une conversation (uniquement leur Id)
+ * Cette méthode se passera en deux étapes :
+ *  - La première consistera à créer une conversation
+ *  - la seconde consistera à ajouter les utilisateur dans cette conversation
+ */
+export const handlePostConversation = (participants) => {
+    return function (dispatch, getState) {
+
+        // On dispatch le fait qu'on envoie un message
+        dispatch({
+            type: CONVERSATIONS_POST_REQUEST
+        })
+
+        // Utilisation de l'api pour envoyer un message
+        api.postConversation(
+            getState().connection.user.token,
+            (conversation) => { dispatch(handlePostParticipantsConversation(getState().connection.user.token, conversation, participants)) },
+            (error) => { dispatch(handlePostConversationError(error)) }
+        )
+    }
+}
+
+/**
+ * Méthode permettant d'ajouter des utilisateurs à une conversation. Il s'agit de la seconde étape de la création d'une conversation
+ * commencé avec la fonction handlePostConversation
+ * 
+ */
+export const handlePostParticipantsConversation = (token, conversation, participants) => {
+
+    return function (dispatch, getState) {
+
+        dispatch({
+            type: CONVERSATIONS_ADD_PARTICIPANTS_POST_REQUEST
+        })
+
+        // Utilisation de l'api pour envoyer un message
+        api.postParticipantsConversation(
+            token,
+            conversation.conversationId,
+            participants,
+            (message) => { dispatch(handlePostConversationSuccess(message)) },
+            (error) => { dispatch(handlePostConversationError(error)) }
+        )
+    };
+};
+
+/**
+ * Méthode permettant d'indiquer qu'il y a eu une erreur lors de la récupération des messages
+ * @param {string} error le message d'erreur
+ */
+const handlePostConversationSuccess = (conversation) => {
+    return {
+        type:   CONVERSATIONS_POST_SUCCESS,
+    };
+};
+
+/**
+ * Méthode permettant d'indiquer qu'il y a eu une erreur lors de la récupération des messages
+ * @param {string} error le message d'erreur
+ */
+const handlePostConversationError = (error) => {
+    return {
+        type:   CONVERSATIONS_POST_ERROR,
+        error:  error
+    };
+};
+
+
+
+
+
+
+/**
+ * Méthode permettant de supprimer du state,
+ * @param {string} error le message d'erreur
+ */
+export const handleCleanMessage = () => {
+    return {
+        type:   MESSAGES_CLEAN_REQUEST
+    }
+};
+
+
+
+
