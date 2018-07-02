@@ -147,9 +147,9 @@ class Profile extends Component {
 
 
     getSections = () => {
+        // Création d'un tableau contenant l'une des personalité de l'utilisateur, 
        let sectionPersonality = [];
        if ( this.state.personality.length > 0 ) {
-            // Création d'un tableau contenant l'une des personalité de l'utilisateur, 
             this.state.personality.forEach(personalityElement => {
                 if (isset(this.props.characteristicsReferencial[personalityElement.personalityReferencialId])) {
                     sectionPersonality.push({
@@ -160,6 +160,7 @@ class Profile extends Component {
                 }
             });
         }
+
 
         return [{   
             title: 'Mes informations', 
@@ -185,13 +186,7 @@ class Profile extends Component {
             action: <TouchableOpacity onPress={ this.changeDescription  }><Entypo  color='#aaa' name='edit' size={ 18 } style={styles.editParam }/></TouchableOpacity>
         }, {   
             title: 'Mes recherches', 
-            data: [{
-                codePostal: "75015",
-                city: "Paris 15ème"
-            }, {
-                codePostal: "45000",
-                city: "Orléans"
-            }],
+            data: this.props.locations,
             renderItem: (props) => <ItemRowLocation {...props} />,
             
             action: this.props.loadingGetLocations

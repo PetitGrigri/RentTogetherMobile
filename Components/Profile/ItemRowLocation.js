@@ -14,7 +14,7 @@ export default class ItemRowLocation extends Component {
 
         return (
             <View key={index} style={styles.itemRow}>
-                <Text style={styles.itemRowLabel} >{item.codePostal}</Text>
+                <Text style={styles.itemRowLabel} >{item.postalCode }</Text>
                 <Text style={styles.itemRowValue}  >{item.city}</Text>
             </View>
         );
