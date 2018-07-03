@@ -11,14 +11,14 @@ class Roomers extends Component {
 
     handleYup = (card) => {
         console.log('Oui', card.matchId, card.targetUser.userId, 1);
-        this.props.handlePostMatchValidation(card.matchId, card.targetUser.userId, 1)
+        this.props.handlePostMatchLocataire(card.matchId, card.targetUser.userId, 1)
         
 
     }
 
     handleNope = (card) => {
         console.log('Non', card.matchId, card.targetUser.userId, 2);
-        this.props.handlePostMatchValidation(card.matchId, card.targetUser.userId, 2)
+        this.props.handlePostMatchLocataire(card.matchId, card.targetUser.userId, 2)
     }
 
 

@@ -27,32 +27,31 @@ class RoomerCard extends Component
 
     render() {
 
-        let { targetUser, matchDetailApiDtos, average } = this.props;
         return (
             <View style={ styles.card }>
                 <View style={styles.cardTop} />
                 <UserImage  
                     style={ [styles.avatar,{borderRadius: this.state.avatarRadius} ] } 
-                    userId= { targetUser.userId}
+                    userId= { this.props.targetUser.userId }
                     onLayout={(event) => this.changeRadius(event.nativeEvent)}  />
                     
                 <View style={ styles.cardTopInformation}>
                     <UserImageBackground
                         blurRadius={ 10 } 
                         style={styles.backgroundAvatar } 
-                        userId= { targetUser.userId} >
+                        userId= { this.props.targetUser.userId} >
 
                         <View style={{width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.2)'}}>
-                            <View style={{flex:1, alignItems:'flex-start', justifyContent: 'space-between', flexDirection:  'row',}}>
-                                    <View style={{width:'25%', padding: 5}}>
-                                    <Text h2 style={styles.textWhite}>xx ans</Text>
-                                </View>
+                            <View style={{flex:1, alignItems:'flex-start', justifyContent: 'flex-end', flexDirection:  'row',}}>
+                               { /* <View style={{width:'25%', padding: 5}}>
+                                    <Text h2 style={styles.textWhite}>{ this.props.targetUser.userId } ans</Text>
+                                </View> */}
                                 <View style={{width:'25%', padding: 5, alignItems: 'flex-end'}}>
-                                    <Text h2 style={styles.textWhite}>{ average } %</Text>
+                                    <Text h2 style={styles.textWhite}>{ this.props.average } %</Text>
                                 </View>
                             </View>
                             <View style={{flex:1, alignItems:'center', justifyContent: 'center'}}>
-                                <Text h1 style= {styles.textWhite}>{ targetUser.firstName } { targetUser.lastName }</Text>
+                                <Text h1 style= {styles.textWhite}>{ this.props.targetUser.firstName } { this.props.targetUser.lastName }</Text>
                             </View>
                         </View>
                     </UserImageBackground>
@@ -61,11 +60,11 @@ class RoomerCard extends Component
                 <View style={ styles.cardBottom }>
                     
                     <Text style={ styles.textDescription }>
-                        { targetUser.description }
+                        { this.props.targetUser.description }
                     </Text>
 
                     <View style={{ flexDirection: 'row', alignSelf: 'flex-start', justifyContent: 'space-around' , flexWrap: 'wrap' }} >
-                        { matchDetailApiDtos.map((personality, index) => {
+                        { this.props.matchDetailApiDtos.map((personality, index) => {
                             let images = getImagesFromPersonalReferentialName(personality.detailPersonalityApiDto.name);
                             return <RatingCondensed2 key={index} fractions={ 5 }  currentValue={ personality.value } activeComponent= { images.activeComponent } unactiveComponent={ images.unactiveComponent} />
                         })}

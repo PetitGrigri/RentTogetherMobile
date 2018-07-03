@@ -13,13 +13,22 @@ class UserImage extends Component {
     }
     
     constructor(props) {
+        
         super(props);
         this.state = {
             userImageContent: null
         }
     }
 
+
     componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.userId != prevProps.userId) {
+            this.setState({
+                userImageContent: null
+            });
+            this.props.handleGetUserMedia(this.props.userId);
+        }
+
         // Si le store redux vient de récupérer l'URI de l'utilisateur qui nous interesse, alors on récupère le contenu de l'URI
         if (prevProps.imagesUsers[this.props.userId] != this.props.imagesUsers[this.props.userId]) {
 
@@ -30,9 +39,8 @@ class UserImage extends Component {
             });
         }
     }
-    
-    componentWillMount() {
 
+    componentWillMount() {
         //si on a déjà l'URI de l'image dans le state média, on récupère son contenu
         if (isset(this.props.imagesUsers[this.props.userId])) {
             getUserMedia(this.props.imagesUsers[this.props.userId], (imageContent) => { 

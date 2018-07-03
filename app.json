@@ -1,9 +1,21 @@
 {
   "expo": {
     "name": "Rent Together",
-    "description": "Application mobile permettant de faciliter la mise en relation entre colocataires, mais aussi de trouver des appartements ouvert à la colocation",
+    "description": "Application permettant de faciliter la mise en relation entre colocataires, mais aussi de trouver des appartements ouvert à la colocation",
     "sdkVersion": "27.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon/icon.png"
+    "icon": "./assets/icon/icon.png",
+    "version": "0.5 Alpha",
+    "slug": "rent-together",
+    "ios": {
+      "bundleIdentifier": "com.rent.together"
+    },
+    "android": {
+      "package": "com.rent.together",
+      "versionCode": 2,
+      "permissions": [
+        "CAMERA"
+      ]
+    }
   }
 }

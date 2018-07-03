@@ -12,17 +12,27 @@ class UserImageBackground extends Component {
     static propTypes= {
         userId:     PropTypes.any.isRequired,
     }
-
+    
     constructor(props) {
+        
         super(props);
         this.state = {
             userImageContent: null
         }
     }
-    
+
+
     componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.userId != prevProps.userId) {
+            this.setState({
+                userImageContent: null
+            });
+            this.props.handleGetUserMedia(this.props.userId);
+        }
+
         // Si le store redux vient de récupérer l'URI de l'utilisateur qui nous interesse, alors on récupère le contenu de l'URI
-        if (prevProps.imagesUsers[this.props.userId] != this.props.imagesUsers[this.props.userId]){
+        if (prevProps.imagesUsers[this.props.userId] != this.props.imagesUsers[this.props.userId]) {
+
             getUserMedia(this.props.imagesUsers[this.props.userId], (imageContent) => { 
                 this.setState({ 
                     userImageContent: imageContent
@@ -30,16 +40,18 @@ class UserImageBackground extends Component {
             });
         }
     }
-    
+
     componentWillMount() {
-        //si on a déjà l'uri de l'image dans le state média, on récupère son contenu
+        //si on a déjà l'URI de l'image dans le state média, on récupère son contenu
         if (isset(this.props.imagesUsers[this.props.userId])) {
             getUserMedia(this.props.imagesUsers[this.props.userId], (imageContent) => { 
                 this.setState({ 
                     userImageContent: imageContent
                 })
             });
-        } else {
+        } 
+        // Sinon, on demande à récupérer cette URI
+        else {
             this.props.handleGetUserMedia(this.props.userId);
         }
     };
