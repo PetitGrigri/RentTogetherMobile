@@ -101,6 +101,7 @@ const conversations = (state = initialConversationsState, action) => {
         case CONVERSATIONS_POST_ERROR:
             return Object.assign({}, state, {
                 loadingPostConversations :  false,
+                createdConversation:        null,
                 message:                    action.error
             });
 

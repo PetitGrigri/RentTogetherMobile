@@ -4,55 +4,9 @@ import RoomerMatchesItem from '../Components/RoomerMatchesItem';
 import { handlePostConversation } from '../actions/conversations';
 import { connect } from 'react-redux';
 import { empty } from '../utils/check';
-import { generateTitleConversation } from '../utils/conversations'
-const matchesRoomers = [{
-    id: 1,
-    user: {
-        userId:     28,
-        firstName:  "Test",
-        lastName:   "Un",
-    }
-}, 
-{
-    id: 3,
-    user: {
-        userId:     29,
-        firstName:  "Test",
-        lastName:   "Deux",
-    }
-}, 
-{
-    id: 5,
-    user: {
-        userId:     30,
-        firstName:  "Test",
-        lastName:   "Trois",
-    }
-}, 
-{
-    id: 10,
-    user: {
-        userId:     31,
-        firstName:  "Test",
-        lastName:   "Quatre",
-    }
-}, 
-{
-    id: 18,
-    user: {
-        userId:     32,
-        firstName:  "Test",
-        lastName:   "Cinq",
-    }
-}, 
-{
-    id: 17,
-    user: {
-        userId:     33,
-        firstName:  "Test",
-        lastName:   "Six",
-    }
-}];
+import { generateTitleConversation } from '../utils/conversations';
+import { handleGetLocatairesValides } from '../actions/matches';
+
 
 class MatchesRoomers extends Component {
 
@@ -62,8 +16,8 @@ class MatchesRoomers extends Component {
             userIdConversationInProgress: null,
         };
     }
-    componentDidMount() {
-
+    componentWillMount() {
+        this.props.handleGetLocatairesValides();
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -94,8 +48,13 @@ class MatchesRoomers extends Component {
 
 
     getData = () =>{
-        let matchesRoomersCards = matchesRoomers;
-        let lastRowItemsCount = matchesRoomers.length % 2;
+        let matchesRoomersCards = this.props.locatairesValides.map(match => {
+            return {
+                id: match.matchId,
+                user: match.targetUser
+            }
+        });
+        let lastRowItemsCount = matchesRoomersCards.length % 2;
 
 
         if (lastRowItemsCount == 1) {
@@ -127,18 +86,18 @@ class MatchesRoomers extends Component {
                 />
     }
 
-    render() {
-        let roomersCards    = this.getData();
 
+    render() {
         return (
             <FlatList
-                data={ roomersCards }
+                refreshing={ this.props.loadingGetLocatairesValides }
+                onRefresh={() => this.handleRefresh() }
+                data={ this.getData() }
                 keyExtractor={item => `${item.id}`}
                 renderItem={ (matche) => this.getMatcheItem(matche) } 
-                refreshing={false}
-                onRefresh={() => console.log('refresh')}
                 numColumns={ 2 }
                 style={styles.container}
+
             />
         );
     }
@@ -153,14 +112,18 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = state => ({
-    loadingPostConversations :  state.conversations.loadingPostConversations, 
-    currentUser:                state.connection.user,
-    message_error:              state.conversations.message,
-    createdConversation:        state.conversations.createdConversation,
+    loadingPostConversations :      state.conversations.loadingPostConversations, 
+    currentUser:                    state.connection.user,
+    message_error:                  state.conversations.message,
+    createdConversation:            state.conversations.createdConversation,
+    loadingGetLocatairesValides:    state.matches.loadingGetLocatairesValides,
+    locatairesValides:              state.matches.locatairesValides,
+
 });
 
 const mapDispatchToProps = dispatch => ({
     handlePostConversation:     (participantsId) => dispatch(handlePostConversation(participantsId)),
+    handleGetLocatairesValides: (filter={}) => dispatch(handleGetLocatairesValides(filter))
 });
 
 export default connect(

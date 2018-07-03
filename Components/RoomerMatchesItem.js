@@ -3,6 +3,7 @@ import  { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 're
 import Avatar from './Avatar';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
+import { UserImage } from '../containers';
 
 
 class RoomerMatchesItem extends Component {
@@ -25,8 +26,9 @@ class RoomerMatchesItem extends Component {
 
         return (
             <View style={ styles.container } >
-                <Avatar 
-
+                <UserImage 
+                    style={ styles.avatar }
+                    userId={ user.userId }
                 />
                 <Text style={ styles.roomer}>{ user.firstName } { user.lastName } </Text>
                 
@@ -82,6 +84,14 @@ const styles= StyleSheet.create({
         color:              '#aaa',
         marginLeft:         10,
         marginRight:        10,
+    },
+    avatar: { 
+        width:          80, 
+        height:         80, 
+        borderRadius:   40, 
+        borderWidth:    2,
+        borderColor:    '#ccc',
     }
+    
 
 })
