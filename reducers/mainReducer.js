@@ -6,7 +6,7 @@ import conversations from './conversations';
 import messages from './messages';
 import referentielCaracteristiques from './referentielCaracteristiques';
 import matches from './matches';
-import locations from './locations';
+import localisations from './localisations';
 
 const mainReducer = combineReducers({
     connection,
@@ -16,7 +16,7 @@ const mainReducer = combineReducers({
     messages,
     referentielCaracteristiques,
     matches,
-    locations,
+    localisations,
 });
 
 export default mainReducer;

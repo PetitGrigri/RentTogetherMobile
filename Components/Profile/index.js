@@ -1,7 +1,7 @@
 import ItemRow from './ItemRow';
-import ItemRowLocation from './ItemRowLocation';
+import ItemRowLocalisation from './ItemRowLocalisation';
 import ItemRowPersonality from './ItemRowPersonality'
 import TitleHeader from './TitleHeader'
 import ItemRowDescription from './ItemRowDescription';
 
-export { ItemRow, ItemRowLocation, ItemRowPersonality, TitleHeader, ItemRowDescription };
+export { ItemRow, ItemRowLocalisation, ItemRowPersonality, TitleHeader, ItemRowDescription };

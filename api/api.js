@@ -1051,8 +1051,6 @@ export const getLocatairesValides = function(token, userId, filter, callBackOk, 
         cache: 'default'
     };
 
-
-
     let urlLocatairesValides = urlWithParams(`${url}/Matches/${userId}/GetValidateMatches`, filter)
 
     console.log(urlLocatairesValides);
@@ -1073,4 +1071,171 @@ export const getLocatairesValides = function(token, userId, filter, callBackOk, 
         .catch(error => {
             callBackError(error.message);
         });
+}
+
+
+
+
+
+
+
+/**
+ *  * Fonction permettant de rechercher une localisation
+ * @param {*} token  Token de l'utilisateur
+ * @param {*} city Le nom de la ville recherchée
+ * @param {*} codePostal le code postal de la ville recherchée
+ * @param {*} callBackOk Le callback en cas de réussite
+ * @param {*} callBackError Le callback en cas d'erreur
+ */
+export const searchLocalisation = function(token, city, codePostal, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+token
+    });
+
+    // Création de notre bjet de recherche
+    var jsonSearchString = JSON.stringify({
+        "PostalCodeId": codePostal,
+        "Libelle" :     city
+    });
+
+    //les paramètres de la requête
+    var options = {
+        method: 'POST',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default',
+        body: jsonSearchString
+    };
+
+    let urlSearch = `${url}/SearchLocations`;
+    
+    fetch(urlSearch, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+                //TODO ici ajouter utilisateur
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataSearch => {
+            callBackOk(dataSearch);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
+
+
+
+
+
+
+/**
+ *  * Fonction permettant d'ajouter une target location à un utilisateur
+ * @param {*} token  Token de l'utilisateur
+ * @param {*} city Le nom de la ville recherchée
+ * @param {*} codePostal le code postal de la ville recherchée
+ * @param {*} callBackOk Le callback en cas de réussite
+ * @param {*} callBackError Le callback en cas d'erreur
+ */
+export const addConnectedUserTargetLocation = function(token, userId, localisationData, callBackOk, callBackError) {
+
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+token
+    });
+
+    // Création de notre bjet de recherche
+    let jsonAddString = JSON.stringify([{
+        "postalCode": localisationData.postalCodeId,
+        "city": localisationData.libelle,
+        "city2": localisationData.libelle2
+    }]);
+
+    //les paramètres de la requête
+    var options = {
+        method: 'POST',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default',
+        body: jsonAddString
+    };
+
+    let urlAdd = `${url}/TargetLocations/${userId}`;
+
+    fetch(urlAdd, options)
+        .then(response => {
+            if (response.ok === true) {
+                console.log(response);
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataLocalisation => {
+            callBackOk(dataLocalisation[0]);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
+
+
+
+
+
+
+/**
+ * Fonction destinée à l'a suppression d'une target location d'un utilisateur
+ * 
+ * @param {string} token Le token de l'utilisateur dont on va supprimer une targetLocation
+ * @param {object} targetLocation La target location que l'on souhaite supprimé
+ * @param {function} callBackOk Le callback à utiliser lorsque la suppression est réalisée
+ * @param {function} callBackError Le callback à utiliser lorsque la suppression a rencontré une erreur
+ */
+export const deleteConnectedUserTargetLocation = function(token, targetLocation, callBackOk, callBackError) {
+
+    console.log (token, targetLocation, callBackOk, callBackError);
+
+    // Le header contiendra le token d'authentification plus tard
+   var myHeaders = new Headers({
+       'Authorization':'Bearer '+ token
+   });
+   
+
+   var jsonDelete = JSON.stringify(targetLocation);
+
+   //les paramêtres de la requête
+   var options = {
+       method: 'DELETE',
+       headers: myHeaders,
+       mode: 'cors',
+       cache: 'default',
+       body: jsonDelete
+   };
+
+
+   let targetDelete = `${url}/TargetLocations/${targetLocation.targetLocationId}`;
+    
+
+   //réalisation de la requête
+   fetch(targetDelete, options)
+       .then(response => {
+           if (response.ok  === true) {
+               callBackOk();
+           } else {
+               throw Error(response.statusText);
+           }
+       })
+       .catch(error => {
+           callBackError(error.message);
+       });
 }

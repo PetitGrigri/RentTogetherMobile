@@ -4,6 +4,7 @@ import TabNavigator from './TabNavigator';
 import Messages from '../screens/Messages';
 import UpdateParam from '../screens/UpdateParam';
 import UpdateDescription from '../screens/UpdateDescription';
+import UpdateLocalisation from '../screens/UpdateLocalisation';
 
 const ApplicationNavigator = createStackNavigator({
     home: {
@@ -39,6 +40,16 @@ const ApplicationNavigator = createStackNavigator({
         screen: UpdateDescription, 
         navigationOptions: {
             title:  'Ma description',
+            headerStyle: {
+                backgroundColor:    '#ff8f00',       
+            },
+            headerTintColor:        '#fff'
+        }
+    },
+    updateLocalisation: { 
+        screen: UpdateLocalisation, 
+        navigationOptions: {
+            title:  'Mes recherches',
             headerStyle: {
                 backgroundColor:    '#ff8f00',       
             },

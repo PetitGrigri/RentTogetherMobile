@@ -28,3 +28,17 @@ export const cleanUsersList = (users) =>  {
    
    return users.map( user => cleanUser(user))
 }
+
+/**
+ * Cette fonction permet la suppression des accès d'une chaine de caractère
+ * 
+ * @param {string} text 
+ */
+export const cleanAccent = (text) => {
+    text = text.replace(/[ÀÁÂÃÄÅ]/g,"A");
+    text = text.replace(/[àáâãäå]/g,"a");
+    text = text.replace(/[ÈÉÊË]/g,"E");
+    text = text.replace(/[èéèë]/g,"e");
+
+    return text;
+}

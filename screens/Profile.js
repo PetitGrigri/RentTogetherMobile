@@ -12,15 +12,15 @@ import { Alert } from 'react-native';
 import { handleGetReferentialCharacteristics } from '../actions/referentielCaracteristiques';
 import { isset, empty } from '../utils/check';
 import {handleHideError } from '../actions/connection';
-import { ItemRow, ItemRowLocation, ItemRowPersonality, TitleHeader, ItemRowDescription } from '../Components/Profile';
-import { handleGetConnectedUserLocation } from '../actions/locations';
+import { ItemRow, ItemRowLocalisation, ItemRowPersonality, TitleHeader, ItemRowDescription } from '../Components/Profile';
+import { handleGetConnectedUserLocalisations } from '../actions/localisations';
 
 class Profile extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            avatarRadius:           0,
+            avatarRadius:           40,
             imageUser:              null,
             personality:            [],
             personalityToUpdate:    false,
@@ -35,7 +35,7 @@ class Profile extends Component {
         this.props.handleGetUserMedia(this.props.user.userId);
         this.props.handleGetReferentialCharacteristics();
         this.props.handleGetPersonalityConnectedUser();
-        this.props.handleGetConnectedUserLocation();
+        this.props.handleGetConnectedUserLocalisations();
     };
     
     componentDidUpdate = (prevProps, prevState) => {
@@ -186,12 +186,12 @@ class Profile extends Component {
             action: <TouchableOpacity onPress={ this.changeDescription  }><Entypo  color='#aaa' name='edit' size={ 18 } style={styles.editParam }/></TouchableOpacity>
         }, {   
             title: 'Mes recherches', 
-            data: this.props.locations,
-            renderItem: (props) => <ItemRowLocation {...props} />,
+            data: this.props.localisations,
+            renderItem: (props) => <ItemRowLocalisation {...props} />,
             
-            action: this.props.loadingGetLocations
+            action: this.props.loadingGetLocalisations
                 ?   <ActivityIndicator size="small" color='#aaa' /> 
-                :   null,
+                :   <TouchableOpacity onPress={ this.changeLocalisations  }><Entypo  color='#aaa' name='edit' size={ 18 } style={styles.editParam }/></TouchableOpacity>
         }, {
             title: 'Mes caractéristiques', 
             data: sectionPersonality,
@@ -218,6 +218,9 @@ class Profile extends Component {
         this.props.navigation.navigate('updateDescription');
     }
 
+    changeLocalisations = () => {
+        this.props.navigation.navigate('updateLocalisation');
+    }
     
     /**
      * Dans le cas ou un utilisateur n'a pas de personnalité, on lui initialise une personalité vide (et on l'informe qu'il doit les sauvegarder)
@@ -263,8 +266,10 @@ class Profile extends Component {
         
     }
 
+    /**
+     * Fonction permettant à l'utilisateur de sélectionnée une photo
+     */
     pickAPhoto = async () => {
-        
         // Demande de la permission camera
         let cameraPermission = await Expo.Permissions.getAsync(Expo.Permissions.CAMERA)
         if (cameraPermission.status !== 'granted') {
@@ -276,6 +281,7 @@ class Profile extends Component {
         if (cameraRollPermission.status  !== 'granted') {
             await Expo.Permissions.askAsync(Expo.Permissions.CAMERA_ROLL)
         }
+        cnsoe.log(cameraPermission, cameraRollPermission);
 
         // Si on n'a pas de permission, on arrête là
         if (((Platform.OS === 'ios') && ((cameraPermission.status  !== 'granted') || (cameraRollPermission.status  !== 'granted'))) ||
@@ -305,10 +311,6 @@ class Profile extends Component {
 
         // Redimentionnement de la photo (et modificaiton de son type en jpg (plus léger pour le transport)
         let resultResized = await Expo.ImageManipulator.manipulate( result.uri, [{ resize: { width: 1000 }}], { format: 'jpg', compress: 0.8} );
-
-        //debug au cas ou
-        //info = await Expo.FileSystem.getInfoAsync(resultResized.uri, {size: true});
-        //console.log('REDIMENSIONNE', info);
 
         //transmission de la photo 
         this.props.handleUploadUserMedia(resultResized.uri);
@@ -374,21 +376,21 @@ const mapStateToProps = state => ({
     loadingCharacteristicsReferential:  state.referentielCaracteristiques.loadingGetReferential,
     characteristicsReferencial:         state.referentielCaracteristiques.characteristicsReferencial,
     message_error:                      state.connection.message_error,
-    loadingGetLocations:                state.locations.loadingGetLocations,
-    locations:                          state.locations.locations,
+    loadingGetLocalisations:            state.localisations.loadingGetLocalisations,
+    localisations:                      state.localisations.localisations,
 });
 
 const mapDispatchToProps = dispatch => ({
     handleGetUserMedia:                     (userId) => dispatch(handleGetUserMedia(userId)),
-    handleUploadUserMedia:                  (imageURI) => dispatch(handleUploadUserMedia(imageURI)),
-    handleLogout:                           () => dispatch(handleLogout()),
     handleGetReferentialCharacteristics:    () => dispatch(handleGetReferentialCharacteristics()),
     handleGetPersonalityConnectedUser:      () => dispatch(handleGetPersonalityConnectedUser()),
+    handleUploadUserMedia:                  (imageURI) => dispatch(handleUploadUserMedia(imageURI)),
+    handleLogout:                           () => dispatch(handleLogout()),
     handlePatchConnectedUserPersonality:    (personality) => dispatch(handlePatchConnectedUserPersonality(personality)),
     handlePostConnectedUserPersonality:     (personality) => dispatch(handlePostConnectedUserPersonality(personality)),
     handleHideError:                        () => dispatch(handleHideError()),
     handleLogoutConversations:              () => dispatch(handleLogoutConversations()),
-    handleGetConnectedUserLocation:         () => dispatch(handleGetConnectedUserLocation()),
+    handleGetConnectedUserLocalisations:    () => dispatch(handleGetConnectedUserLocalisations()),
 });
 
 export default connect(

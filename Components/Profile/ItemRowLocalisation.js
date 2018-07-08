@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {  View, Text, StyleSheet } from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {MaterialIcons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
-export default class ItemRowLocation extends Component {
+export default class ItemRowLocalisation extends Component {
   
     static proptTypes = {
         index:  PropTypes.number.isRequired,
@@ -14,8 +15,8 @@ export default class ItemRowLocation extends Component {
 
         return (
             <View key={index} style={styles.itemRow}>
-                <Text style={styles.itemRowLabel} >{item.postalCode }</Text>
-                <Text style={styles.itemRowValue}  >{item.city}</Text>
+                <Text style={styles.city}  >{item.city} {item.city2}</Text>
+                <Text style={styles.postalCode} >{item.postalCode }</Text>
             </View>
         );
     }
@@ -30,15 +31,21 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems:     'center',
     },
-    itemRowLabel: {
+    postalCode: {
         fontFamily:     'open-sans-light', 
         fontSize:       12,
         flex:           1,
+        textAlign:      'right'
     }, 
-    itemRowValue: {
+    city: {
         fontFamily:     'open-sans-light', 
         fontSize :      16,
         flex:           2,
-        textAlign:      'right'
-    }
+        textAlign:      'left'
+    },
+    deleteIcon: {
+        width:          30,
+        textAlign:      'left',
+
+    }, 
 });

@@ -39,7 +39,7 @@ class App extends React.Component {
             'open-sans-light':      require('./assets/fonts/Open_Sans/OpenSans-Light.ttf'),
             'open-sans-regular':    require('./assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
             'open-sans-bold':       require('./assets/fonts/Open_Sans/OpenSans-Bold.ttf'),
-            'open-sans-semi-bold':       require('./assets/fonts/Open_Sans/OpenSans-SemiBold.ttf')
+            'open-sans-semi-bold':   require('./assets/fonts/Open_Sans/OpenSans-SemiBold.ttf')
         }).then(() => {
             this.setState({fontLoaded: true});
         });
