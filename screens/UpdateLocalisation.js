@@ -40,10 +40,8 @@ class UpdateLocalisations extends Component {
         if (!empty(text)) {
             text = cleanAccent(text);
 
-            console.log(Number.isNaN(text))
-            console.log(Number.toString(Number.parseInt(text)));
-            
-            let isPostalCode = Number.isInteger(Number.parseInt(text))
+
+            let isPostalCode = (Number.isInteger(Number.parseInt(text)) || (text.search(/2[ABab]/g) == 0))
             
 
             this.props.handleSearchLocalisation(

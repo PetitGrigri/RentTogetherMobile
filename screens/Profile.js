@@ -278,13 +278,13 @@ class Profile extends Component {
 
         // Demande de la permission camera (semble nécessaire pour iOS)
         let cameraRollPermission= await Expo.Permissions.getAsync(Expo.Permissions.CAMERA_ROLL)
-        if ((Platform.OS === 'ios')  && (cameraRollPermission.status  !== 'granted')) {
+        if (cameraRollPermission.status  !== 'granted') {
             await Expo.Permissions.askAsync(Expo.Permissions.CAMERA_ROLL)
         }
+        console.log(cameraPermission, cameraRollPermission, (cameraPermission.status  !== "granted") || (cameraRollPermission.status  !== "granted"));
 
         // Si on n'a pas de permission, on arrête là
-        if (((Platform.OS === 'ios') && ((cameraPermission.status  !== 'granted') || (cameraRollPermission.status  !== 'granted'))) ||
-            ((Platform.OS !== 'ios') && (cameraPermission.status  !== 'granted')) ) {
+        if ((cameraPermission.status  !== "granted") || (cameraRollPermission.status  !== "granted")) {
                 // Message d'erreur en cas de refus
                 Alert.alert(
                     'Erreur',
@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
     },
     imageHeader: {
         width:          '100%',
-        aspectRatio:        1.8,
+        aspectRatio:     1.8,
         justifyContent: 'center',
         alignItems:     'center',
     },

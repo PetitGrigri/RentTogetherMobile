@@ -43,9 +43,6 @@ class RoomerCard extends Component
 
                         <View style={{width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.2)'}}>
                             <View style={{flex:1, alignItems:'flex-start', justifyContent: 'flex-end', flexDirection:  'row',}}>
-                               { /* <View style={{width:'25%', padding: 5}}>
-                                    <Text h2 style={styles.textWhite}>{ this.props.targetUser.userId } ans</Text>
-                                </View> */}
                                 <View style={{width:'25%', padding: 5, alignItems: 'flex-end'}}>
                                     <Text h2 style={styles.textWhite}>{ this.props.average } %</Text>
                                 </View>
@@ -60,7 +57,7 @@ class RoomerCard extends Component
                 <View style={ styles.cardBottom }>
                     
                     <Text style={ styles.textDescription }>
-                        { this.props.targetUser.description }
+                        { this.props.targetUser.description ? this.props.targetUser.description : "Cet utilisateur n'a pas encore remplis sa description, mais ses carectéristiques et ses localisations semblent correspondre avec les votres." }
                     </Text>
 
                     <View style={{ flexDirection: 'row', alignSelf: 'flex-start', justifyContent: 'space-around' , flexWrap: 'wrap' }} >
