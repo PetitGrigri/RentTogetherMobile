@@ -12,7 +12,7 @@
     },
     "android": {
       "package": "com.rent.together",
-      "versionCode": 4,
+      "versionCode": 5,
       "permissions": [
         "CAMERA", 
         "CAMERA_ROLL"

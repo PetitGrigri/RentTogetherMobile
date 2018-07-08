@@ -278,10 +278,9 @@ class Profile extends Component {
 
         // Demande de la permission camera (semble nécessaire pour iOS)
         let cameraRollPermission= await Expo.Permissions.getAsync(Expo.Permissions.CAMERA_ROLL)
-        if (cameraRollPermission.status  !== 'granted') {
+        if ((Platform.OS === 'ios')  && (cameraRollPermission.status  !== 'granted')) {
             await Expo.Permissions.askAsync(Expo.Permissions.CAMERA_ROLL)
         }
-        cnsoe.log(cameraPermission, cameraRollPermission);
 
         // Si on n'a pas de permission, on arrête là
         if (((Platform.OS === 'ios') && ((cameraPermission.status  !== 'granted') || (cameraRollPermission.status  !== 'granted'))) ||
