@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View} from 'react-native';
 import Text from '../Components/Text';
 import PropTypes from 'prop-types';
 import RatingCondensed2 from './RatingCondensed2';

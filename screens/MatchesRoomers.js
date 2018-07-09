@@ -23,16 +23,13 @@ class MatchesRoomers extends Component {
     componentDidUpdate = (prevProps, prevState) => {
         if (prevProps.loadingPostConversations && !this.props.loadingPostConversations && empty(this.props.message_error)) {
 
-
             this.setState({
                 userIdConversationInProgress: null
             });
 
             let title = generateTitleConversation(this.props.createdConversation, this.props.currentUser);
 
-            console.log('CONVERSATION CREATED CONVERSATION CREATED', this.props.createdConversation, title);
 
-            
             this.props.navigation.navigate('messages', {
                 conversation:       this.props.createdConversation,
                 title:              title
@@ -76,12 +73,21 @@ class MatchesRoomers extends Component {
         this.props.handlePostConversation([this.props.currentUser.userId, userId])
     }
 
+    handleShowMatchProfile = (userId) => {
+        let match = this.props.locatairesValides.filter(match => match.targetUser.userId == userId )[0];
+
+        this.props.navigation.navigate('roomerProfile', {
+            match: match
+        });
+    }
+
     getMatcheItem = (matche) => {
         return (matche.item.isEmpty === true) 
             ? <View style={styles.emptyContainer} /> 
             : <RoomerMatchesItem 
                 key={ matche.item.id } {...matche.item} 
                 handleCreateConversation={ this.handleCreateConversation } 
+                handleShowProfile= { this.handleShowMatchProfile }
                 loadingCreateConversation={ matche.item.user.userId == this.state.userIdConversationInProgress }
                 />
     }

@@ -5,6 +5,7 @@ import Messages from '../screens/Messages';
 import UpdateParam from '../screens/UpdateParam';
 import UpdateDescription from '../screens/UpdateDescription';
 import UpdateLocalisation from '../screens/UpdateLocalisation';
+import RoomerProfile from '../screens/RoomerProfile';
 
 const ApplicationNavigator = createStackNavigator({
     home: {
@@ -56,6 +57,15 @@ const ApplicationNavigator = createStackNavigator({
             headerTintColor:        '#fff'
         }
     },
+    roomerProfile: {
+        screen: RoomerProfile, 
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor:    '#ff8f00',       
+            },
+            headerTintColor:        '#fff'
+        }
+    }
     
 });
 

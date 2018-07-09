@@ -62,23 +62,19 @@ class Roomers extends Component {
                     showNope={true}
                     showMaybe={false}
                     cardRemoved={ this.cardRemoved }
-                    yupView={   <LinearGradient colors={['#00e676', 'transparent']} style={ styles.yupNopeView} start={[1, 0]} end={[0, 0]}>
+                    yupView={   <LinearGradient colors={['rgba(0,230,118,1)', 'rgba(0,230,118,0)']} style={ styles.yupNopeView} start={[1, 0]} end={[0, 0]}>
                                     <Entypo name='emoji-happy' color='#fff'  size={40}/> 
                                     <Text style={styles.whiteText} >Je te veux</Text>
                                 </LinearGradient> }
-                    noView={   <LinearGradient colors={['#c62828', 'transparent']} style={ styles.yupNopeView } start={[0, 0]} end={[1, 0]}>
+                    noView={   <LinearGradient colors={['rgba(198,40,40,1)', 'rgba(198,40,40, 0)']} style={ styles.yupNopeView } start={[0, 0]} end={[1, 0]}>
                                     <Entypo name='emoji-sad' color='#fff'  size={40}/> 
                                     <Text style={styles.whiteText} >Plus tard peut être</Text>
                                 </LinearGradient> }
 
                     yupStyle={styles.yupContainer}
                     nopeStyle={styles.nopeContainer}
-
-                    nopeText='Mmmm non...'
-
                     handleYup={this.handleYup}
                     handleNope={this.handleNope}
-
                     dragY={false}
                     onClickHandler={()=>{}}
                 /> 

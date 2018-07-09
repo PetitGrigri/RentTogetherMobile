@@ -83,6 +83,7 @@ export const handleGetUsers = () => {
 
         api.getUtilisateurs(
             getState().connection.user.token,
+            {},
             (data) => { dispatch(handleGetUserSuccess(data)) },
             (error) => { dispatch(handleGetUserError(error)) }
         )

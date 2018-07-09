@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import  { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Avatar from './Avatar';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, Entypo } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import { UserImage } from '../containers';
 
 
 class RoomerMatchesItem extends Component {
     static propTypes = {
-        user:           PropTypes.object.isRequired,
-        handlePress:    PropTypes.func,
+        user:                       PropTypes.object.isRequired,
+        handleShowProfile:          PropTypes.func.isRequired,
+        handleCreateConversation:   PropTypes.func.isRequired,
     };
-
 
     constructor(props) {
         super(props);
@@ -22,7 +22,7 @@ class RoomerMatchesItem extends Component {
     }
 
     render() {
-        let { user, handleCreateConversation, loadingCreateConversation } = this.props;
+        let { user, handleCreateConversation, handleShowProfile, loadingCreateConversation } = this.props;
 
         return (
             <View style={ styles.container } >
@@ -33,12 +33,14 @@ class RoomerMatchesItem extends Component {
                 <Text style={ styles.roomer}>{ user.firstName } { user.lastName } </Text>
                 
                 <View style={styles.iconesWraper} >
-                    <Ionicons name='ios-home' style={ styles.icon } size={24} />
+                    <TouchableOpacity onPress={ () => handleShowProfile(user.userId) }>
+                        <Ionicons name='ios-contact' style={ styles.icon } size={28} />
+                    </TouchableOpacity>
                     <View style= {styles.separator} />
                     {loadingCreateConversation 
                         ?   <ActivityIndicator size="small" color='#aaa' /> 
                         :   <TouchableOpacity onPress={ () => handleCreateConversation(user.userId) }>
-                                <Ionicons name='ios-mail-outline' style={ styles.icon } size={24} />
+                                <Ionicons name='ios-mail-outline' style={ styles.icon } size={32} />
                             </TouchableOpacity>
                     }
                     
