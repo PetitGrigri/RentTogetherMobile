@@ -1,7 +1,7 @@
 
 
 const folderUserMedia = `${Expo.FileSystem.documentDirectory}users-media`;
-
+const folderLocationMedia = `${Expo.FileSystem.documentDirectory}locations-media`;
 
 /**
  * @param {id} userId 
@@ -15,7 +15,7 @@ export const saveUserMedia = async (userId, image) =>  {
     let imageURI = `${folderUserMedia}/user_${userId}.png`;
 
     //suppression de l'image précédente de l'utilisateur si elle existe
-    await deleteUserMediaIfExist(imageURI);
+    await deleteMediaIfExist(imageURI);
 
     //écriture du contenu de l'image
     await Expo.FileSystem.writeAsStringAsync(imageURI, image);
@@ -65,7 +65,7 @@ export const createUserMediaFolderIfNotExist = async () => {
 /**
  * Fonction permettant de supprimer l'image d'un utilisateur si elle existe déjà
  */
-export const deleteUserMediaIfExist = async (imageURI) => {
+export const deleteMediaIfExist = async (imageURI) => {
 
     // Récupération des informations sur l'existence potentielle d'une image préalablement enregistré
     let imageURIInfo = await Expo.FileSystem.getInfoAsync(imageURI);
@@ -78,10 +78,60 @@ export const deleteUserMediaIfExist = async (imageURI) => {
 
 
 /**
- * Fonction permettant de récupérer l'image d'un utilisateur
+ * Fonction permettant de récupérer le contenu indiqué par fileUri et de le retourner au callback
+ * @param {*} fileUri 
+ * @param {*} callback 
  */
-export const getUserMedia = (fileUri, callback) => {
+export const getCachedMedia = (fileUri, callback) => {
+    console.log('//TODO TODO TODO fileUri', fileUri)
     Expo.FileSystem.readAsStringAsync(fileUri).then(content => {
         callback(content);
-    })
+    }).catch(error => {
+        
+        console.log('//TODO TODO TODO TODOgetCachedMedia', error)
+    });
+}
+
+
+
+
+
+
+
+
+/**
+ * @param {id} pictureId 
+ * @param {blob} image 
+ */
+export const saveLocationMedia = async (pictureId, image) =>  {
+    //création du dossier des images des utilisateurs s'il n'existe pas
+    await createLocationMediaFolderIfNotExist();
+    
+    // Création de l'URI de l'image
+    let imageURI = `${folderLocationMedia}/location_${pictureId}.png`;
+
+    //suppression de l'image précédente de l'utilisateur si elle existe
+    await deleteMediaIfExist(imageURI);
+
+    //écriture du contenu de l'image
+    await Expo.FileSystem.writeAsStringAsync(imageURI, image);
+
+    return imageURI
+};
+
+
+/**
+ * Fonction permettant la crétion du dossier des médias destinée aux logements
+ */
+export const createLocationMediaFolderIfNotExist = async () => {
+    //récupération des informations sur le dossier
+    let folderInfo = await Expo.FileSystem.getInfoAsync(folderLocationMedia)
+
+    // Création du fichier quand il n'existe pas ou retour
+    if (folderInfo.exists) {
+        return folderInfo.exists;
+    } else {
+        let createdFolderInfo = await Expo.FileSystem.makeDirectoryAsync(folderLocationMedia);
+        return createdFolderInfo.exists;
+    }
 }

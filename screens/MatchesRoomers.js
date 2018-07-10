@@ -81,6 +81,9 @@ class MatchesRoomers extends Component {
         });
     }
 
+    handleRefresh = () => {
+        this.props.handleGetLocatairesValides();
+    }
     getMatcheItem = (matche) => {
         return (matche.item.isEmpty === true) 
             ? <View style={styles.emptyContainer} /> 

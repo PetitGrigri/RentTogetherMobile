@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import Text from '../Components/Text';
 import PropTypes from 'prop-types';
 import RatingCondensed from './RatingCondensed';
 import Carousel from './Carousel';
+import LocationImage from '../containers/LocationImage';
+
+import { MaterialIcons, FontAwesome, Entypo } from '@expo/vector-icons';
 
 class LocationCard extends Component 
 {
@@ -13,20 +16,21 @@ class LocationCard extends Component
 
     static propTypes = {
         description:    PropTypes.string.isRequired,
-        images:         PropTypes.array.isRequired,
+        //images:         PropTypes.array.isRequired,
     };
-    constructor(props) {
-
-        super(props);
-    }
 
     render() {
+
+        let images = this.props.buildingPictureInformationApiDtos.map( value => { 
+            return <LocationImage pictureId={ value.buildingPictureId } /> 
+        });
+
         return (
             <View style={ styles.card }>
                     
                 <View style={ styles.cardTopInformation}  >
                     <Carousel 
-                        images={ this.props.images }
+                        images={ images }
                     />
                     <View style={styles.cardBottomAfter}><View style={styles.cardBottomTop} /></View>
                 </View>
@@ -36,7 +40,12 @@ class LocationCard extends Component
                     </Text>
 
                     <View style={{ flexDirection: 'row', alignSelf: 'flex-start', justifyContent: 'space-around' , flexWrap: 'wrap'}} >
-                        { this.props.characteristics.map((characteristic, index) => <RatingCondensed key={index} {...characteristic} />)}
+                        <RatingCondensed value={ this.props.nbRoom } icon={ <FontAwesome name='bed' /> } />
+                        <RatingCondensed value={ this.props.nbPiece } icon={ <FontAwesome name='cube' /> } />
+                        <RatingCondensed value={ `${this.props.nbRenters} / ${this.props.nbMaxRenters}` } icon={ <FontAwesome name='user' /> } />
+                        <RatingCondensed value={ this.props.parking } icon={ <MaterialIcons name='local-parking' /> } />
+                        <RatingCondensed value={ this.props.area } icon={ <Entypo name='resize-full-screen' /> } />
+                        <RatingCondensed value={ `${this.props.price} / personne` } icon={ <FontAwesome name='euro' /> } />
                     </View>
                 </View>
             </View>

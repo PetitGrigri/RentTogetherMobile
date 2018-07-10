@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {  ImageBackground } from 'react-native';
 import { isset } from '../utils/check';
-import { getUserMedia } from '../utils/fileSystem';
+import { getCachedMedia } from '../utils/fileSystem';
 import { connect } from 'react-redux'
 import { handleGetUserMedia } from '../actions/media';
 import { PropTypes } from 'prop-types';
@@ -33,7 +33,7 @@ class UserImageBackground extends Component {
         // Si le store redux vient de récupérer l'URI de l'utilisateur qui nous interesse, alors on récupère le contenu de l'URI
         if (prevProps.imagesUsers[this.props.userId] != this.props.imagesUsers[this.props.userId]) {
 
-            getUserMedia(this.props.imagesUsers[this.props.userId], (imageContent) => { 
+            getCachedMedia(this.props.imagesUsers[this.props.userId], (imageContent) => { 
                 this.setState({ 
                     userImageContent: imageContent
                 });
@@ -44,7 +44,7 @@ class UserImageBackground extends Component {
     componentWillMount() {
         //si on a déjà l'URI de l'image dans le state média, on récupère son contenu
         if (isset(this.props.imagesUsers[this.props.userId])) {
-            getUserMedia(this.props.imagesUsers[this.props.userId], (imageContent) => { 
+            getCachedMedia(this.props.imagesUsers[this.props.userId], (imageContent) => { 
                 this.setState({ 
                     userImageContent: imageContent
                 })

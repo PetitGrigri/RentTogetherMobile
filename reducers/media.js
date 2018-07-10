@@ -5,8 +5,11 @@ import {
 
     USER_POST_USER_IMAGE_REQUEST,
     USER_POST_USER_IMAGE_SUCCESS, 
-    USER_POST_USER_IMAGE_ERROR
+    USER_POST_USER_IMAGE_ERROR,
 
+    BUILDING_GET_IMAGE_REQUEST,
+    BUILDING_GET_IMAGE_SUCCESS, 
+    BUILDING_GET_IMAGE_ERROR
 } from '../actions/media'
 
 
@@ -15,6 +18,11 @@ const initialMediaState = {
     usersMediaLoading:      [],
     usersMediaError: [],
     usersMedia: {},
+
+    locationsMediaLoading:  [],
+    locationsMediaError:    [],
+    locationsMedia:         {},
+
     userMediaUpaloadLoading: false
 }
 
@@ -51,9 +59,10 @@ const media = (state = initialMediaState, action) => {
 
 
 
+
         case USER_POST_USER_IMAGE_REQUEST : 
             return Object.assign({}, state, {
-                userMediaUpaloadLoading:    true,
+                MediaUpaloadLoading:    true,
             });
 
         case USER_POST_USER_IMAGE_SUCCESS : 
@@ -74,6 +83,39 @@ const media = (state = initialMediaState, action) => {
 
 
 
+
+
+
+
+
+
+
+
+        case BUILDING_GET_IMAGE_REQUEST :
+
+            let newlocationsMediaLoading = state.locationsMediaLoading.slice(0);
+            newlocationsMediaLoading.push(action.pictureId)
+
+            return Object.assign({}, state, {
+                locationsMediaLoading : newlocationsMediaLoading
+            });
+
+        case BUILDING_GET_IMAGE_SUCCESS : 
+            return Object.assign({}, state, {
+                locationsMediaLoading:  state.locationsMediaLoading.filter(value => (value !== action.pictureId)),
+                locationsMedia:         Object.assign({}, state.usersMedia, { [action.pictureId] : action.image })
+            });
+
+
+        case BUILDING_GET_IMAGE_ERROR :
+
+            let newLocationsMediaError = state.locationsMediaError.slice(0);
+            newLocationsMediaError.push(action.pictureId)
+
+            return Object.assign({}, state, {
+                locationsMediaLoading: state.newlocationsMediaLoading.filter(value => (value !== action.pictureId)),
+                locationsMediaError:   newLocationsMediaError
+            });
 
 
         //autres 

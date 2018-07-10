@@ -1,63 +1,16 @@
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Dimensions, ActivityIndicator } from 'react-native';
 import Text from '../Components/Text';
 import TabContent from '../Components/TabContent';
 import LocationCard from '../Components/LocationCard';
-import { MaterialIcons, FontAwesome} from '@expo/vector-icons';
 import SwipeCards from 'react-native-swipe-cards'
+import { connect } from 'react-redux';
+import { handleGetAppartementsPotentiels } from '../actions/logements';
+import { Entypo } from '@expo/vector-icons';
 
-const appartments = [{
-    description: "Paris MEUBLE 3 pièce(s) - 45 m² - Paris 75013, 7 Allée du test Dans un immeuble moderne avec gardien et ascenseur, Studio meublé situé au 3ème étage comprenant une entrée, une pièce principale avec un coin cuisine équipée, et une salle d'eau avec WC. Calme et lumineux, chauffage collectif.. Loyer: 400 euros /mois et charges incluses.  Disponible à partir du 30 juin.. ",
-    images: [
-        require("../assets/tests/appartment_01.jpg"),
-        require("../assets/tests/appartment_02.jpg"),
-    ], 
-    characteristics: [{
-        icon:               <FontAwesome name='bed' />,
-        value:              "2",
-    },{
-        icon:               <FontAwesome name='cube' />,
-        value:              "3",
-    },{
-        icon:               <FontAwesome name='user' />,
-        value:              '1 / 2',
-    },{
-        icon:               <MaterialIcons name='local-parking' />,
-        value:              '1',
-    },{
-        icon:               <FontAwesome name='wifi' />,
-        value:              'fibre',
-    },{
-        icon:               <FontAwesome name='euro' />,
-        value:              '600 / personne',
-    }]
-}, {
-    description: "Paris MEUBLE 3 pièce(s) - 42 m² - Paris 75013, 9 Allée du deuxième test Dans un immeuble hausmanien avec cours intérieure et ascenseur, Studio meublé situé au 4ème étage comprenant une entrée, une pièce principale avec un coin cuisine équipée, et une salle d'eau avec WC. Calme et lumineux, chauffage collectif.. Loyer: 400 euros /mois et charges incluses.  Disponible à partir du 30 juin.. ",
-    images: [
-        require("../assets/tests/appartment_03.jpg"),
-        require("../assets/tests/appartment_04.jpg"),
-    ],
-    characteristics: [{
-        icon:               <FontAwesome name='bed' />,
-        value:              "2",
-    },{
-        icon:               <FontAwesome name='cube' />,
-        value:              "3",
-    }]
-}, {
-    description: "Test 3.",
-    images: [
-        require("../assets/tests/appartment_01.jpg"),
-        require("../assets/tests/appartment_02.jpg"),
-        require("../assets/tests/appartment_03.jpg"),
-        require("../assets/tests/appartment_04.jpg"),
-    ],
-    characteristics: [{
-        icon:               <FontAwesome name='bed' />,
-        value:              "3",
-    }]
-}, 
-];
+const {height, width} = Dimensions.get('window');
+
+
 
 class Locations extends Component {
 
@@ -69,15 +22,41 @@ class Locations extends Component {
         console.log('Non');
     }
 
+    componentWillMount() {
+        this.props.handleGetAppartementsPotentiels();
+    }
+
+    // Méthode utilisée pour le rendu 
+    noMoreCard = () => {
+        if (this.props.loadingGetAppartementsPotentiels) {
+            return  <View style={ styles.containerNoMoreCards }>
+                        <Text style={ styles.noMoreText }>Recherche de l'appartement idéal en cours...</Text>
+                        <ActivityIndicator color='#ff8f00' size='large' />
+                    </View>
+        } else {
+            return  <View style={ styles.containerNoMoreCards }>
+                        <Text style={ styles.noMoreText }>Nous n'avons pas trouvé d'appartements vous correspondant</Text>
+                        <Entypo name='emoji-sad' color='#ff8f00'  size={40}/>
+                    </View>
+        }   
+
+    }
+
+    // Quand il n'y a plus de locataires potentiels, on lance une nouvelle recherche
+    cardRemoved = (index) => {
+        if (index >= (this.props.appartementsPotentiels.length -1)) {
+            this.props.handleGetAppartementsPotentiels();
+        }
+    }
 
     render() {
         return (
             <TabContent>
                 <SwipeCards
-                    cards={ appartments }
+                    renderNoMoreCards={() => this.noMoreCard() }
+                    cards={ this.props.appartementsPotentiels }
                     stack={false}
                     renderCard={(appartement) => <LocationCard {...appartement} />}
-                    renderNoMoreCards={() => <View style={{flex:1}}><Text>Terminé</Text></View>}
                     showYup={true}
                     showNope={true}
                     showMaybe={false}
@@ -86,6 +65,7 @@ class Locations extends Component {
                     handleYup={this.handleYup}
                     handleNope={this.handleNope}
                     dragY={false}
+                    cardRemoved={ this.cardRemoved }
                     onClickHandler={()=>{}}
                 /> 
             </TabContent>
@@ -93,4 +73,70 @@ class Locations extends Component {
     }
 }
 
-export default Locations;
+const mapStateToProps = state => ({
+    loadingGetAppartementsPotentiels :  state.logements.loadingGetAppartementsPotentiels,
+    appartementsPotentiels:             state.logements.appartementsPotentiels,
+    message_error:                      state.logements.message_error
+});
+
+const mapDispatchToProps = dispatch => ({
+    handleGetAppartementsPotentiels:     () => dispatch(handleGetAppartementsPotentiels()),
+});
+  
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Locations);
+
+
+const styles = StyleSheet.create({
+    yupContainer: {
+        borderWidth:    0,
+        height:         height*2,
+        margin:         0,
+        padding:        0,
+        width:          (width * 0.4),
+        position:       'absolute',
+        top:            -0.5 * height,
+        bottom:         -0.5 * height,
+        right:          -0.2 * width,
+        paddingRight:   0.2 * width,
+    },
+    nopeContainer: {
+        borderWidth:    0,
+        height:         height*2,
+        margin:         0,
+        padding:        0,
+        width:          (width * 0.4),
+        position:       'absolute',
+        top:            -0.5 * height,
+        bottom:         -0.5 * height,
+        left:          -0.2 * width,
+        paddingLeft:   0.2 * width,
+    },
+    yupNopeView: {
+        flex:           1,
+        justifyContent: 'center',
+        alignItems:     'center',
+    },
+    whiteText:{
+        color:          '#fff',
+        fontFamily:     'open-sans-regular', 
+        fontSize :      12,
+        padding:        4,
+        textAlign:      'center'
+    }, 
+    containerNoMoreCards: {
+        flex:           1,
+        justifyContent: 'center',
+        alignItems:     'center',
+        padding:        16,
+    }, 
+    noMoreText: {
+        color:           '#ff8f00',
+        fontFamily:      'open-sans-light', 
+        fontSize:        24,
+        textAlign:      'center',
+        marginBottom:   40,           
+    }
+});

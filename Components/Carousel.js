@@ -104,7 +104,11 @@ class Carousel extends Component {
 
     render() {
 
-        let images = this.props.images.map( (image, index) => <Image key={index} style={{ width: this.state.cardWidth, height: this.state.cardHeight }} source={ image }/>);
+        let images = this.props.images.map( (image, index) => React.cloneElement(image,  { 
+            style : { width: this.state.cardWidth, height: this.state.cardHeight },
+            key: index
+        }));
+
         let dots = [];
 
         for (var i = 0; i <= this.state.imagesCount-1; i++) {

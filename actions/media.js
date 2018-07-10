@@ -1,5 +1,5 @@
 import * as api from '../api/api.js';
-import { saveUserMedia, saveUserUpdatedMedia, deleteUserMediaIfExist } from '../utils/fileSystem';
+import { saveUserMedia, saveUserUpdatedMedia, deleteUserMediaIfExist, saveLocationMedia } from '../utils/fileSystem';
 import { isset } from '../utils/check';
 
 //Types d'actions destinées à la connexion
@@ -10,9 +10,11 @@ export const
 
     USER_POST_USER_IMAGE_REQUEST    = 'USER_POST_USER_IMAGE_REQUEST',  
     USER_POST_USER_IMAGE_SUCCESS    = 'USER_POST_USER_IMAGE_SUCCESS',  
-    USER_POST_USER_IMAGE_ERROR      = 'USER_POST_USER_IMAGE_ERROR'
+    USER_POST_USER_IMAGE_ERROR      = 'USER_POST_USER_IMAGE_ERROR',
 
-    
+    BUILDING_GET_IMAGE_REQUEST     = 'BUILDING_GET_IMAGE_REQUEST',  
+    BUILDING_GET_IMAGE_SUCCESS     = 'BUILDING_GET_IMAGE_SUCCESS',  
+    BUILDING_GET_IMAGE_ERROR       = 'BUILDING_GET_IMAGE_ERROR'
 ;
 
 export const handleGetUserMedia =  (userId) => {
@@ -83,6 +85,80 @@ export const handleGetUserMediaError = (userId, error) => {
 
 
 
+/**
+ * @param {*} pictureId 
+ */
+export const handleGetLogementMedia =  (pictureId) => {
+    return function (dispatch, getState) {
+
+        // Si on est déjà en train de télécharger l'image de l'batiment, on ne dispatch rien
+        if (getState().media.locationsMediaLoading.indexOf(pictureId) > -1 ) {
+            return;
+        }
+        // On dispatch l'état de connexion en cours (demande de récupération d'une image en cours)
+        dispatch({
+            type:       BUILDING_GET_IMAGE_REQUEST,
+            pictureId:  pictureId
+        })
+
+        // Récupération du contenu de l'image d'un batiment
+        api.getLogementMedia(
+            getState().connection.user.token,
+            pictureId,
+            async (pictureId, image) => { 
+                // Sauvegarde du contenu de l'image que l'on vient de récupérer, et récupération de son URI
+                let buildingImageURI =  await saveLocationMedia(pictureId, image)
+                // On transmet l'URI de l'image téléchargé
+                dispatch(handleGetLogementMediaSuccess(pictureId, buildingImageURI)) 
+            },
+            (pictureId, error) => { dispatch(handleGetLogementMediaError(pictureId, error)) }
+        )
+    }
+};
+
+/**q
+ * Méthode permettant de 
+ * @param {int} pictureId L'id de l'image d'un batiment dont on récupère l'image
+ * @param {Blob} image Le contenu de l'image pour un batiment donné
+ */
+export const handleGetLogementMediaSuccess = (pictureId, image) => {
+    //retour de l'action
+    return {
+        type:       BUILDING_GET_IMAGE_SUCCESS,
+        pictureId:  pictureId,
+        image:      image,
+    } 
+};
+
+/**
+ * Méthode permettant de 
+ * @param {int} pictureId L'id de l'image d'un batiment dont on récupère l'image
+ * @param {error} error Le message d'erreur
+ */
+export const handleGetLogementMediaError = (pictureId, error) => {
+    //retour de l'action
+    return {
+        type:       BUILDING_GET_IMAGE_ERROR,
+        pictureId:  pictureId,
+        error:      error
+    } 
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -136,7 +212,7 @@ export const handleUploadUserMediaSuccess = (userId, userOldImageURI, userImageU
 
         //retour de l'action
         dispatch({
-            type:       USER_POST_USER_IMAGE_SUCCESS,
+            type:       BUILDING_GET_BUILDING_IMAGE_SUCCESS,
             image:      userImageURI,
             userId:     userId,
         });
@@ -149,7 +225,7 @@ export const handleUploadUserMediaSuccess = (userId, userOldImageURI, userImageU
  */
 export const handleUploadUserMediaError = (error) => {
     return {
-        type:   USER_POST_USER_IMAGE_ERROR,
+        type:   BUILDING_GET_BUILDING_IMAGE_ERROR,
         error:  error
     }
 };

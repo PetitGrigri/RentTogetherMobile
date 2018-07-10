@@ -1239,3 +1239,96 @@ export const deleteConnectedUserTargetLocation = function(token, targetLocation,
            callBackError(error.message);
        });
 }
+
+
+
+
+
+export const handleGetAppartementsPotentiels = function(token, userId, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+token
+    });
+
+    //les paramêtres de la requête
+    var options = {
+        method: 'GET',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default'
+    };
+
+    let urlAppartementsPotentiels = `${url}/Building/${userId}`;
+
+    console.log(urlAppartementsPotentiels);
+
+    fetch(urlAppartementsPotentiels, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataPotentialRoomers => {
+            callBackOk(dataPotentialRoomers);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
+
+
+
+
+
+export const getLogementMedia = function(token, pictureId, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+   var myHeaders = new Headers({
+       'Authorization':'Bearer '+ token
+   });
+
+   //les paramêtres de la requête
+   var options = {
+       method: 'GET',
+       headers: myHeaders,
+       mode: 'cors',
+       cache: 'default',
+   };
+
+/**TODO TODO TODO TODO NE PAS OUBLIER DE SUPPRIMER LE 8 */
+
+
+
+   let urlLogementMedia = `${url}/Building/8/BuildingPictures/${pictureId}`;
+
+   console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);
+   console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);
+
+   //réalisation de la requête
+   fetch(urlLogementMedia, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.blob();
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(blob => {
+            var reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                callBackOk(pictureId, reader.result)
+            }, false);
+
+            reader.readAsDataURL(blob);
+            //reader.readAsText(blob);
+        })
+        .catch(error => {
+            console.log("Image inexistante");
+            callBackError(pictureId, error.message);
+        });
+}
