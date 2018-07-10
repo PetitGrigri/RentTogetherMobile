@@ -1299,14 +1299,7 @@ export const getLogementMedia = function(token, pictureId, callBackOk, callBackE
        cache: 'default',
    };
 
-/**TODO TODO TODO TODO NE PAS OUBLIER DE SUPPRIMER LE 8 */
-
-
-
-   let urlLogementMedia = `${url}/Building/8/BuildingPictures/${pictureId}`;
-
-   console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);
-   console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);console.log(urlLogementMedia);
+   let urlLogementMedia = `${url}/BuildingPictures/${pictureId}`;
 
    //réalisation de la requête
    fetch(urlLogementMedia, options)

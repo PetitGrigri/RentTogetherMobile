@@ -15,9 +15,9 @@ import {
 
 //le state initial
 const initialMediaState = {
-    usersMediaLoading:      [],
-    usersMediaError: [],
-    usersMedia: {},
+    usersMediaLoading:  [],
+    usersMediaError:    [],
+    usersMedia:         {},
 
     locationsMediaLoading:  [],
     locationsMediaError:    [],
@@ -31,12 +31,8 @@ const media = (state = initialMediaState, action) => {
 
     switch(action.type) {
         case USER_GET_USER_IMAGE_REQUEST :
-
-            let newUsersMediaLoading = state.usersMediaLoading.slice(0);
-            newUsersMediaLoading.push(action.userId)
-
             return Object.assign({}, state, {
-                usersMediaLoading : newUsersMediaLoading
+                usersMediaLoading : state.usersMediaLoading.concat(action.userId)
             });
 
         case USER_GET_USER_IMAGE_SUCCESS : 
@@ -47,13 +43,9 @@ const media = (state = initialMediaState, action) => {
 
 
         case USER_GET_USER_IMAGE_ERROR :
-
-             let newUsersMediaError = state.usersMediaError.slice(0);
-            newUsersMediaError.push(action.userId)
-
             return Object.assign({}, state, {
                 usersMediaLoading   : state.usersMediaLoading.filter(value => (value !== action.userId)),
-                usersMediaError     : newUsersMediaError
+                usersMediaError     : state.usersMediaError.concat(action.userId)
             });
 
 
@@ -85,36 +77,22 @@ const media = (state = initialMediaState, action) => {
 
 
 
-
-
-
-
-
-
         case BUILDING_GET_IMAGE_REQUEST :
-
-            let newlocationsMediaLoading = state.locationsMediaLoading.slice(0);
-            newlocationsMediaLoading.push(action.pictureId)
-
             return Object.assign({}, state, {
-                locationsMediaLoading : newlocationsMediaLoading
+                locationsMediaLoading : state.locationsMediaLoading.concat(action.pictureId)
             });
 
         case BUILDING_GET_IMAGE_SUCCESS : 
             return Object.assign({}, state, {
                 locationsMediaLoading:  state.locationsMediaLoading.filter(value => (value !== action.pictureId)),
-                locationsMedia:         Object.assign({}, state.usersMedia, { [action.pictureId] : action.image })
+                locationsMedia:         Object.assign({}, state.locationsMedia, { [action.pictureId] : action.image })
             });
 
 
         case BUILDING_GET_IMAGE_ERROR :
-
-            let newLocationsMediaError = state.locationsMediaError.slice(0);
-            newLocationsMediaError.push(action.pictureId)
-
             return Object.assign({}, state, {
-                locationsMediaLoading: state.newlocationsMediaLoading.filter(value => (value !== action.pictureId)),
-                locationsMediaError:   newLocationsMediaError
+                locationsMediaLoading: state.locationsMediaLoading.filter(value => (value !== action.pictureId)),
+                locationsMediaError:   state.locationsMediaError.concat(action.pictureId)
             });
 
 
