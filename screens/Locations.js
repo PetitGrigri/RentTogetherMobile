@@ -49,6 +49,19 @@ class Locations extends Component {
         }
     }
 
+    showMessages = (buildingId) => {
+        //TODO
+        let location = this.props.appartementsPotentiels.filter(location => location.buildingId == buildingId)[0];
+        console.log('todo', buildingId, location);
+
+        this.props.navigation.navigate('messagesLogements', {
+            title:      location.title, 
+            owner:      location.ownerApiDto,
+            buildingId: location.buildingId
+        })
+
+    }
+
     render() {
         return (
             <TabContent>
@@ -56,7 +69,7 @@ class Locations extends Component {
                     renderNoMoreCards={() => this.noMoreCard() }
                     cards={ this.props.appartementsPotentiels }
                     stack={false}
-                    renderCard={(appartement) => <LocationCard {...appartement} />}
+                    renderCard={(appartement) => <LocationCard {...appartement} handleShowMessages={ (buildingId) => this.showMessages(buildingId) }/>}
                     showYup={true}
                     showNope={true}
                     showMaybe={false}

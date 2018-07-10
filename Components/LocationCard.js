@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Text from '../Components/Text';
 import PropTypes from 'prop-types';
 import RatingCondensed from './RatingCondensed';
 import Carousel from './Carousel';
 import LocationImage from '../containers/LocationImage';
+import { Ionicons} from '@expo/vector-icons';
 
 import { MaterialIcons, FontAwesome, Entypo } from '@expo/vector-icons';
 
@@ -17,6 +18,7 @@ class LocationCard extends Component
     static propTypes = {
         description:    PropTypes.string.isRequired,
         //images:         PropTypes.array.isRequired,
+        handleShowMessages:  PropTypes.func.isRequired
     };
 
     render() {
@@ -29,6 +31,11 @@ class LocationCard extends Component
             <View style={ styles.card }>
                     
                 <View style={ styles.cardTopInformation}  >
+                    <View style={ styles.messagesIcon } >
+                        <TouchableOpacity onPress={ () => { this.props.handleShowMessages(this.props.buildingId) } } >
+                            <Ionicons color='#fff' name='ios-chatbubbles' size={32} />
+                        </TouchableOpacity>
+                    </View>
                     <Carousel 
                         images={ images }
                     />
@@ -113,5 +120,12 @@ const styles = StyleSheet.create({
         zIndex:         1000,
         bottom:         0,
         position:       'absolute'
+    },
+    messagesIcon: {
+        position:           'absolute',
+        padding:            8,
+        top:                0,
+        right:              0,
+        zIndex:             5,
     }
   });

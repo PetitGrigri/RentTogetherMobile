@@ -1325,3 +1325,107 @@ export const getLogementMedia = function(token, pictureId, callBackOk, callBackE
             callBackError(pictureId, error.message);
         });
 }
+
+
+
+
+
+/**
+ * Fonction permettant de récupérer la liste des messages d'un logement
+ * @param {string} token 
+ * @param {int} buildingId 
+ * @param {object} filter 
+ * @param {function} callBackOk 
+ * @param {function} callBackError 
+ */
+export const getMessagesLogement = function(token, buildingId, filter, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+    let myHeaders = new Headers({
+        'Content-Type':     'application/json',
+        'Authorization':    'Bearer '+token
+    });
+
+    //les paramètres de la requête
+    let options = {
+        method:     'GET',
+        headers:    myHeaders,
+        mode:       'cors',
+        cache:      'default'
+    };
+
+    let getMessagesLogementURL = urlWithParams(`${url}/BuildingMessages/${buildingId}`,filter);
+
+
+    fetch(getMessagesLogementURL, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataMessages => {
+            callBackOk(dataMessages);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+    
+}
+
+
+
+
+/**
+ * Fonction permettant d'ajouter un nouveau message dans une conversation
+ * @param {string} token 
+ * @param {int} userId 
+ * @param {int} buildingId 
+ * @param {string} message 
+ * @param {function} callBackOk 
+ * @param {function} callBackError 
+ */
+export const postMessageLogement = function(token, userId, buildingId, message,  callBackOk, callBackError) {
+
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':     'application/json',
+        'Authorization':    'Bearer '+token
+    });
+
+    // Conversion de notre FormData en objet 
+    var jsonMessageString = JSON.stringify({
+        "messageText": message,
+        "userId": userId,
+        "buildingId": buildingId,
+        "isReport": 0
+    });
+
+    //les paramètres de la requête
+    var options = {
+        method:     'POST',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default',
+        body: jsonMessageString
+    };
+
+    fetch(url+ "/BuildingMessages", options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(message => {
+            callBackOk(message);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
