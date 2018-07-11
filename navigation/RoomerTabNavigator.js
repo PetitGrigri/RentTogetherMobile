@@ -62,7 +62,7 @@ const transitionConfig = (Platform.OS === 'android') ? () => {
     }} : null;
 
 
-const TabNavigator = createBottomTabNavigator({
+export default RoomerTabNavigator = createBottomTabNavigator({
     Roomers: {
         screen: Roomers,
         navigationOptions: {
@@ -131,6 +131,3 @@ const TabNavigator = createBottomTabNavigator({
         inactiveTintColor:  '#ccc',
     }
 })
-
-
-export default TabNavigator;

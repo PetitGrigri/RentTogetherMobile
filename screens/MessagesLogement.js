@@ -74,18 +74,6 @@ class MessagesLogement extends Component {
 
 
     getMessageItem = (message) => {
-        
-        //console.log(message.item.messageId);
-        //récupération de l'utilisateur qui a écrit le message
-        /*let user = this.state.conversation.participants.filter(participant => {
-                return (message.item.userId === participant.userApiDto.userId)
-            })[0].userApiDto;
-
-        
-        let alignRight= (this.props.userConnected.userId !== user.userId);*/
-console.log('getMessageItem', message.item);
-
-
         //retour d'une bulle avec le contenu du message et l'utilisateur qui l'a écrit
         return <Bubble 
             userId={ message.item.writer.userId }

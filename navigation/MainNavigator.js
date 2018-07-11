@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import LoginNavigator from './LoginNavigator';
-import ApplicationNavigator from './ApplicationNavigator';
+import RoomerApplicationNavigator from './RoomerApplicationNavigator';
+import OwnerApplicationNavigator from './OwnerApplicationNavigator';
 import { handleConnectWithPreviousToken } from '../actions/connection';
 import { TOKEN_NAME, USER_ID } from '../actions/connection';
 import { empty } from '../utils/check';
@@ -36,13 +37,16 @@ class MainNavigator extends React.Component {
      */
     render() {
         return this.props.isAuthenticated 
-            ? <ApplicationNavigator />
+            ? this.props.user.isOwner 
+                ?   <OwnerApplicationNavigator/>
+                :   <RoomerApplicationNavigator/>
             : <LoginNavigator /> 
     }
 }
 
 const mapStateToProps = state => ({
-    isAuthenticated:    state.connection.isAuthenticated, 
+    isAuthenticated:    state.connection.isAuthenticated,
+    user:               state.connection.user,
     loadingSignInToken: state.connection.loadingSignInToken,
 });
 

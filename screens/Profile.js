@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, SectionList, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import Text from  '../Components/Text';
-import { Entypo, Ionicons, SimpleLineIcons} from '@expo/vector-icons';
+import { Entypo, Ionicons, SimpleLineIcons, FontAwesome } from '@expo/vector-icons';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { handleGetUserMedia, handleUploadUserMedia } from '../actions/media';
 import { handleLogout, handleGetPersonalityConnectedUser, handlePatchConnectedUserPersonality, handlePostConnectedUserPersonality } from '../actions/connection';
@@ -11,7 +11,7 @@ import { UserImage, UserImageBackground } from '../containers';
 import { Alert } from 'react-native';
 import { handleGetReferentialCharacteristics } from '../actions/referentielCaracteristiques';
 import { isset, empty } from '../utils/check';
-import {handleHideError } from '../actions/connection';
+import {handleHideError, handlePatchConnectedUser } from '../actions/connection';
 import { ItemRow, ItemRowLocalisation, ItemRowPersonality, TitleHeader, ItemRowDescription } from '../Components/Profile';
 import { handleGetConnectedUserLocalisations } from '../actions/localisations';
 
@@ -267,7 +267,7 @@ class Profile extends Component {
     }
 
     /**
-     * Fonction permettant à l'utilisateur de sélectionnée une photo
+     * Fonction permettant à l'utilisateur de sélectionner une photo
      */
     pickAPhoto = async () => {
         // Demande de la permission camera
@@ -315,6 +315,15 @@ class Profile extends Component {
         this.props.handleUploadUserMedia(resultResized.uri);
     }
 
+    /**
+     * Fonction permettant  de changer de rôle (Propriétaire ou locataire)
+     */
+    changeRole = () => {
+        console.log('//TODO');
+
+    }
+
+
 
     logout = () => {
         this.props.handleLogout();
@@ -322,15 +331,29 @@ class Profile extends Component {
     }
 
 
+    changeRole = ()  => {
+
+        this.props.handlePatchConnectedUser({
+            isOwner:    this.props.user.isOwner ? 0 : 1, 
+            isRoomer:   this.props.user.isRoower ? 0 : 1
+        });
+    }
+
     render() {
         return (
             <ScrollView style={styles.container}>
                 <UserImageBackground
                     userId= { this.props.user.userId }
-                    style= {[styles.imageHeader, { paddingTop: getStatusBarHeight() }  ]}
+                    style= {[styles.imageHeader ]}
                     blurRadius= { 10 }>
 
                     <View style={ [ styles.imageHeaderIcons , { top: getStatusBarHeight() }]} >
+                        { !this.props.loadingUpload 
+                            ?   <TouchableOpacity onPress={ this.changeRole }>
+                                    <FontAwesome color='#fff' name='exchange' size={24} />
+                                </TouchableOpacity>
+                            :   <ActivityIndicator size="small" color='#fff' />
+                        }
                         { !this.props.loadingUpload 
                             ?   <TouchableOpacity onPress={ this.pickAPhoto }>
                                     <Ionicons color='#fff' name='ios-camera' size={32} />
@@ -390,6 +413,7 @@ const mapDispatchToProps = dispatch => ({
     handleHideError:                        () => dispatch(handleHideError()),
     handleLogoutConversations:              () => dispatch(handleLogoutConversations()),
     handleGetConnectedUserLocalisations:    () => dispatch(handleGetConnectedUserLocalisations()),
+    handlePatchConnectedUser:               (userData)  => dispatch(handlePatchConnectedUser(userData))
 });
 
 export default connect(
@@ -433,10 +457,15 @@ const styles = StyleSheet.create({
     },
     imageHeaderIcons: {
         width:              '100%',
-        position:           'absolute',
-        padding:            16,
-        justifyContent:     'center',
-        alignItems:         'flex-end',
+        top:                0,
+        left:               0,
+        right:              0,
+        paddingLeft:        16,
+        paddingRight:       16,
+        justifyContent:     'space-between',
+        alignItems:         'flex-start',
+        flexDirection:      'row',
+        
     }, 
     editParam: {
         width:          30,
