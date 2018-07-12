@@ -6,8 +6,8 @@ import LocationCard from '../Components/LocationCard';
 import SwipeCards from 'react-native-swipe-cards'
 import { connect } from 'react-redux';
 import { handleGetAppartementsPotentiels } from '../actions/logements';
-import { Entypo } from '@expo/vector-icons';
 
+import NoMoreCard from '../Components/NoMoreCard';
 const {height, width} = Dimensions.get('window');
 
 
@@ -26,19 +26,13 @@ class Locations extends Component {
         this.props.handleGetAppartementsPotentiels();
     }
 
+
     // Méthode utilisée pour le rendu 
     noMoreCard = () => {
-        if (this.props.loadingGetAppartementsPotentiels) {
-            return  <View style={ styles.containerNoMoreCards }>
-                        <Text style={ styles.noMoreText }>Recherche de l'appartement idéal en cours...</Text>
-                        <ActivityIndicator color='#ff8f00' size='large' />
-                    </View>
-        } else {
-            return  <View style={ styles.containerNoMoreCards }>
-                        <Text style={ styles.noMoreText }>Nous n'avons pas trouvé d'appartements vous correspondant</Text>
-                        <Entypo name='emoji-sad' color='#ff8f00'  size={40}/>
-                    </View>
-        }   
+        return <NoMoreCard 
+            loading={ this.props.loadingGetAppartementsPotentiels } 
+            loadingText="Chargement de vos appartements en cours"
+            nothingText="Nous n'avons pas trouvé d'appartements vous correspondant" />
 
     }
 
@@ -59,7 +53,6 @@ class Locations extends Component {
             owner:      location.ownerApiDto,
             buildingId: location.buildingId
         })
-
     }
 
     render() {

@@ -36,8 +36,7 @@ class LocationCard extends Component
                             <Ionicons color='#fff' name='ios-chatbubbles' size={32} />
                         </TouchableOpacity>
                     </View>
-                    <Carousel 
-                        images={ images }
+                    <Carousel images={ images }
                     />
                     <View style={styles.cardBottomAfter}><View style={styles.cardBottomTop} /></View>
                 </View>

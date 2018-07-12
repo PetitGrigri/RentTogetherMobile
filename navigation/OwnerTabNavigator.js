@@ -2,14 +2,9 @@ import React from 'react';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
-import Roomers from '../screens/Roomers';
-import Locations from '../screens/Locations';
 import Profile from '../screens/Profile';
-import MatchesLocations from '../screens/MatchesLocations';
-import MatchesRoomers from '../screens/MatchesRoomers';
 import Conversations from '../screens/Conversations';
-import Messages from '../screens/Messages';
-import MatchesHeader from '../navigation/MatchesHeader';
+import OwnerProperties from '../screens/OwnerProperties';
 
 import { Easing, Animated, Platform } from 'react-native';
 
@@ -64,6 +59,20 @@ const transitionConfig = (Platform.OS === 'android') ? () => {
 
 export default RoomerTabNavigator = createBottomTabNavigator({
     
+    OwnerProperties: {
+        screen: OwnerProperties,
+        navigationOptions: {
+            tabBarLabel: 'Mes locations',
+            tabBarIcon: ({focused}) => (
+                <Ionicons color={focused?'#ff8f00':'#ccc'} name={focused ? 'ios-home' : 'ios-home-outline'} size={32}/>
+            ),
+            headerStyle: {
+                backgroundColor: 'rgba(255,255,255,0.5)',
+            },
+            headerTransparent: true
+        }
+
+    },
     Conversations: {
         screen: Conversations,
         navigationOptions: {
@@ -85,7 +94,7 @@ export default RoomerTabNavigator = createBottomTabNavigator({
             },
             headerTransparent: true
         }
-    },
+    }
 },{
     tabBarOptions: {
         activeTintColor:    '#ff8f00',

@@ -315,27 +315,20 @@ class Profile extends Component {
         this.props.handleUploadUserMedia(resultResized.uri);
     }
 
-    /**
-     * Fonction permettant  de changer de rôle (Propriétaire ou locataire)
-     */
-    changeRole = () => {
-        console.log('//TODO');
-
-    }
-
-
 
     logout = () => {
         this.props.handleLogout();
         this.props.handleLogoutConversations();
     }
 
-
+    /**
+     * Fonction permettant  de changer de rôle (Propriétaire ou locataire)
+     */
     changeRole = ()  => {
 
         this.props.handlePatchConnectedUser({
             isOwner:    this.props.user.isOwner ? 0 : 1, 
-            isRoomer:   this.props.user.isRoower ? 0 : 1
+            isRoomer:   this.props.user.isRoomer ? 0 : 1
         });
     }
 

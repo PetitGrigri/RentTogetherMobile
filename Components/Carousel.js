@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, ImageBackground, StyleSheet, Image, PanResponder, Animated } from 'react-native';
 import Text from './Text';
 import PropTypes from 'prop-types';
+import RoomerTabNavigator from '../navigation/RoomerTabNavigator';
 
 
 class Carousel extends Component {
@@ -167,5 +168,7 @@ const styles = StyleSheet.create({
         width:              10,
         height:             10,
         margin:             5,
+        borderColor:        'rgba(255,143,0,0.5)',
+        borderWidth:        1,
     },
   });
