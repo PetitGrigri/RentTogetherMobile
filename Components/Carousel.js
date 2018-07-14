@@ -49,7 +49,7 @@ class Carousel extends Component {
 
                 let nextTranslation = this.state.position * this.state.cardWidth;
 
-                if ((gestureState.dx < 20 ) && (this.state.position < (this.state.imagesCount-1))) {
+                if ((gestureState.dx < -20 ) && (this.state.position < (this.state.imagesCount-1))) {
 
                     nextTranslation = -this.state.cardWidth * (this.state.position + 1);
 
@@ -62,7 +62,7 @@ class Carousel extends Component {
                         }
                     ).start(() => this.nextImage());
 
-                } else if ((gestureState.dx > -20 ) && (this.state.position > 0)){
+                } else if ((gestureState.dx > 20 ) && (this.state.position > 0)){
 
                     nextTranslation = -(this.state.position-1)  * this.state.cardWidth;
 

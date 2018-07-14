@@ -363,16 +363,17 @@ class Profile extends Component {
                     <Text h1 style= {styles.textWhite}>{ this.props.user.firstName } { this.props.user.lastName }</Text>
                     
                 </UserImageBackground>
-                    <View style={styles.cardBottomTop} />
-                    <View style={styles.containerInformations}>
-                        <SectionList
-                            renderItem={({ item, index, section }) => <Text key={index}>{item}</Text>}
-                            renderSectionHeader={ (props) => <TitleHeader {...props} />}
-                            sections={ this.getSections() }
-                            keyExtractor={(item, index) => item + index}
-                        />
-                        
-                    </View>
+                
+                <View style={styles.cardBottomTop} />
+                <View style={styles.containerInformations}>
+                    <SectionList
+                        renderItem={({ item, index, section }) => <Text key={index}>{item}</Text>}
+                        renderSectionHeader={ (props) => <TitleHeader {...props} />}
+                        sections={ this.getSections() }
+                        keyExtractor={(item, index) => item + index}
+                    />
+                    
+                </View>
             </ScrollView>
         );
     }

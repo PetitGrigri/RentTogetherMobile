@@ -1429,3 +1429,71 @@ export const postMessageLogement = function(token, userId, buildingId, message, 
             callBackError(error.message);
         });
 }
+
+
+
+
+/**
+ * Méthode permettant à un propriétaire de créer un appartement
+ * 
+ * @param {*} token 
+ * @param {*} userId 
+ * @param {*} building 
+ * @param {*} callBackOk 
+ * @param {*} callBackError 
+ */
+export const postBuilding = function(token, userId, building,  callBackOk, callBackError) {
+
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':     'application/json',
+        'Authorization':    'Bearer '+token
+    });
+
+    // Conversion de notre FormData en objet 
+    var jsonBuildingString = JSON.stringify({
+        "address":      building.address,
+        "address2":     building.address2,
+        "postalCode":   building.postalCode,
+        "city":         building.city,
+        "ownerId":      userId,
+        "type":         building.type,
+        "nbRoom":       building.nbRoom,
+        "nbPiece":      building.nbPiece,
+        "nbRenters":    building.nbRenters,
+        "status":       building.status,
+        "area":         building.area,
+        "price":        building.price,
+        "parking":      building.parking,
+        "description":  building.description,
+        "title":        building.title,
+        "NbMaxRenters": building.NbMaxRenters,
+    });
+
+    //les paramètres de la requête
+    var options = {
+        method:     'POST',
+        mode:       'cors',
+        cache:      'default',
+        headers:    myHeaders,
+        body:       jsonBuildingString
+    };
+
+    fetch(url+ "/Building", options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(message => {
+            callBackOk(message);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
+

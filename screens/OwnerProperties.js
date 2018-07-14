@@ -4,7 +4,8 @@ import {
     View,
     StyleSheet,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    Image
 } from 'react-native';
 import Carousel from '../Components/Carousel';
 import LocationImage from '../containers/LocationImage';
@@ -16,6 +17,19 @@ import { LinearGradient } from 'expo';
 import { Ionicons} from '@expo/vector-icons';
 
 class OwnerProperties extends Component {
+
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerRight: (
+                <Ionicons
+                    onPress={() => navigation.navigate('addProperty') }
+                    style={{marginRight: 16 }}
+                    name='md-add' size={ 32 }
+                    color="#fff"
+                />
+            ),
+        };
+    };
 
     constructor(props) {
         super(props)
@@ -46,41 +60,41 @@ class OwnerProperties extends Component {
         })
     }
 
-    getConversationItem = (property) => {
+    getPropertyItem = (property) => {
 
-        console.log('OWNER PROPERIES"', property.item.buildingPictureInformationApiDtos);
-
-        let images = property.item.buildingPictureInformationApiDtos.map( picture => {
+        //les images sont contenus dans buildingPictureInformationApiDtos. Si buildingPictureInformationApiDtos est null (cela est lié à l'ajout d'un appartement dans redux, on retourne un tableau vide)
+        let images = property.item.buildingPictureInformationApiDtos ? property.item.buildingPictureInformationApiDtos.map( picture => {
             return <LocationImage pictureId={ picture.buildingPictureId } /> 
-        });
+        }) : [];
 
         return (
             <View  style={ styles.propertyContainer }>
-                <LinearGradient colors={['rgba(0,0,0,0)','rgba(0,0,0,0.1)', 'rgba(0,0,0,0.4)', ]} style={ styles.titlePropertContainer } start={[0, 1]} end={[0, 0]}>
+                <LinearGradient colors={['rgba(0,0,0,0)','rgba(0,0,0,0.1)', 'rgba(0,0,0, 0.6 )', ]} style={ styles.titlePropertContainer } start={[0, 1]} end={[0, 0]}>
                     <Text style={ styles.title }>{ property.item.title }</Text>
                     <TouchableOpacity onPress={ () => { this.showMessages(property.item.buildingId) } } >
                         <Ionicons color='#fff' name='ios-chatbubbles' size={32} />
                     </TouchableOpacity>
                 </LinearGradient>
-                <Carousel images={ images }/>
+                { (images.length > 0)
+                    ? <Carousel images={ images }/>
+                    : <Image source={ require('../assets/no_building.png') }  />
+                }
+                
             </View>
         );   
     }
 
     render() {
         return (
-            <TabContent>
-                
-                <FlatList
-                    data={this.props.properties}
-                    keyExtractor={item => `${item.buildingId}`}
-                    renderItem={(property) =>  this.getConversationItem(property)}
-                    refreshing={ this.props.loadingGetAppartementsPotentiels }
-                    onRefresh={() => this.handleRefresh() }
-                    onEndReached={() => console.log('loadNext') }
-                    style={ styles.container }
-                />
-            </TabContent>
+            <FlatList
+                data={this.props.properties}
+                keyExtractor={item => `${item.buildingId}`}
+                renderItem={(property) =>  this.getPropertyItem(property)}
+                refreshing={ this.props.loadingGetAppartementsPotentiels }
+                onRefresh={() => this.handleRefresh() }
+                onEndReached={() => console.log('loadNext') }
+                style={ styles.container }
+            />
         );
     }
 }
@@ -111,7 +125,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems:     'center',
         borderRadius:   8,
-        overflow:       'hidden'
+        overflow:       'hidden',
+        marginBottom:   8,
     },
     titlePropertContainer: {
         position:       'absolute',
@@ -131,5 +146,4 @@ const styles = StyleSheet.create({
         fontSize:       12,
 
     }
-
 })

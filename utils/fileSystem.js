@@ -83,7 +83,6 @@ export const deleteMediaIfExist = async (imageURI) => {
  * @param {*} callback 
  */
 export const getCachedMedia = (fileUri, callback) => {
-    console.log('//TODO TODO TODO fileUri', fileUri)
     Expo.FileSystem.readAsStringAsync(fileUri).then(content => {
         callback(content);
     }).catch(error => {

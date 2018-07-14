@@ -8,6 +8,7 @@ import { UserImage, UserImageBackground } from '../containers';
 import { handlePatchConnectedUser } from '../actions/connection';
 import { empty } from '../utils/check';
 import {handleHideError } from '../actions/connection';
+import InputTextareaApplication from '../Components/InputTextareaApplication';
 
 class UpdateParam extends Component {
 

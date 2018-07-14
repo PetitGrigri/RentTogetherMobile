@@ -61,7 +61,7 @@ class LocationImage extends Component {
             <Image 
                 source={ this.state.locationImageContent
                         ? { uri: this.state.locationImageContent }
-                        : require('../assets/no_user.png') }  
+                        : require('../assets/no_building.png') }  
                 { ...this.props} 
             />
         );

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import {  View, Text, StyleSheet,  TouchableOpacity, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
-export default class ItemRowLocalisationAdd extends Component {
+export default class ItemRowLocalisationSelect extends Component {
   
     static proptTypes = {
         index:          PropTypes.number.isRequired,
         item:           PropTypes.object.isRequired,
-        handleAdd:      PropTypes.func.isRequired,
+        handleSelect:   PropTypes.func.isRequired,
         addInProgress:  PropTypes.bool,
         addDone:        PropTypes.bool
     }
@@ -18,7 +18,7 @@ export default class ItemRowLocalisationAdd extends Component {
     }
     
     render() {
-        let { index, item } = this.props;
+        let { index, item, handleSelect } = this.props;
         
 
         
@@ -29,8 +29,8 @@ export default class ItemRowLocalisationAdd extends Component {
                 { this.props.addDone 
                     ? <Ionicons size={24} color='#ccc' name='md-checkmark' style={ styles.addIcon } />
                     :    !this.props.addInProgress 
-                            ?   <TouchableOpacity onPress={ () => this.props.handleAdd(this.props.item) } style={ styles.addIcon }>
-                                    <Ionicons size={24} color='#ff8f00'name='md-add' />
+                            ?   <TouchableOpacity onPress={ () => handleSelect(this.props.item) } style={ styles.addIcon }>
+                                    <MaterialIcons size={24} color='#ff8f00'name='add-location' />
                                 </TouchableOpacity>
                             : <ActivityIndicator size="small" color='#ff8f00' style={ styles.addIcon } />
                 } 

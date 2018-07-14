@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Profile from '../screens/Profile';
 import Conversations from '../screens/Conversations';
 import OwnerProperties from '../screens/OwnerProperties';
-
+import AddProperty from '../screens/AddProperty';
 import { Easing, Animated, Platform } from 'react-native';
 
 // transitionConfig Tuto :  https://medium.com/async-la/custom-transitions-in-react-navigation-2f759408a053
@@ -60,7 +60,29 @@ const transitionConfig = (Platform.OS === 'android') ? () => {
 export default RoomerTabNavigator = createBottomTabNavigator({
     
     OwnerProperties: {
-        screen: OwnerProperties,
+        screen: createStackNavigator({
+            properties: {
+                screen: OwnerProperties,
+                navigationOptions: {
+                    title:  'Mes locations',
+                    headerStyle: {
+                        backgroundColor:    '#ff8f00',       
+                    },
+                    headerTintColor:        '#fff'
+                }
+            },
+            addProperty: {
+                screen: AddProperty,
+                navigationOptions: {
+                    title: 'Ajouter une location',
+                    headerStyle: {
+                        backgroundColor:    '#ff8f00',       
+                    },
+                    headerTintColor:        '#fff'
+                }
+            },
+            
+        }),
         navigationOptions: {
             tabBarLabel: 'Mes locations',
             tabBarIcon: ({focused}) => (
@@ -71,7 +93,6 @@ export default RoomerTabNavigator = createBottomTabNavigator({
             },
             headerTransparent: true
         }
-
     },
     Conversations: {
         screen: Conversations,

@@ -8,6 +8,7 @@ import UpdateLocalisation from '../screens/UpdateLocalisation';
 import RoomerProfile from '../screens/RoomerProfile';
 import MessagesLogement from '../screens/MessagesLogement';
 
+
 export default RoomerApplicationNavigator = createStackNavigator({
     home: {
         screen: OwnerTabNavigator,
@@ -66,5 +67,5 @@ export default RoomerApplicationNavigator = createStackNavigator({
             headerTintColor:        '#fff'
         }
     },
-    
+
 });

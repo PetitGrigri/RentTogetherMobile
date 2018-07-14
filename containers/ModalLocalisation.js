@@ -5,23 +5,29 @@ import {
     StyleSheet,
     TextInput,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator,
+    Modal,
+    Text
 } from 'react-native';
-import TabContent from '../Components/TabContent';
 import { connect } from 'react-redux';
-import ItemRowLocalisationSwipe from '../Components/Profile/ItemRowLocalisationSwipe';
-import ItemRowLocalisationAdd from '../Components/Profile/ItemRowLocalisationAdd';
+import ItemRowLocalisationSelect from '../Components/ItemRowLocalisationSelect';
 import { Ionicons } from '@expo/vector-icons';
 import { handleSearchLocalisation, handleGetConnectedUserLocalisations, handleAddConnectedUserTargetLocation, handleDeleteConnectedTargetLocation } from '../actions/localisations';
 import { empty } from '../utils/check';
 import { cleanAccent } from '../utils/clean';
+import PropTypes from 'prop-types';
 
-class UpdateLocalisations extends Component {
+class ModalLocalisation extends Component {
+
+    static proptTypes = {
+        handleSelect:    PropTypes.func.isRequired, 
+        handleClose:     PropTypes.func.isRequired
+    }
 
     constructor(props) {
         super(props)
         this.state = {
-            recherche: ''
+            recherche:      '',
         }
     }
 
@@ -32,10 +38,8 @@ class UpdateLocalisations extends Component {
         if (!empty(text)) {
             text = cleanAccent(text);
 
-
             let isPostalCode = (Number.isInteger(Number.parseInt(text)) || (text.search(/2[ABab]/g) == 0))
             
-
             this.props.handleSearchLocalisation(
                 (!isPostalCode) ? text : '', 
                 isPostalCode    ? text : '');
@@ -44,38 +48,25 @@ class UpdateLocalisations extends Component {
 
     //Méthode permettant de rendre les lignes de la flat list
     getLocalisationItem = (props) => {
+        let addInProgress = false;
+        let addDone =       false;
 
-        if (this.state.recherche) {
-            addInProgress = (this.props.loadingAddLocalisation.indexOf(props.item) >= 0);
-            addDone =   (this.props.localisations.filter(targetLocation => 
-                            (targetLocation.city == props.item.libelle) && (targetLocation.city2 == props.item.libelle2) && (targetLocation.postalCode == props.item.postalCodeId)
-                        ).length > 0);
+        return <ItemRowLocalisationSelect {...props} handleSelect={ this.props.handleSelect }  addInProgress={ addInProgress } addDone={ addDone }/>
 
-            return <ItemRowLocalisationAdd {...props} handleAdd={ this.handleAddLocalisation }  addInProgress={ addInProgress } addDone={ addDone }/>
-        } else {
-            deleteInProgress = (this.props.loadingDeleteTargetLocation.indexOf(props.item.targetLocationId) >= 0);
-
-            return <ItemRowLocalisationSwipe {...props} handleDelete={ this.handleDeleteLocalisation }  deleteInProgress={deleteInProgress}   />
-        }
-    }
-
-    handleDeleteLocalisation = (item) => {
-        this.props.handleDeleteConnectedTargetLocation(item);
-    }
-
-    handleAddLocalisation = (item) => {
-        this.props.handleAddConnectedUserTargetLocation(item);
     }
 
     handleClearSearch = () => {
-        this.setState({
-            recherche:  ''
-        })
+        if (!empty(this.state.recherche)) {
+            this.setState({
+                recherche:      ''
+            });
+        } else {
+            this.props.handleClose();
+        }
     }
 
     getSearchBar = () => {
 
-        //TODO Transformer en composant
         return (
             <View style={styles.searchContainer} >
                 { this.props.loadingSearchLocalisation 
@@ -89,58 +80,65 @@ class UpdateLocalisations extends Component {
                     placeholder='Nom de ville ou code postal à ajouter'
                     onChangeText= { this.handleSearchChange }
                 />
-                { this.state.recherche  
-                    ? <TouchableOpacity onPress={ this.handleClearSearch }><Ionicons style={ styles.stopIcon } size={32} name='ios-close-outline' /></TouchableOpacity> 
-                    : null 
-                }
-            </View>)
+                <TouchableOpacity onPress={ this.handleClearSearch }><Ionicons style={ styles.stopIcon } size={32} name='ios-close-outline' /></TouchableOpacity> 
+            </View>);
     }
 
     getData =() => {
-        return (!this.state.recherche) ? this.props.localisations : this.props.searchLocalisations;
+        //console.log(this.props.searchLocalisations);
+        return this.state.recherche ? this.props.searchLocalisations : [];
     }
 
     render() {
         return (
-            <FlatList
-                data={ this.getData() }
-                keyExtractor={ (item, index) => item.targetLocationId ? `targetLocationId-${item.targetLocationId }` : `postalCode-${item.id }`  }
-                ItemSeparatorComponent={ () => <View style={ styles.separator } /> }
-                renderItem={(localisation) =>  this.getLocalisationItem(localisation)}
-                refreshing={ this.props.loadingConversations }
-                onRefresh={() => this.handleRefresh() }
-                refreshing= { false }
-                onEndReached={() => console.log('loadNext') }
-                ListHeaderComponent={ this.getSearchBar }
-            />
+            <Modal
+                animationType="slide"
+                transparent={false}
+                visible={this.props.modalVisible}
+                onRequestClose={ this.props.handleClose }>
 
+                <View style={ styles.modalContent}>
+                    <Text h2 style={styles.titleProfile}>Sélectionner une localisation</Text>
+
+                    <FlatList
+                        data={ this.getData() }
+                        keyExtractor={ (item, index) => item.targetLocationId ? `targetLocationId-${item.targetLocationId }` : `postalCode-${item.id }`  }
+                        ItemSeparatorComponent={ () => <View style={ styles.separator } /> }
+                        renderItem={(localisation) =>  this.getLocalisationItem(localisation)}
+                        refreshing={ this.props.loadingConversations }
+                        onRefresh={() => this.handleRefresh() }
+                        refreshing= { false }
+                        onEndReached={() => console.log('loadNext') }
+                        ListHeaderComponent={ this.getSearchBar }
+                    />
+                </View>
+            </Modal>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    loadingGetLocalisations:            state.localisations.loadingGetLocalisations,
     loadingSearchLocalisation:          state.localisations.loadingSearchLocalisation,
-    localisations:                      state.localisations.localisations,
     searchLocalisations:                state.localisations.searchLocalisations,
-    loadingAddLocalisation:             state.localisations.loadingAddLocalisation,
-    loadingDeleteTargetLocation:        state.localisations.loadingDeleteTargetLocation,
+
 });
 
 const mapDispatchToProps = dispatch => ({
-    handleGetConnectedUserLocalisations:    () => dispatch(handleGetConnectedUserLocalisations()),
     handleSearchLocalisation:               (city, postalCode) => dispatch(handleSearchLocalisation(city, postalCode)),
-    handleAddConnectedUserTargetLocation:   (localisation) => dispatch(handleAddConnectedUserTargetLocation(localisation)),
-    handleDeleteConnectedTargetLocation:    (localisation) => dispatch(handleDeleteConnectedTargetLocation(localisation))
 });
   
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(UpdateLocalisations);
+)(ModalLocalisation);
 
 
 const styles = StyleSheet.create({
+    modalContent: {
+        backgroundColor:    '#eee',
+        flex:               1, 
+        padding:            16
+    },
     searchContainer: {
         flexDirection:      'row',
         justifyContent:     'flex-start',
@@ -175,6 +173,10 @@ const styles = StyleSheet.create({
     separator: {
         height:             1, 
         backgroundColor:    '#efefef', 
-
+    },
+    titleProfile: {
+        fontFamily: 'open-sans-light', 
+        color:      '#e65100',
+        fontSize:   24,
     }
 })
