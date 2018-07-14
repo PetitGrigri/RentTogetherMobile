@@ -22,6 +22,11 @@ export const
     BUILDING_ADD_FAVORITE_SUCCESS=  'BUILDING_ADD_FAVORITE_SUCCESS',
     BUILDING_ADD_FAVORITE_ERROR =   'BUILDING_ADD_FAVORITE_ERROR',
 
+    // Actions destiné à récupérer les appartements favoris
+    BUILDING_GET_FAVORITE_REQUEST=  'BUILDING_GET_FAVORITE_REQUEST',
+    BUILDING_GET_FAVORITE_SUCCESS=  'BUILDING_GET_FAVORITE_SUCCESS',
+    BUILDING_GET_FAVORITE_ERROR =   'BUILDING_GET_FAVORITE_ERROR',
+
     // Action destinée à cacher le message d'erreur
     BUILDING_HIDE_ERROR = 'BUILDING_HIDE_ERROR'
     ;
@@ -69,10 +74,6 @@ const handleGetAppartementsPotentielsError = (error) => {
         message:    error
     }
 };
-
-
-
-
 
 
 
@@ -235,5 +236,58 @@ const handleBuildingFavoriteError = (error) => {
     return {
         type:   BUILDING_ADD_FAVORITE_ERROR,
         error:  error
+    }
+};
+
+
+
+
+
+
+
+
+
+
+/**
+ * Méthode permettant de récupérer la liste des appartements favoris d'un utilisateur
+ */
+export const handleGetFavoriteLocations = () => {
+    return function (dispatch, getState) {
+        //on dispatch l'état de la recherche des roomers
+        dispatch({
+            type: BUILDING_GET_FAVORITE_REQUEST
+        })
+        
+        //utilisations de l'api pour récupérer les roomers
+        api.getFavoriteLocations(
+            getState().connection.user.token,
+            getState().connection.user.userId,
+            (dataLocations) => { dispatch(handleGetFavoriteLocationsSuccess(dataLocations)) },
+            (error) => { dispatch(handleGetFavoriteLocationsError(error)) }
+        )
+    }
+};
+
+/**
+ * Méthode permettant de transmettre les appartements favoris reçus
+ * @param {object} data 
+ */
+const handleGetFavoriteLocationsSuccess = (dataLocations) => {
+    console.log('handleGetAppartementsPotentielsSuccess', dataLocations);
+    //retour de l'action
+    return {
+        type:           BUILDING_GET_FAVORITE_SUCCESS,
+        dataLocations:  dataLocations
+    } 
+};
+
+/**
+ * Méthode utilisée lorsque les appartements n'ont pas pu être récupérés
+ * @param {string} error le message d'erreur
+ */
+const handleGetFavoriteLocationsError = (error) => {
+    return {
+        type:       BUILDING_GET_FAVORITE_ERROR,
+        message:    error
     }
 };

@@ -1606,3 +1606,47 @@ export const postBuildingFavorite =  function(token, userId, buildingId, callBac
             callBackError(error.message);
         });
 }
+
+
+
+/**
+ * Fonction permettant de récupérer la liste des appartements favoris d'un utilisateur
+ * @param {*} token 
+ * @param {*} userId 
+ * @param {*} callBackOk 
+ * @param {*} callBackError 
+ */
+export const getFavoriteLocations = function(token, userId, callBackOk, callBackError) {
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+token
+    });
+
+    //les paramêtres de la requête
+    var options = {
+        method: 'GET',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default'
+    };
+
+    let urlAppartementsFavoris = `${url}/FavoriteBuildings/${userId}`;
+
+    fetch(urlAppartementsFavoris, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(dataPotentialRoomers => {
+            callBackOk(dataPotentialRoomers);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}

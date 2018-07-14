@@ -19,17 +19,24 @@ import {
     BUILDING_ADD_FAVORITE_SUCCESS,
     BUILDING_ADD_FAVORITE_ERROR,
 
+    // Actions destiné à récupérer les appartements favoris
+    BUILDING_GET_FAVORITE_REQUEST,
+    BUILDING_GET_FAVORITE_SUCCESS,
+    BUILDING_GET_FAVORITE_ERROR,
+
     BUILDING_HIDE_ERROR
 
  } from '../actions/logements';
 
 //le state initial
 const initialAppartementsState = {
-    loadingGetAppartementsPotentiels :  false,
+    loadingGetAppartementsPotentiels:   false,
+    loadingGetAppartementsFavoris:      false,
     loadingPostBuilding:                false,
     loadingPostPostHistory:             false,
     loadingBuildingFavorite:            false,
     appartementsPotentiels:             [],
+    appartementsFavoris:                [],
     message_error:                      "",
     
 }
@@ -102,7 +109,7 @@ const logements = (state = initialAppartementsState, action) => {
                 message_error:              action.message||"Erreur lors de la prise en compte de votre refus",
             });
 
-            
+
 
             // Mise en favori d'un appartement
             case BUILDING_ADD_FAVORITE_REQUEST: 
@@ -139,6 +146,29 @@ const logements = (state = initialAppartementsState, action) => {
             
 
 
+
+
+        // Demande de récupération des appartements
+        case BUILDING_GET_FAVORITE_REQUEST: 
+            return Object.assign({}, state, {
+                loadingGetAppartementsFavoris :      true,
+                appartementsFavoris:              []
+            });
+
+        // Prise en compte de la récupération des appartements
+        case  BUILDING_GET_FAVORITE_SUCCESS: 
+            return Object.assign({}, state, {
+                loadingGetAppartementsFavoris :     false,
+                appartementsFavoris:                action.dataLocations,
+            });
+
+        // Erreur lors de la récupération dess appartements
+        case  BUILDING_GET_FAVORITE_ERROR : 
+            return Object.assign({}, state, {
+                loadingGetAppartementsFavoris :     false,
+                appartementsFavoris:                [],
+                message_error:                      action.message||"Erreur lors de la récupération de vos appartements favoris",
+            });
 
 
 

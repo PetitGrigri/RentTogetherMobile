@@ -7,6 +7,7 @@ import UpdateDescription from '../screens/UpdateDescription';
 import UpdateLocalisation from '../screens/UpdateLocalisation';
 import RoomerProfile from '../screens/RoomerProfile';
 import MessagesLogement from '../screens/MessagesLogement';
+import LocationDetails from '../screens/LocationDetails';
 
 export default RoomerApplicationNavigator = createStackNavigator({
     home: {
@@ -60,6 +61,15 @@ export default RoomerApplicationNavigator = createStackNavigator({
     },
     roomerProfile: {
         screen: RoomerProfile, 
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor:    '#ff8f00',       
+            },
+            headerTintColor:        '#fff'
+        }
+    },
+    locationDetails: {
+        screen: LocationDetails, 
         navigationOptions: {
             headerStyle: {
                 backgroundColor:    '#ff8f00',       
