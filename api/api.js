@@ -1153,9 +1153,9 @@ export const addConnectedUserTargetLocation = function(token, userId, localisati
 
     // Création de notre bjet de recherche
     let jsonAddString = JSON.stringify([{
-        "postalCode": localisationData.postalCodeId,
-        "city": localisationData.libelle,
-        "city2": localisationData.libelle2
+        "postalCode":   localisationData.postalCodeId,
+        "city":         localisationData.libelle,
+        "city2":        localisationData.libelle2
     }]);
 
     //les paramètres de la requête
@@ -1497,3 +1497,112 @@ export const postBuilding = function(token, userId, building,  callBackOk, callB
         });
 }
 
+
+
+
+
+/**
+ * Fonction destinée à indiquer que l'on a déjà vu un logement
+ */
+export const postBuildingHistory =  function(token, userId, buildingId, callBackOk, callBackError) {
+
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+ token
+    });
+
+    // l'objet pour créer une conversation par défaut (plus tard on aura peut être d'autres types de conversations)
+    var jsonBuildingSeen = JSON.stringify({
+        "hasSeen":      1,
+        "userId":       userId,
+        "buildingId":   buildingId,
+    });
+
+    //les paramètres de la requête
+    var options = {
+        headers:    myHeaders,
+        body:       jsonBuildingSeen,
+        method:     'POST',
+        mode:       'cors',
+        cache:      'default'
+    };
+
+    let urlBuildingSeen = `${url}/BuildingHistories`;
+
+
+
+    fetch(urlBuildingSeen, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+                //TODO ici ajouter utilisateur
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(data => {
+            callBackOk(data);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}
+
+
+
+
+
+
+
+
+/**
+ * Fonction destinée à indiquer que l'on ajoute un appartement en favoris
+ */
+export const postBuildingFavorite =  function(token, userId, buildingId, callBackOk, callBackError) {
+
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+ token
+    });
+
+    // l'objet pour créer une conversation par défaut (plus tard on aura peut être d'autres types de conversations)
+    var jsonBuildingFavorite = JSON.stringify({
+        "BuildingId" :  buildingId,
+        "UserId" :      userId
+    });
+
+    //les paramètres de la requête
+    var options = {
+        headers:    myHeaders,
+        body:       jsonBuildingFavorite,
+        method:     'POST',
+        mode:       'cors',
+        cache:      'default'
+    };
+
+    let urlBuildingFavorite= `${url}/FavoriteBuildings`;
+
+
+
+    fetch(urlBuildingFavorite, options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+                //TODO ici ajouter utilisateur
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(data => {
+            callBackOk(data);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}

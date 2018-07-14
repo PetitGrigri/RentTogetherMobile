@@ -5,22 +5,27 @@ import TabContent from '../Components/TabContent';
 import LocationCard from '../Components/LocationCard';
 import SwipeCards from 'react-native-swipe-cards'
 import { connect } from 'react-redux';
-import { handleGetAppartementsPotentiels } from '../actions/logements';
-
+import { handleGetAppartementsPotentiels, handleBuildingSeen, handleBuildingFavorite } from '../actions/logements';
+import { LinearGradient } from 'expo';
+import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import NoMoreCard from '../Components/NoMoreCard';
+
 const {height, width} = Dimensions.get('window');
 
 
 
 class Locations extends Component {
 
-    handleYup = () => {
-        console.log('Oui');
+    handleYup = (card) => {
+        //this.props.handlePostMatchLocataire(card.buildin, card.targetUser.userId, 1)
+        this.props.handleBuildingFavorite(card.buildingId);
     }
 
-    handleNope = () => {
-        console.log('Non');
+    handleNope = (card) => {
+        console.log(card);
+        this.props.handleBuildingSeen(card.buildingId);
     }
+
 
     componentWillMount() {
         this.props.handleGetAppartementsPotentiels();
@@ -31,7 +36,7 @@ class Locations extends Component {
     noMoreCard = () => {
         return <NoMoreCard 
             loading={ this.props.loadingGetAppartementsPotentiels } 
-            loadingText="Chargement de vos appartements en cours"
+            loadingText="Chargement de logements interessants en cours..."
             nothingText="Nous n'avons pas trouvé d'appartements vous correspondant" />
 
     }
@@ -44,7 +49,6 @@ class Locations extends Component {
     }
 
     showMessages = (buildingId) => {
-        //TODO
         let location = this.props.appartementsPotentiels.filter(location => location.buildingId == buildingId)[0];
         console.log('todo', buildingId, location);
 
@@ -66,8 +70,16 @@ class Locations extends Component {
                     showYup={true}
                     showNope={true}
                     showMaybe={false}
-                    yupText='Je te veux !'
-                    nopeText='Mmmm non...'
+                    yupView={   <LinearGradient colors={['rgba(255,200,0,1)', 'rgba(255,200,0,0)']} style={ styles.yupNopeView} start={[1, 0]} end={[0, 0]}>
+                                    <MaterialIcons name='favorite-border' color='#fff'  size={40}/> 
+                                    <Text style={styles.whiteText} >Ca me plait !</Text>
+                                </LinearGradient> }
+                    noView={   <LinearGradient colors={['rgba(198,40,40,1)', 'rgba(198,40,40, 0)']} style={ styles.yupNopeView } start={[0, 0]} end={[1, 0]}>
+                                    <Entypo name='emoji-neutral' color='#fff'  size={40}/> 
+                                    <Text style={styles.whiteText} >Plus tard peut être</Text>
+                                </LinearGradient> }
+                    yupStyle={styles.yupContainer}
+                    nopeStyle={styles.nopeContainer}
                     handleYup={this.handleYup}
                     handleNope={this.handleNope}
                     dragY={false}
@@ -86,7 +98,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    handleGetAppartementsPotentiels:     () => dispatch(handleGetAppartementsPotentiels()),
+    handleGetAppartementsPotentiels:    () => dispatch(handleGetAppartementsPotentiels()),
+    handleBuildingSeen:                 (buildingId) => dispatch(handleBuildingSeen(buildingId)),
+    handleBuildingFavorite:             (buildingId) => dispatch(handleBuildingFavorite(buildingId)),
 });
   
 export default connect(
@@ -144,5 +158,12 @@ const styles = StyleSheet.create({
         fontSize:        24,
         textAlign:      'center',
         marginBottom:   40,           
-    }
+    },
+    whiteText:{
+        color:          '#fff',
+        fontFamily:     'open-sans-regular', 
+        fontSize :      12,
+        padding:        4,
+        textAlign:      'center'
+    }, 
 });

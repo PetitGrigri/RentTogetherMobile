@@ -9,6 +9,16 @@ import {
     BUILDING_POST_SUCCESS,
     BUILDING_POST_ERROR,
     
+    // Actions destiné à historiser un appartement (indiquer que l'on l'a déjà vu, mais qu'il ne nous interesse pas)
+    BUILDING_POST_HISTORY_REQUEST,
+    BUILDING_POST_HISTORY_SUCCESS,
+    BUILDING_POST_HISTORY_ERROR,
+
+    // Actions destiné à mettre un logement en favoris
+    BUILDING_ADD_FAVORITE_REQUEST,
+    BUILDING_ADD_FAVORITE_SUCCESS,
+    BUILDING_ADD_FAVORITE_ERROR,
+
     BUILDING_HIDE_ERROR
 
  } from '../actions/logements';
@@ -17,6 +27,8 @@ import {
 const initialAppartementsState = {
     loadingGetAppartementsPotentiels :  false,
     loadingPostBuilding:                false,
+    loadingPostPostHistory:             false,
+    loadingBuildingFavorite:            false,
     appartementsPotentiels:             [],
     message_error:                      "",
     
@@ -68,6 +80,54 @@ const logements = (state = initialAppartementsState, action) => {
                 loadingPostBuilding :      false,
                 message_error:             action.message||"Erreur lors de la création de votre logement",
             });
+
+
+        // Demande de l'historisation d'un appartement
+        case BUILDING_POST_HISTORY_REQUEST: 
+            return Object.assign({}, state, {
+                loadingPostPostHistory :      true,
+            });
+
+        // Prise en compte de l'historisation d'un appartement
+        case  BUILDING_POST_HISTORY_SUCCESS: 
+            return Object.assign({}, state, {
+                loadingPostPostHistory :      false,
+                // action.dataBuildingHistory non utilisé pour le moment
+            });
+
+        // Erreur lors de l'historisation d'un appartement
+        case  BUILDING_POST_HISTORY_ERROR : 
+            return Object.assign({}, state, {
+                loadingPostPostHistory :    false,
+                message_error:              action.message||"Erreur lors de la prise en compte de votre refus",
+            });
+
+            
+
+            // Mise en favori d'un appartement
+            case BUILDING_ADD_FAVORITE_REQUEST: 
+                return Object.assign({}, state, {
+                    loadingBuildingFavorite :      true,
+                });
+
+            // Mise en favori : OK
+            case  BUILDING_ADD_FAVORITE_SUCCESS: 
+                return Object.assign({}, state, {
+                    loadingBuildingFavorite :      false,
+                    // action.dataBuildingFavorite non utilisé pour le moment
+                });
+
+            // Mise en favori : KO
+            case  BUILDING_ADD_FAVORITE_ERROR : 
+                return Object.assign({}, state, {
+                    loadingBuildingFavorite :    false,
+                    message_error:              action.message||"Erreur lors de la prise en compte de votre refus",
+                });
+
+
+
+
+
 
 
 

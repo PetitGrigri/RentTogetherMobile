@@ -12,6 +12,17 @@ export const
     BUILDING_POST_SUCCESS  = 'BUILDING_POST_SUCCESS', 
     BUILDING_POST_ERROR    = 'BUILDING_POST_ERROR',
 
+    // Actions destiné à historiser un logement (indiquer que l'on l'a déjà vu, mais qu'il ne nous interesse pas)
+    BUILDING_POST_HISTORY_REQUEST = 'BUILDING_POST_HISTORY_REQUEST',
+    BUILDING_POST_HISTORY_SUCCESS = 'BUILDING_POST_HISTORY_SUCCESS',
+    BUILDING_POST_HISTORY_ERROR =   'BUILDING_POST_HISTORY_ERROR',
+
+    // Actions destiné à mettre un logement en favoris
+    BUILDING_ADD_FAVORITE_REQUEST=  'BUILDING_ADD_FAVORITE_REQUEST',
+    BUILDING_ADD_FAVORITE_SUCCESS=  'BUILDING_ADD_FAVORITE_SUCCESS',
+    BUILDING_ADD_FAVORITE_ERROR =   'BUILDING_ADD_FAVORITE_ERROR',
+
+    // Action destinée à cacher le message d'erreur
     BUILDING_HIDE_ERROR = 'BUILDING_HIDE_ERROR'
     ;
 
@@ -114,9 +125,6 @@ const handlePostAppartementError = (error) => {
     }
 };
 
-
-
-
 /**
  * Fonction permettant de retourner l'action nécessaire pour vider les messages
  */
@@ -124,4 +132,108 @@ export const handleHideError = () => {
     return {
         type: BUILDING_HIDE_ERROR
     } 
+};
+
+
+
+
+
+
+/**
+ * Fonction destiné à indiquer que l'on a vu un appartement
+ * 
+ * @param {int} buildingId Le logement que l'on a vu
+ */
+export const handleBuildingSeen = (buildingId) => {
+    return function (dispatch, getState) {
+
+        // On dispatch de l'action demandée
+        dispatch({
+            type: BUILDING_POST_HISTORY_REQUEST
+        })
+
+        // Utilisation indiqué que l'on a vu l'appartement
+        api.postBuildingHistory(
+            getState().connection.user.token,
+            getState().connection.user.userId,
+            buildingId,
+            (message) => { dispatch(handleBuildingSucess(message)) },
+            (error) => { dispatch(handleBuildingError(error)) }
+        )
+    }
+}
+
+/**
+ * @param {object} message 
+ */
+const handleBuildingSucess = (dataBuildingHistory) => {
+
+    //retour de l'action
+    return {
+        type:                   BUILDING_POST_HISTORY_SUCCESS,
+        dataBuildingHistory:    dataBuildingHistory
+    } 
+};
+
+/**
+ * @param {string} error le message d'erreur
+ */
+const handleBuildingError = (error) => {
+    return {
+        type:   BUILDING_POST_HISTORY_ERROR,
+        error:  error
+    }
+};
+
+
+
+
+
+
+
+
+/**
+ * Fonction destiné à indiquer que l'on ajoute cet appartement en favoris
+ * 
+ * @param {int} buildingId Le logement que l'on a vu
+ */
+export const handleBuildingFavorite = (buildingId) => {
+    return function (dispatch, getState) {
+
+        // On dispatch de l'action demandée
+        dispatch({
+            type: BUILDING_ADD_FAVORITE_REQUEST
+        })
+
+        // Utilisation indiqué que l'on a vu l'appartement
+        api.postBuildingFavorite(
+            getState().connection.user.token,
+            getState().connection.user.userId,
+            buildingId,
+            (data) => { dispatch(handleBuildingFavoriteSuccess(data)) },
+            (error) => { dispatch(handleBuildingFavoriteError(error)) }
+        )
+    }
+}
+
+/**
+ * @param {object} data 
+ */
+const handleBuildingFavoriteSuccess = (dataBuildingFavorite) => {
+
+    //retour de l'action
+    return {
+        type:                   BUILDING_ADD_FAVORITE_SUCCESS,
+        dataBuildingFavorite:   dataBuildingFavorite
+    } 
+};
+
+/**
+ * @param {string} error le message d'erreur
+ */
+const handleBuildingFavoriteError = (error) => {
+    return {
+        type:   BUILDING_ADD_FAVORITE_ERROR,
+        error:  error
+    }
 };

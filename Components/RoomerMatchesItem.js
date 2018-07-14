@@ -63,6 +63,7 @@ const styles= StyleSheet.create({
         alignItems:         'center',
         justifyContent:     'space-around',
         padding:            8,
+        elevation:          3,
     }, 
     roomer: {
         fontFamily:     'open-sans-regular',

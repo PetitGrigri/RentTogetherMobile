@@ -13,13 +13,10 @@ const {height, width} = Dimensions.get('window');
 class Roomers extends Component {
 
     handleYup = (card) => {
-        console.log('Oui', card.matchId, card.targetUser.userId, 1);
         this.props.handlePostMatchLocataire(card.matchId, card.targetUser.userId, 1)
-
     }
 
     handleNope = (card) => {
-        console.log('Non', card.matchId, card.targetUser.userId, 2);
         this.props.handlePostMatchLocataire(card.matchId, card.targetUser.userId, 2)
     }
 
@@ -67,7 +64,7 @@ class Roomers extends Component {
                                     <Text style={styles.whiteText} >Je te veux</Text>
                                 </LinearGradient> }
                     noView={   <LinearGradient colors={['rgba(198,40,40,1)', 'rgba(198,40,40, 0)']} style={ styles.yupNopeView } start={[0, 0]} end={[1, 0]}>
-                                    <Entypo name='emoji-sad' color='#fff'  size={40}/> 
+                                    <Entypo name='emoji-neutral' color='#fff'  size={40}/> 
                                     <Text style={styles.whiteText} >Plus tard peut être</Text>
                                 </LinearGradient> }
 
