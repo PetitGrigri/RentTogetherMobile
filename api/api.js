@@ -1650,3 +1650,58 @@ export const getFavoriteLocations = function(token, userId, callBackOk, callBack
             callBackError(error.message);
         });
 }
+
+
+
+
+
+
+
+/**
+ * Méthode permettant à un propriétaire de mettre à jour son appartement
+ * 
+ * @param {*} token 
+ * @param {*} building 
+ * @param {*} callBackOk 
+ * @param {*} callBackError 
+ */
+export const putBuilding = function(token, building,  callBackOk, callBackError) {
+
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':     'application/json',
+        'Authorization':    'Bearer '+token
+    });
+
+    console.log('putBuilding', building);
+
+    // Conversion de notre FormData en objet 
+    var jsonBuildingString = JSON.stringify(building);
+
+
+    //les paramètres de la requête
+    var options = {
+        method:     'PUT',
+        mode:       'cors',
+        cache:      'default',
+        headers:    myHeaders,
+        body:       jsonBuildingString
+    };
+
+    fetch(url+ "/Building", options)
+        .then(response => {
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(message => {
+            callBackOk(message);
+        })
+        .catch(error => {
+            callBackError(error.message);
+        });
+}

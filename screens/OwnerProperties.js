@@ -61,19 +61,29 @@ class OwnerProperties extends Component {
         });
     }
 
+    editLocation = (item) => {
+        this.props.navigation.navigate('updateProperty', {
+            location:       item, 
+        });
+    }
+
+
     getPropertyItem = (property) => {
         return (
             <LocationItem 
                 {...property.item} 
-                showMessages = { () => this.showMessages(property.item.buildingId) }
-                handleShowLocation= { () => this.handleShowLocation(property.item) } />
+                showMessages ={ () => this.showMessages(property.item.buildingId) }
+                handleShowLocation={ () => this.handleShowLocation(property.item) } 
+                editlocation= { () => this.editLocation(property.item) }
+                />
         );   
     }
 
     render() {
         return (
             <FlatList
-                data={this.props.properties}
+                data={ this.props.properties }
+
                 keyExtractor={item => `${item.buildingId}`}
                 renderItem={(property) =>  this.getPropertyItem(property)}
                 refreshing={ this.props.loadingGetAppartementsPotentiels }
@@ -104,7 +114,7 @@ export default connect(
 const styles = StyleSheet.create({
     container: {
         flex:           1,
-        margin:         8
+        padding:        8
     },
     propertyContainer: {
         aspectRatio:     1.8,

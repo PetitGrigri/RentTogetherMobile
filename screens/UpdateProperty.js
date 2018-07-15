@@ -1,34 +1,46 @@
 import React, { Component } from 'react';
-import {  View, Text, ScrollView, Keyboard, StyleSheet, Alert } from 'react-native';
+import {  View, Text, ScrollView, Keyboard, StyleSheet, Alert, Image, ImageBackground } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import ButtonSubmit from '../Components/ButtonSubmit';
 import InputTextApplication from '../Components/InputTextApplication';
 import InputTextareaApplication from '../Components/InputTextareaApplication';
 import { MaterialIcons, Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
-import { ModalLocalisation } from '../containers';
+import { ModalLocalisation, LocationImage } from '../containers';
 import { connect } from 'react-redux';
-import { handlePostAppartement, handleHideError } from '../actions/logements';
+import { handleHideError, handlePutAppartement } from '../actions/logements';
 import { empty } from '../utils/check';
+import Carousel from '../Components/Carousel';
+import TouchableIcon from '../Components/TouchableIcon';
+import { LinearGradient } from 'expo';
 
-class AddProperty extends Component {
+class UpdateProperty extends Component {
 
+    
     constructor(props) {
         super(props);
 
-        this.state = {
-            title:              '',
-            description:        '',
-            address:            '',
-            address2:           '',
-            nbRoom:             '',
-            nbPiece:            '',
-            nbRenters:          '',
-            nbMaxRenters:       '',
-            area:               '',
-            price:              '',
-            city:               '',
-            city2:              '',
-            postalCode:         '',
-            localisationResume: '',
+        let location = this.props.navigation.getParam('location');
+        console.log('UPDATE', location);
+
+
+        this.state = {        
+            buildingId:         location.buildingId,
+            title:              location.title||'',
+            description:        location.description||'',
+            address:            location.address||'',
+            address2:           location.address2||'',
+            nbRoom:             location.nbRoom.toString()||'',
+            nbPiece:            location.nbPiece.toString()||'',
+            nbRenters:          location.nbRenters.toString()||'',
+            nbMaxRenters:       location.nbMaxRenters.toString()||'',
+            area:               location.area.toString()||'',
+            price:              location.price.toString()||'',
+            isRent:             location.isRent.toString()||0,
+            city:               location.city||'',
+            city2:              location.city2||'',
+            postalCode:         location.postalCode||'',
+            localisationResume: `${location.city||''} ${location.city2||''} (${location.postalCode||''})`||'',
+
             footerHeight:       0,
             modalVisible:       false
         }
@@ -109,6 +121,7 @@ class AddProperty extends Component {
     sumbit = () => {
         // Initialisation de l'appartement
         let building = {
+            buildingId:         this.state.buildingId,
             title:              this.state.title,
             description:        this.state.description,
             address:            this.state.address,
@@ -122,18 +135,26 @@ class AddProperty extends Component {
             city:               this.state.city,
             city2:              this.state.city2,
             postalCode:         this.state.postalCode,
-            isRent:             0
+            isRent:             this.state.isRent,
         }
 
-        // Demande de création de l'appartement
-        this.props.handlePostAppartement(building);
+        // Demande de MàJ de l'appartement
+        this.props.handlePutAppartement(building);
     }
 
     render() {
 
-        return (
-            <View>
+        let buildingPictureInformationApiDtos = this.props.navigation.getParam('location').buildingPictureInformationApiDtos;
+        
+        //les images sont contenus dans buildingPictureInformationApiDtos. Si buildingPictureInformationApiDtos est null (cela est lié à l'ajout d'un appartement dans redux, on retourne un tableau vide)
+        let images =  buildingPictureInformationApiDtos? buildingPictureInformationApiDtos.map( picture => {
+            return <LocationImage pictureId={ picture.buildingPictureId } /> 
+        }) : [];
 
+        console.log(images);
+
+        return (
+            <View style={ styles.container} >
                 <ModalLocalisation 
                     modalVisible={ this.state.modalVisible } 
                     handleSelect={ this.localisationSelected } 
@@ -141,7 +162,25 @@ class AddProperty extends Component {
                 />
 
                 <ScrollView scrollEnabled={true} keyboardShouldPersistTaps="handled" ref={ this.scrollView}>
-                    <View style={ styles.container } >
+
+                    <LinearGradient style={ styles.imageHeaderIcons } colors={['rgba(0,0,0,0)', 'rgba(0,0,0, 0.6 )', ]} start={[0, 1]} end={[0, 0]}>
+                        <TouchableIcon 
+                            action={ this.pickAPhoto } 
+                            icon={ <Ionicons color='#fff' name='ios-camera' size={32} /> } 
+                            loadingColor='#fff' 
+                            loading={ false } />
+                    </LinearGradient>
+
+                    <View style={ styles.imageHeader }>
+                        { (images.length > 0)
+                            ? <Carousel images={ images }/>
+                            : <ImageBackground source={ require('../assets/no_building.png') } style={{ width: '100%', height: '100%'}}/>
+                        }
+                    </View>
+
+                    <View style={ styles.cardBottomTop } />
+
+                    <View style={ styles.containerForm}>
                         <Text h2 style={styles.titleProfile}>Description</Text>
 
                         <InputTextApplication 
@@ -249,14 +288,14 @@ class AddProperty extends Component {
                         />
 
                         <ButtonSubmit 
-                            text="Ajouter cet appartement"
-                            onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
+                            text="Modifier cet appartement"
                             style={{marginTop:40, marginBottom: 40}}
-                            loading={ this.props.loadingPostBuilding }
+                            loading={ this.props.loadingPutBuilding }
                             onPress={ this.sumbit }
                         />
                     </View>
                     <View  style={{ height: this.state.footerHeight}} />
+
                 </ScrollView>
             </View>
         );
@@ -266,38 +305,30 @@ class AddProperty extends Component {
 
 
 const mapToProps = state => ({
-    loadingPostBuilding :   state.logements.loadingPostBuilding,
+    loadingPutBuilding:     state.logements.loadingPutBuilding,
     message_error:          state.logements.message_error
 });
 
 const mapDispatchToProps = dispatch => ({
-    handlePostAppartement:  (building) => dispatch(handlePostAppartement(building)),
+    handlePutAppartement:   (building) => dispatch(handlePutAppartement(building)),
     handleHideError:        () => dispatch(handleHideError())
 });
   
 export default connect(
     mapToProps,
     mapDispatchToProps
-)(AddProperty);
+)(UpdateProperty);
 
 
 
 
 const styles = StyleSheet.create({
     container: {
-        margin:    16
+        flex:       1,
+        backgroundColor:    '#eee'
     },
     containerForm: {
-        flex:   1,
-        flexDirection: 'row',
-    },
-    columnRight:{
-        flex: 1,
-        paddingLeft:8,
-    },
-    columnLeft:{
-        flex: 1,
-        paddingRight:8,
+        margin:    16,
     },
     iconLeft: {
         paddingRight:       8,
@@ -310,4 +341,31 @@ const styles = StyleSheet.create({
         flex:       1,
         fontSize:   24,
     },
+    imageHeader: {
+        width:          '100%',
+        aspectRatio:    1.8,
+        justifyContent: 'center',
+        alignItems:     'center',
+    },
+    cardBottomTop: {
+        position:           'relative',
+        bottom:             10,
+        zIndex:             1000,
+        backgroundColor:    '#eee',
+        height:             20,
+        borderRadius:       10,
+    },
+    imageHeaderIcons: {
+        width:              '100%',
+        position:           'absolute',
+        zIndex:             3,
+        top:                0,
+        left:               0,
+        right:              0,
+        paddingLeft:        16,
+        paddingRight:       16,
+        justifyContent:     'flex-end',
+        alignItems:         'flex-start',
+        flexDirection:      'row',
+    }, 
 })

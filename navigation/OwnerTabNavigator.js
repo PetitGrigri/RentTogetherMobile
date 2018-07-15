@@ -7,6 +7,7 @@ import Conversations from '../screens/Conversations';
 import OwnerProperties from '../screens/OwnerProperties';
 import AddProperty from '../screens/AddProperty';
 import { Easing, Animated, Platform } from 'react-native';
+import UpdateProperty from '../screens/UpdateProperty';
 
 // transitionConfig Tuto :  https://medium.com/async-la/custom-transitions-in-react-navigation-2f759408a053
 const transitionConfig = (Platform.OS === 'android') ? () => {
@@ -75,6 +76,16 @@ export default RoomerTabNavigator = createBottomTabNavigator({
                 screen: AddProperty,
                 navigationOptions: {
                     title: 'Ajouter une location',
+                    headerStyle: {
+                        backgroundColor:    '#ff8f00',       
+                    },
+                    headerTintColor:        '#fff'
+                }
+            },
+            updateProperty: {
+                screen: UpdateProperty,
+                navigationOptions: {
+                    title:  'Modifier une location',
                     headerStyle: {
                         backgroundColor:    '#ff8f00',       
                     },

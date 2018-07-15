@@ -24,6 +24,12 @@ import {
     BUILDING_GET_FAVORITE_SUCCESS,
     BUILDING_GET_FAVORITE_ERROR,
 
+    // Actions destinées à la mise à jour d'un appartement
+    BUILDING_PUT_REQUEST,
+    BUILDING_PUT_SUCCESS,
+    BUILDING_PUT_ERROR,
+
+
     BUILDING_HIDE_ERROR
 
  } from '../actions/logements';
@@ -33,6 +39,7 @@ const initialAppartementsState = {
     loadingGetAppartementsPotentiels:   false,
     loadingGetAppartementsFavoris:      false,
     loadingPostBuilding:                false,
+    loadingPutBuilding:                 false,
     loadingPostPostHistory:             false,
     loadingBuildingFavorite:            false,
     appartementsPotentiels:             [],
@@ -170,6 +177,35 @@ const logements = (state = initialAppartementsState, action) => {
                 message_error:                      action.message||"Erreur lors de la récupération de vos appartements favoris",
             });
 
+
+
+
+
+
+
+
+
+        // Demande de création d'un nouvel appartement
+        case BUILDING_PUT_REQUEST: 
+            return Object.assign({}, state, {
+                loadingPutBuilding :      true,
+            });
+
+        // Prise en compte de la création d'un nouvel appartement
+        case  BUILDING_PUT_SUCCESS: 
+            return Object.assign({}, state, {
+                loadingPutBuilding :      false,
+                appartementsPotentiels:   state.appartementsPotentiels.map(
+                    buildingState => (buildingState.buildingId === action.dataBuilding.buildingId) ? action.dataBuilding : buildingState
+                )
+            });
+
+        // Erreur lors de la création d'un nouvel appartement
+        case  BUILDING_PUT_ERROR : 
+            return Object.assign({}, state, {
+                loadingPutBuilding :      false,
+                message_error:             action.message||"Erreur lors de la création de votre logement",
+            });
 
 
 

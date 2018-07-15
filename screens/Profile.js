@@ -341,11 +341,9 @@ class Profile extends Component {
                     blurRadius= { 10 }>
 
                     <View style={ [ styles.imageHeaderIcons , { top: getStatusBarHeight() }]} >
-                        { !this.props.loadingUpload 
-                            ?   <TouchableOpacity onPress={ this.changeRole }>
-                                    <FontAwesome color='#fff' name='exchange' size={24} />
-                                </TouchableOpacity>
-                            :   <ActivityIndicator size="small" color='#fff' />
+                        <TouchableOpacity onPress={ this.changeRole }>
+                            <FontAwesome color='#fff' name='exchange' size={24} />
+                        </TouchableOpacity>
                         }
                         { !this.props.loadingUpload 
                             ?   <TouchableOpacity onPress={ this.pickAPhoto }>
@@ -459,7 +457,6 @@ const styles = StyleSheet.create({
         justifyContent:     'space-between',
         alignItems:         'flex-start',
         flexDirection:      'row',
-        
     }, 
     editParam: {
         width:          30,

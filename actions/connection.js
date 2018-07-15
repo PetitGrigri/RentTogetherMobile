@@ -110,7 +110,7 @@ export const handleHideError = () => {
  * @param {string} token le userId obtenu lors d'une connexion précédente
  */
 export const handleConnectWithPreviousToken = (token, userId) => {
-
+console.log('handleConnectWithPreviousToken', token, userId)
     return function (dispatch, getState) {
         //on dispatch le fait qu'on se connecte via  un token
         dispatch({
@@ -133,13 +133,10 @@ export const handleConnectWithPreviousToken = (token, userId) => {
  * @param {Array} dataUser un tableau d'utilisateurs
  */
 const handleGetUserWithTokenSuccess = (dataUser) => {
-    
-    if (!dataUser.result)
-        console.log('ATTENTION result SUPPRIME ! !  !! ! !! !!!! handleGetUserWithTokenSuccess');
 
     return {
         type:       SIGN_IN_WITH_PREVIOUS_TOKEN_SUCCESS,
-        user:       dataUser.result,
+        user:       dataUser,
     }
 }
 

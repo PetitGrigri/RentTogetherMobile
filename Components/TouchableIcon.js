@@ -14,11 +14,11 @@ export default class TouchableIcon extends Component {
     };
 
     static defaultProps = {
-        action:         () => console('//TODO : configure action'),
+        action:         () => console.log('//TODO : configure action'),
         loading:        false,
         loadingSize:    'small',
         loadingColor:   '#aaa',
-      };
+    };
 
 
   render() {

@@ -26,7 +26,7 @@ class LocationItem extends Component {
             return <LocationImage pictureId={ picture.buildingPictureId } /> 
         }) : [];
 
-        let { handleCreateConversation, handleShowLocation, loadingCreateConversation, showMessages } = this.props;
+        let { handleCreateConversation, handleShowLocation, loadingCreateConversation, showMessages, editlocation } = this.props;
 
         return (
             <View  style={ styles.propertyContainer }>
@@ -47,17 +47,24 @@ class LocationItem extends Component {
                             ?   <TouchableIcon action={ handleShowLocation } icon={<Ionicons name='ios-home' style={ styles.icon } size={28} />} />
                             :   null }
 
-                        <View style= {styles.separator} />
+                        { handleCreateConversation ? <View style= {styles.separator} /> : null }
 
                         { handleCreateConversation 
                             ? <TouchableIcon action={ handleCreateConversation } icon={ <Ionicons name='ios-mail-outline' style={ styles.icon } size={32} loading={loadingCreateConversation} /> } />
                             : null }
 
-                        { handleCreateConversation ? <View style= {styles.separator} /> : null }
+                        { showMessages ? <View style= {styles.separator} /> : null }
 
                         { showMessages 
                             ? <TouchableIcon action={ showMessages } icon={ <Ionicons name='ios-chatbubbles-outline' style={ styles.icon } size={28} /> } />
                             : null }
+
+                        { showMessages ? <View style= {styles.separator} /> : null }
+
+                        { editlocation 
+                            ? <TouchableIcon action={ editlocation } icon={ <Entypo  color='#aaa' name='edit' size={ 24 } style={styles.icon }/> } />
+                            : null }
+                        
 
                     </View>
                 </View>

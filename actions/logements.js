@@ -27,6 +27,11 @@ export const
     BUILDING_GET_FAVORITE_SUCCESS=  'BUILDING_GET_FAVORITE_SUCCESS',
     BUILDING_GET_FAVORITE_ERROR =   'BUILDING_GET_FAVORITE_ERROR',
 
+    // Actions destinées à la mise à jour d'un appartement
+    BUILDING_PUT_REQUEST  = 'BUILDING_PUT_REQUEST', 
+    BUILDING_PUT_SUCCESS  = 'BUILDING_PUT_SUCCESS', 
+    BUILDING_PUT_ERROR    = 'BUILDING_PUT_ERROR',
+
     // Action destinée à cacher le message d'erreur
     BUILDING_HIDE_ERROR = 'BUILDING_HIDE_ERROR'
     ;
@@ -125,17 +130,6 @@ const handlePostAppartementError = (error) => {
         message:    error
     }
 };
-
-/**
- * Fonction permettant de retourner l'action nécessaire pour vider les messages
- */
-export const handleHideError = () => {
-    return {
-        type: BUILDING_HIDE_ERROR
-    } 
-};
-
-
 
 
 
@@ -287,4 +281,67 @@ const handleGetFavoriteLocationsError = (error) => {
         type:       BUILDING_GET_FAVORITE_ERROR,
         message:    error
     }
+};
+
+
+
+
+/**
+ * Méthode permettant de récupérer la liste des appartements potentiels
+ */
+export const handlePutAppartement = (building) => {
+    return function (dispatch, getState) {
+        //on dispatch l'état de la recherche des roomers
+        dispatch({
+            type: BUILDING_PUT_REQUEST
+        })
+        
+        console.log('handlePutAppartement', building);
+
+        //utilisations de l'api pour récupérer les roomers
+        api.putBuilding(
+            getState().connection.user.token,
+            building,
+            (dataBuilding) =>  { dispatch(handlePutAppartementSuccess(dataBuilding)) },
+            (error) =>          { dispatch(handlePutAppartementError(error)) }
+        )
+    }
+};
+
+/**
+ * Méthode permettant de créer un appartement
+ * @param {object} data 
+ */
+const handlePutAppartementSuccess = (dataBuilding) => {
+
+    //retour de l'action
+    return {
+        type:           BUILDING_PUT_SUCCESS,
+        dataBuilding:   dataBuilding
+    } 
+};
+
+/**
+ * Méthode utilisée lorsque les appartements n'ont pas pu être récupérés
+ * @param {string} error le message d'erreur
+ */
+const handlePutAppartementError = (error) => {
+    return {
+        type:       BUILDING_PUT_ERROR,
+        message:    error
+    }
+};
+
+
+
+
+
+
+/**
+ * Fonction permettant de retourner l'action nécessaire pour vider les messages
+ */
+export const handleHideError = () => {
+    return {
+        type: BUILDING_HIDE_ERROR
+    } 
 };
