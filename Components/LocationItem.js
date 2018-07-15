@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import  { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator, Dimensions } from 'react-native';
+import  { View, StyleSheet, Text, TouchableOpacity, Image, Dimensions, ImageBackground } from 'react-native';
 import Avatar from './Avatar';
 import { Ionicons, Entypo } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
@@ -7,6 +7,7 @@ import { UserImage } from '../containers';
 import { LinearGradient } from 'expo';
 import Carousel from '../Components/Carousel';
 import LocationImage from '../containers/LocationImage';
+import TouchableIcon from './TouchableIcon';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 
@@ -36,25 +37,28 @@ class LocationItem extends Component {
                     </LinearGradient>
                     { (images.length > 0)
                         ? <Carousel images={ images }/>
-                        : <Image source={ require('../assets/no_building.png') }  />
+                        : <ImageBackground source={ require('../assets/no_building.png') } style={{flex:1}} />
                     }
                 </View>
                 <View style={ styles.bottomCard}>
                     <View style={styles.iconesWraper} >
-                        <TouchableOpacity onPress={ () => handleShowLocation() }>
-                            <Ionicons name='ios-home' style={ styles.icon } size={28} />
-                        </TouchableOpacity>
+                    
+                        { handleShowLocation 
+                            ?   <TouchableIcon action={ handleShowLocation } icon={<Ionicons name='ios-home' style={ styles.icon } size={28} />} />
+                            :   null }
+
                         <View style= {styles.separator} />
-                        {loadingCreateConversation 
-                            ?   <ActivityIndicator size="small" color='#aaa' /> 
-                            :   <TouchableOpacity onPress={ () => handleCreateConversation() }>
-                                    <Ionicons name='ios-mail-outline' style={ styles.icon } size={32} />
-                                </TouchableOpacity>
-                        }
-                        <View style= {styles.separator} />
-                        <TouchableOpacity onPress={ () => { showMessages () } } >
-                            <Ionicons name='ios-chatbubbles-outline' style={ styles.icon } size={28} />
-                        </TouchableOpacity>
+
+                        { handleCreateConversation 
+                            ? <TouchableIcon action={ handleCreateConversation } icon={ <Ionicons name='ios-mail-outline' style={ styles.icon } size={32} loading={loadingCreateConversation} /> } />
+                            : null }
+
+                        { handleCreateConversation ? <View style= {styles.separator} /> : null }
+
+                        { showMessages 
+                            ? <TouchableIcon action={ showMessages } icon={ <Ionicons name='ios-chatbubbles-outline' style={ styles.icon } size={28} /> } />
+                            : null }
+
                     </View>
                 </View>
             </View>
@@ -66,11 +70,11 @@ export default LocationItem
 
 const styles= StyleSheet.create({
     propertyContainer: {
-        width:          WINDOW_WIDTH - 16,
-        aspectRatio:     1.6,
-        margin:         8,
-        elevation:      3,
-        backgroundColor:'#fff',
+        width:              WINDOW_WIDTH - 16,
+        aspectRatio:        1.6,
+        margin:             8,
+        elevation:          3,
+        backgroundColor:    '#fff',
     },
     titlePropertContainer: {
         position:       'absolute',

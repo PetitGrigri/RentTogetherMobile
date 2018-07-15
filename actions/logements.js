@@ -245,9 +245,6 @@ const handleBuildingFavoriteError = (error) => {
 
 
 
-
-
-
 /**
  * Méthode permettant de récupérer la liste des appartements favoris d'un utilisateur
  */

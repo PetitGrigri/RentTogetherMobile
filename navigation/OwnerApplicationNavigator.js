@@ -4,7 +4,7 @@ import OwnerTabNavigator from './OwnerTabNavigator';
 import Messages from '../screens/Messages';
 import UpdateParam from '../screens/UpdateParam';
 import UpdateDescription from '../screens/UpdateDescription';
-import UpdateLocalisation from '../screens/UpdateLocalisation';
+import LocationDetails from '../screens/LocationDetails';
 import RoomerProfile from '../screens/RoomerProfile';
 import MessagesLogement from '../screens/MessagesLogement';
 
@@ -67,5 +67,14 @@ export default RoomerApplicationNavigator = createStackNavigator({
             headerTintColor:        '#fff'
         }
     },
+    locationDetails: {
+        screen: LocationDetails, 
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor:    '#ff8f00',       
+            },
+            headerTintColor:        '#fff'
+        }
+    }
 
 });

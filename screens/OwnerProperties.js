@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import NoMoreCard from '../Components/NoMoreCard';
 import { LinearGradient } from 'expo';
 import { Ionicons} from '@expo/vector-icons';
+import LocationItem from '../Components/LocationItem';
 
 class OwnerProperties extends Component {
 
@@ -34,11 +35,6 @@ class OwnerProperties extends Component {
     constructor(props) {
         super(props)
     }
-    
-
-    componentDidMount = () => {
-        //TODO
-    };
 
     handleRefresh = () => {
         this.props.handleGetAppartementsPotentiels();
@@ -49,9 +45,7 @@ class OwnerProperties extends Component {
     }
     
     showMessages = (buildingId) => {
-        //TODO
         let location = this.props.properties.filter(location => location.buildingId == buildingId)[0];
-        console.log('todo', buildingId, location);
 
         this.props.navigation.navigate('messagesLogements', {
             title:      location.title, 
@@ -60,27 +54,19 @@ class OwnerProperties extends Component {
         })
     }
 
+    handleShowLocation= (item) => {
+        this.props.navigation.navigate('locationDetails', {
+            location:       item, 
+            showMessages :  () => this.showMessages(item),
+        });
+    }
+
     getPropertyItem = (property) => {
-
-        //les images sont contenus dans buildingPictureInformationApiDtos. Si buildingPictureInformationApiDtos est null (cela est lié à l'ajout d'un appartement dans redux, on retourne un tableau vide)
-        let images = property.item.buildingPictureInformationApiDtos ? property.item.buildingPictureInformationApiDtos.map( picture => {
-            return <LocationImage pictureId={ picture.buildingPictureId } /> 
-        }) : [];
-
         return (
-            <View  style={ styles.propertyContainer }>
-                <LinearGradient colors={['rgba(0,0,0,0)','rgba(0,0,0,0.1)', 'rgba(0,0,0, 0.6 )', ]} style={ styles.titlePropertContainer } start={[0, 1]} end={[0, 0]}>
-                    <Text style={ styles.title }>{ property.item.title }</Text>
-                    <TouchableOpacity onPress={ () => { this.showMessages(property.item.buildingId) } } >
-                        <Ionicons color='#fff' name='ios-chatbubbles' size={32} />
-                    </TouchableOpacity>
-                </LinearGradient>
-                { (images.length > 0)
-                    ? <Carousel images={ images }/>
-                    : <Image source={ require('../assets/no_building.png') }  />
-                }
-                
-            </View>
+            <LocationItem 
+                {...property.item} 
+                showMessages = { () => this.showMessages(property.item.buildingId) }
+                handleShowLocation= { () => this.handleShowLocation(property.item) } />
         );   
     }
 
