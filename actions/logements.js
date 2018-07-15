@@ -61,7 +61,6 @@ export const handleGetAppartementsPotentiels = () => {
  * @param {object} data 
  */
 const handleGetAppartementsPotentielsSuccess = (dataLocations) => {
-    console.log('handleGetAppartementsPotentielsSuccess', dataLocations);
     //retour de l'action
     return {
         type:           POTENTIAL_LOCATION_GET_SUCCESS,
@@ -264,7 +263,6 @@ export const handleGetFavoriteLocations = () => {
  * @param {object} data 
  */
 const handleGetFavoriteLocationsSuccess = (dataLocations) => {
-    console.log('handleGetAppartementsPotentielsSuccess', dataLocations);
     //retour de l'action
     return {
         type:           BUILDING_GET_FAVORITE_SUCCESS,
@@ -295,8 +293,6 @@ export const handlePutAppartement = (building) => {
         dispatch({
             type: BUILDING_PUT_REQUEST
         })
-        
-        console.log('handlePutAppartement', building);
 
         //utilisations de l'api pour récupérer les roomers
         api.putBuilding(

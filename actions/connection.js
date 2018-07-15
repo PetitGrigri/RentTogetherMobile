@@ -110,7 +110,6 @@ export const handleHideError = () => {
  * @param {string} token le userId obtenu lors d'une connexion précédente
  */
 export const handleConnectWithPreviousToken = (token, userId) => {
-console.log('handleConnectWithPreviousToken', token, userId)
     return function (dispatch, getState) {
         //on dispatch le fait qu'on se connecte via  un token
         dispatch({

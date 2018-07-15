@@ -46,7 +46,6 @@ class MatchLocations extends Component {
 
     //TODO Factoriser copié coller de ownerProperties.js
     showMessages = (item) => {
-        console.log('SOWWWWWW',item)
         this.props.navigation.navigate('messagesLogements', {
             title:      item.title, 
             owner:      item.ownerApiDto,

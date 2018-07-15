@@ -108,7 +108,6 @@ class Messages extends Component {
                         renderItem={(message) =>  this.getMessageItem(message)}
                         refreshing={false}
                         onRefresh={() => console.log('refresh')}
-                        onEndReached={() => console.log('loadNext') }
                         refreshing={this.props.loadingMessages}
                         inverted
                     />

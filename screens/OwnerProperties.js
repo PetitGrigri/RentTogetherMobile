@@ -62,6 +62,7 @@ class OwnerProperties extends Component {
     }
 
     editLocation = (item) => {
+        console.log(item);
         this.props.navigation.navigate('updateProperty', {
             location:       item, 
         });
@@ -88,7 +89,6 @@ class OwnerProperties extends Component {
                 renderItem={(property) =>  this.getPropertyItem(property)}
                 refreshing={ this.props.loadingGetAppartementsPotentiels }
                 onRefresh={() => this.handleRefresh() }
-                onEndReached={() => console.log('loadNext') }
                 style={ styles.container }
             />
         );

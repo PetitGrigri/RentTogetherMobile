@@ -86,7 +86,6 @@ const localisations = (state = initialLocalisationsState, action) => {
 
         // Demande de récupération des locataires
         case CONNECTED_USER_ADD_LOCALISATION_REQUEST: 
-            console.log('CONNECTED_USER_ADD_LOCALISATION_REQUEST', action.localisation);
             return Object.assign({}, state, {
                 loadingAddLocalisation :    state.localisations.concat(action.localisation)
             });
@@ -94,7 +93,6 @@ const localisations = (state = initialLocalisationsState, action) => {
 
         // Prise en compte de la récupération des locataires
         case  CONNECTED_USER_ADD_LOCALISATION_SUCCESS: 
-        console.log('CONNECTED_USER_ADD_LOCALISATION_SUCCESS', action.localisation);
             return Object.assign({}, state, {
                 
                 localisations:              state.localisations.concat(action.localisation),

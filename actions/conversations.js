@@ -142,10 +142,6 @@ export const handlePostParticipantsConversation = (token, conversation, particip
 const handlePostConversationSuccess = (conversation, dataParticipants) => {
     return function (dispatch, getState) {
 
-        console.log('SUCCESS SUCCESS SUCCESS', );
-        console.log('TODO TODO TODO TODO');
-        console.log(conversation, dataParticipants);
-
         dispatch({
             type:           CONVERSATIONS_POST_SUCCESS,
             conversation:   conversation, 

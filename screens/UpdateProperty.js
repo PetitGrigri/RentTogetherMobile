@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {  View, Text, ScrollView, Keyboard, StyleSheet, Alert, Image, ImageBackground } from 'react-native';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
+import {  View, Text, ScrollView, Keyboard, StyleSheet, Alert, Image, ImageBackground, Switch } from 'react-native';
 import ButtonSubmit from '../Components/ButtonSubmit';
 import InputTextApplication from '../Components/InputTextApplication';
 import InputTextareaApplication from '../Components/InputTextareaApplication';
@@ -20,8 +19,7 @@ class UpdateProperty extends Component {
         super(props);
 
         let location = this.props.navigation.getParam('location');
-        console.log('UPDATE', location);
-
+        console.log(location);
 
         this.state = {        
             buildingId:         location.buildingId,
@@ -35,7 +33,7 @@ class UpdateProperty extends Component {
             nbMaxRenters:       location.nbMaxRenters.toString()||'',
             area:               location.area.toString()||'',
             price:              location.price.toString()||'',
-            isRent:             location.isRent.toString()||0,
+            isRent:             location.isRent||0,
             city:               location.city||'',
             city2:              location.city2||'',
             postalCode:         location.postalCode||'',
@@ -47,30 +45,32 @@ class UpdateProperty extends Component {
         this.scrollView = React.createRef();
     }
 
-    componentDidUpdate = (prevProps, prevState) => {
-        //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
-        if (prevProps.loadingPostBuilding && !this.props.loadingPostBuilding && (empty(this.props.message_error))) {
-            Alert.alert(
-                'Logement créé',
-                "Votre logement vient d'être créé vous pouvez maintenant, ajouter des photos de ce dernier et le rendre disponible à la location.",
-                [
-                    { text: 'OK', onPress: () => this.props.navigation.navigate('properties') }
-                ],
-                { cancelable: false }
-            )
-        }
-        //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
-        if (prevProps.loadingPostBuilding && !this.props.loadingPostBuilding && (!empty(this.props.message_error)))  {
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        // Si on a une erreur lors de la mise à jour de l'utilisateur
+        if (prevProps.loadingPutBuilding && !this.props.loadingPutBuilding && (!empty(this.props.message_error))) {
             Alert.alert(
                 'Erreur',
                 this.props.message_error,
                 [
-                    { text: 'OK', onPress: () => this.props.handleHideError() },
+                    {text: 'OK', onPress: () => this.props.handleHideError()},
                 ],
-                { cancelable: false }
-            )
+                { cancelable: true }
+            );
         }
-    };
+        // Si l'on n'a pas d'erreur lors de la mise à jour de l'utilisateur
+        if (prevProps.loadingPutBuilding && !this.props.loadingPutBuilding && (empty(this.props.message_error))) {
+            Alert.alert(
+                '',
+                "Votre location a été mise à jour",
+                [
+                    {text: 'OK', onPress: () => this.props.navigation.goBack()},
+                ],
+                { cancelable: true }
+            );
+
+        }
+    }
+
     
     componentDidMount = () => {
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow',  this.keyboardDidShow);
@@ -118,6 +118,12 @@ class UpdateProperty extends Component {
         });
     }
 
+    updateIsRent(value) {
+        this.setState({
+            isRent:     value ? 1 : 0
+        })
+    }
+
     sumbit = () => {
         // Initialisation de l'appartement
         let building = {
@@ -150,8 +156,6 @@ class UpdateProperty extends Component {
         let images =  buildingPictureInformationApiDtos? buildingPictureInformationApiDtos.map( picture => {
             return <LocationImage pictureId={ picture.buildingPictureId } /> 
         }) : [];
-
-        console.log(images);
 
         return (
             <View style={ styles.container} >
@@ -287,15 +291,28 @@ class UpdateProperty extends Component {
                             placeholder='Ville'
                         />
 
+                        <View style={styles.containerSwitch} > 
+                            <Text style={styles.textSwitch}>Logement disponible</Text>
+                            <Switch
+                                onValueChange = { value => this.updateIsRent(value) }
+                                value = { this.state.isRent ? true : false } 
+                                tintColor='#ccc'
+                                thumbTintColor={ this.state.isRent ? '#ff8f00' : '#eee'}
+                                onTintColor='#ffc985'
+                                
+                                />
+                        </View>
+
                         <ButtonSubmit 
                             text="Modifier cet appartement"
                             style={{marginTop:40, marginBottom: 40}}
                             loading={ this.props.loadingPutBuilding }
                             onPress={ this.sumbit }
                         />
-                    </View>
-                    <View  style={{ height: this.state.footerHeight}} />
 
+                        <View  style={{ height: this.state.footerHeight}} />
+
+                    </View>
                 </ScrollView>
             </View>
         );
@@ -368,4 +385,16 @@ const styles = StyleSheet.create({
         alignItems:         'flex-start',
         flexDirection:      'row',
     }, 
+    containerSwitch: {
+        flex:               1,
+        flexDirection:      'row',
+        justifyContent:     'space-between',
+        alignItems:         'center',
+        padding:            8
+    },
+    textSwitch: {
+        fontFamily:     'open-sans-light',
+        fontSize:       16,     
+        color:          '#000',
+    }
 })

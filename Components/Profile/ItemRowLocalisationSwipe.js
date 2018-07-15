@@ -34,7 +34,6 @@ export default class ItemRowLocalisationSwipe extends Component {
 
             },
             onPanResponderMove: (evt, gestureState) => { 
-                //console.log(gestureState);
                 if ((gestureState.dx < 0) && (!this.props.deleteInProgress)) {
                     this.state.translation.setValue(gestureState.dx);
                 }

@@ -11,7 +11,6 @@ export default class RoomerProfile extends Component {
     };
 
     render() {
-        console.log('test',this.props.navigation.getParam('match'));
         return (
             <RoomerCard {...this.props.navigation.getParam('match')}/>
         )

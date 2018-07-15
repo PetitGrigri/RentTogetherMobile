@@ -31,7 +31,7 @@ class LocationImage extends Component {
 
         // Si le store redux vient de récupérer l'URI de l'utilisateur qui nous interesse, alors on récupère le contenu de l'URI
         if (prevProps.imagesLogements[this.props.pictureId] != this.props.imagesLogements[this.props.pictureId]) {
-            console.log('LOCATION IMAGE componentDidUpdate', prevProps.imagesLogements[this.props.pictureId], this.props.imagesLogements[this.props.pictureId])
+
             getCachedMedia(this.props.imagesLogements[this.props.pictureId], (imageContent) => { 
                 this.setState({ 
                     locationImageContent: imageContent

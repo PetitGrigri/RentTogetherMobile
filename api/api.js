@@ -114,8 +114,6 @@ export const getUtilisateurs = function(token, filter, callBackOk, callBackError
         cache: 'default'
     };
 
-    console.log(urlWithParams(url+ "/Users", filter));
-
     fetch(urlWithParams(url+ "/Users", filter), options)
         .then(response => {
             if (response.ok === true) {
@@ -235,8 +233,6 @@ export const putUser = function(user, token, callBackOk, callBackError) {
 
     // Conversion de notre FormData en objet 
     var jsonUserString = JSON.stringify(user);
-    
-    console.log(jsonUserString);
 
     //les paramêtres de la requête
     var options = {
@@ -283,8 +279,6 @@ export const putUser = function(user, token, callBackOk, callBackError) {
  */
 export const patchUser = function(token, user, callBackOk, callBackError) {
 
-    console.log(token, user, callBackOk, callBackError);
-
     // Le header contiendra le token d'authentification plus tard
    var myHeaders = new Headers({
        'Content-Type':'application/json',
@@ -293,8 +287,6 @@ export const patchUser = function(token, user, callBackOk, callBackError) {
 
    // Conversion de notre FormData en objet 
    var jsonUserString = JSON.stringify(user);
-   
-   console.log(jsonUserString);
 
    //les paramêtres de la requête
    var options = {
@@ -357,7 +349,6 @@ export const getUserMedia = function(token, userId, callBackOk, callBackError) {
             //reader.readAsText(blob);
         })
         .catch(error => {
-            console.log("Image inexistante");
             callBackError(userId, error.message);
         });
 }
@@ -389,9 +380,6 @@ export const getConversations = function(token, userId, filter, callBackOk, call
     };
 
     let gestConversationsURL = urlWithParams(`${url}/Conversations/${userId}`,filter);
-
-    console.log(gestConversationsURL);
-    console.log(options);
 
     fetch(gestConversationsURL, options)
         .then(response => {
@@ -437,9 +425,6 @@ export const getMessages = function(token, conversationId, filter, callBackOk, c
     };
 
     let getMessagesURL = urlWithParams(`${url}/Conversations/${conversationId}/Messages`,filter);
-
-    console.log(getMessagesURL);
-    console.log(options);
 
     fetch(getMessagesURL, options)
         .then(response => {
@@ -544,7 +529,6 @@ export const postUploadUserImage = function(token, userId, imageURI, callBackOk,
 
     fetch(url+ "/media", options)
         .then(response => {
-            console.log('API 1', response);
             if (response.ok === true) {
                 return response.blob();
             } else {
@@ -552,7 +536,6 @@ export const postUploadUserImage = function(token, userId, imageURI, callBackOk,
             }
         })
         .then(blob => {
-            console.log('API 2');
             var reader = new FileReader();
 
             reader.addEventListener("load", function () {
@@ -676,9 +659,6 @@ export const getPersonnalityUser = function(token, userId, callBackOk, callBackE
  * @param {function} callBackError Le callback à utiliser lorsque la personalité de l'utilisateur n'a pas pu être mis à jour
  */
 export const patchPersonalityUser = function(token, personality, userId, callBackOk, callBackError) {
-
-    console.log(token, personality, callBackOk, callBackError);
-
     // Le header contiendra le token d'authentification plus tard
    var myHeaders = new Headers({
        'Content-Type':'application/json',
@@ -687,8 +667,6 @@ export const patchPersonalityUser = function(token, personality, userId, callBac
 
    // Conversion de notre FormData en objet 
    var jsonPersonalityString = JSON.stringify(personality);
-   
-   console.log(jsonPersonalityString);
 
    //les paramêtres de la requête
    var options = {
@@ -726,7 +704,7 @@ export const patchPersonalityUser = function(token, personality, userId, callBac
  * @param {function} callBackError 
  */
 export const postPersonalityUser= function(token, personality, userId,  callBackOk, callBackError) {
-    console.log(1, token, personality, userId,  callBackOk, callBackError);
+
     // Le header contiendra le token d'authentification plus tard
     var myHeaders = new Headers({
         'Content-Type':'application/json',
@@ -791,8 +769,6 @@ export const getLocatairesPotentiels = function(token, userId, filter, callBackO
     };
 
     let urlLocatairesPotentiels = urlWithParams(`${url}/Matches/${userId}`, filter)
-
-    console.log(urlLocatairesPotentiels);
 
     fetch(urlLocatairesPotentiels, options)
         .then(response => {
@@ -1000,8 +976,6 @@ export const postMatchValidation= function(token, userId, targetUserId, matchId,
 
     let urlMatchValidation = `${url}/Matches`;
 
-    console.log(urlMatchValidation, jsonMatchValidationString);
-
     fetch(urlMatchValidation, options)
         .then(response => {
             if (response.ok === true) {
@@ -1053,7 +1027,6 @@ export const getLocatairesValides = function(token, userId, filter, callBackOk, 
 
     let urlLocatairesValides = urlWithParams(`${url}/Matches/${userId}/GetValidateMatches`, filter)
 
-    console.log(urlLocatairesValides);
 
     fetch(urlLocatairesValides, options)
         .then(response => {
@@ -1172,7 +1145,6 @@ export const addConnectedUserTargetLocation = function(token, userId, localisati
     fetch(urlAdd, options)
         .then(response => {
             if (response.ok === true) {
-                console.log(response);
                 return response.json().catch(error => {
                     throw Error("Erreur de l'API.");
                 });
@@ -1202,8 +1174,6 @@ export const addConnectedUserTargetLocation = function(token, userId, localisati
  * @param {function} callBackError Le callback à utiliser lorsque la suppression a rencontré une erreur
  */
 export const deleteConnectedUserTargetLocation = function(token, targetLocation, callBackOk, callBackError) {
-
-    console.log (token, targetLocation, callBackOk, callBackError);
 
     // Le header contiendra le token d'authentification plus tard
    var myHeaders = new Headers({
@@ -1260,8 +1230,6 @@ export const handleGetAppartementsPotentiels = function(token, userId, callBackO
     };
 
     let urlAppartementsPotentiels = `${url}/Building/${userId}`;
-
-    console.log(urlAppartementsPotentiels);
 
     fetch(urlAppartementsPotentiels, options)
         .then(response => {
@@ -1672,8 +1640,6 @@ export const putBuilding = function(token, building,  callBackOk, callBackError)
         'Content-Type':     'application/json',
         'Authorization':    'Bearer '+token
     });
-
-    console.log('putBuilding', building);
 
     // Conversion de notre FormData en objet 
     var jsonBuildingString = JSON.stringify(building);

@@ -85,7 +85,6 @@ class ModalLocalisation extends Component {
     }
 
     getData =() => {
-        //console.log(this.props.searchLocalisations);
         return this.state.recherche ? this.props.searchLocalisations : [];
     }
 

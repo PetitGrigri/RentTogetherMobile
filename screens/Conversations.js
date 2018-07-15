@@ -55,7 +55,6 @@ class Conversations extends Component {
                     renderItem={(conversation) =>  this.getConversationItem(conversation)}
                     refreshing={ this.props.loadingConversations }
                     onRefresh={() => this.handleRefresh() }
-                    onEndReached={() => console.log('loadNext') }
                 />
             </TabContent>
         );

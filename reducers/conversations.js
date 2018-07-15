@@ -91,8 +91,7 @@ const conversations = (state = initialConversationsState, action) => {
 
             createdConversation.participants = action.participants;
 
-            console.log('CONVERSATIONS_POST_SUCCESS REDUCER', createdConversation)
-            
+
             return Object.assign({}, state, {
                 loadingPostConversations :  false,
                 createdConversation:        createdConversation

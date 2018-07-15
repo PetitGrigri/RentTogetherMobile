@@ -67,8 +67,7 @@ class UpdateParam extends Component {
         
         return (
             <View>
-                <ScrollView                 scrollEnabled={false}
-                keyboardShouldPersistTaps="handled">
+                <ScrollView scrollEnabled={false} keyboardShouldPersistTaps="handled">
                     <KeyboardAvoidingView behavior="position">
                         <UserImageBackground
                             userId= { this.props.user.userId }
