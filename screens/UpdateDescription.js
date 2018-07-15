@@ -8,6 +8,7 @@ import { UserImage, UserImageBackground } from '../containers';
 import { handlePatchConnectedUser } from '../actions/connection';
 import { empty } from '../utils/check';
 import {handleHideError } from '../actions/connection';
+import Entypo from '../node_modules/@expo/vector-icons/Entypo';
 
 class UpdateDescription extends Component {
 
@@ -62,9 +63,8 @@ class UpdateDescription extends Component {
     render() {
         
         return (
-            <View>
-                <ScrollView                 scrollEnabled={false}
-                keyboardShouldPersistTaps="handled">
+            <View style={ styles.container}>
+                <ScrollView scrollEnabled={false} keyboardShouldPersistTaps="handled">
                     <KeyboardAvoidingView behavior="position">
                         <UserImageBackground
                             userId= { this.props.user.userId }
@@ -86,6 +86,7 @@ class UpdateDescription extends Component {
                             <View style={ styles.inputWrapper}>
 
                                 <InputTextareaApplication 
+                                    iconLeft= { <Entypo name='text' size={ 18 } style={styles.iconLeft}/> }
                                     onChangeText={(text) => this.setState({ description:text }) } 
                                     value={ this.state.description }
                                     multiline={true}
@@ -219,5 +220,10 @@ const styles = StyleSheet.create({
         width:          30,
         textAlign:      'right',
 
-    }
+    },
+    iconLeft: {
+        paddingRight:       8,
+        paddingLeft:        16,
+        color:              '#000',
+    },
 });

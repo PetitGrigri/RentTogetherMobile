@@ -8,7 +8,7 @@ import { UserImage, UserImageBackground } from '../containers';
 import { handlePatchConnectedUser } from '../actions/connection';
 import { empty } from '../utils/check';
 import {handleHideError } from '../actions/connection';
-import InputTextareaApplication from '../Components/InputTextareaApplication';
+import { MaterialIcons, Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
 
 class UpdateParam extends Component {
 
@@ -90,21 +90,25 @@ class UpdateParam extends Component {
                             <View style={ styles.inputWrapper}>
 
                                 <InputTextApplication 
+                                    iconLeft= { <FontAwesome name='user' size={ 18 } style={styles.iconLeft}/> }
                                     onChangeText={(text) => this.setState({ firstName:text }) } 
                                     value={ this.state.firstName }
                                     placeholder='Prénom'/>
 
                                 <InputTextApplication 
+                                    iconLeft= { <FontAwesome name='user' size={ 18 } style={styles.iconLeft}/> }
                                     onChangeText={(text) => this.setState({ lastName:text }) } 
                                     value={ this.state.lastName }
                                     placeholder='Nom'/>
                                     
                                 <InputTextApplication 
+                                    iconLeft= { <FontAwesome style={ styles.iconLeft } size={18} name='phone' />  }
                                     onChangeText={(text) => this.setState({ phoneNumber:text }) }
                                     value={ this.state.phoneNumber }
                                     placeholder='Téléphone'/>
 
                                 <InputTextApplication 
+                                    iconLeft= { <Ionicons style={ styles.iconLeft } size={18} name='ios-mail-outline' />  }
                                     onChangeText={(text) => this.setState({ email:text }) }
                                     value={ this.state.email }
                                     placeholder='Email'/>
@@ -139,15 +143,6 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(UpdateParam);
-
-
-
-
-
-
-
-
-
 
 
 
@@ -235,5 +230,10 @@ const styles = StyleSheet.create({
         width:          30,
         textAlign:      'right',
 
-    }
+    },
+    iconLeft: {
+        paddingRight:       8,
+        paddingLeft:        16,
+        color:              '#000',
+    },
 });

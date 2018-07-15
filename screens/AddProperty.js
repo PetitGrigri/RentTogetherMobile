@@ -144,7 +144,7 @@ class AddProperty extends Component {
 
                     <InputTextApplication 
                         onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
-                        iconLeft= { <MaterialIcons name='title' size={ 18 } color='#ff8f00' style={styles.searchIcon} /> }
+                        iconLeft= { <MaterialIcons name='title' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
                         onChangeText={(text) => this.setState({ title: text }) } 
                         value={ this.state.title }
                         keyboardType='default'
@@ -152,7 +152,7 @@ class AddProperty extends Component {
 
                     <InputTextareaApplication 
                         onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
-                        iconLeft= { <Entypo name='text' size={ 18 } color='#ff8f00' style={styles.searchIcon}/> }
+                        iconLeft= { <Entypo name='text' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
                         onChangeText={(text) => this.setState({ description: text }) } 
                         value={ this.state.description }
                         multiline={true}
@@ -165,7 +165,7 @@ class AddProperty extends Component {
 
                     <InputTextApplication 
                         onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
-                        iconLeft= { <FontAwesome name='bed' size={ 18 } color='#ff8f00' style={styles.searchIcon}/> }
+                        iconLeft= { <FontAwesome name='bed' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
                         onChangeText={(text) => this.setState({ nbRoom: text }) } 
                         value={ this.state.nbRoom }
                         keyboardType='numeric'
@@ -174,7 +174,7 @@ class AddProperty extends Component {
 
                     <InputTextApplication 
                         onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
-                        iconLeft= { <FontAwesome name='cube' size={ 18 } color='#ff8f00' style={styles.searchIcon}/> }
+                        iconLeft= { <FontAwesome name='cube' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
                         onChangeText={(text) => this.setState({ nbPiece: text }) } 
                         value={ this.state.nbPiece }
                         keyboardType='numeric'
@@ -184,7 +184,7 @@ class AddProperty extends Component {
 
                     <InputTextApplication 
                         onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
-                        iconLeft= { <FontAwesome name='user' size={ 18 } color='#ff8f00' style={styles.searchIcon}/> }
+                        iconLeft= { <FontAwesome name='user' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
                         onChangeText={(text) => this.setState({ nbRenters: text }) } 
                         value={ this.state.nbRenters }
                         keyboardType='numeric'
@@ -193,7 +193,7 @@ class AddProperty extends Component {
 
                     <InputTextApplication 
                         onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
-                        iconLeft= { <FontAwesome name='users' size={ 18 } color='#ff8f00' style={styles.searchIcon}/> }
+                        iconLeft= { <FontAwesome name='users' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
                         onChangeText={(text) => this.setState({ nbMaxRenters: text }) } 
                         value={ this.state.nbMaxRenters }
                         keyboardType='numeric'
@@ -202,7 +202,7 @@ class AddProperty extends Component {
 
                     <InputTextApplication 
                         onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
-                        iconLeft= { <Entypo name='resize-full-screen' size={ 18 } color='#ff8f00' style={styles.searchIcon} /> }
+                        iconLeft= { <Entypo name='resize-full-screen' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
                         onChangeText={(text) => this.setState({ area: text }) } 
                         value={ this.state.area }
                         keyboardType='numeric'
@@ -211,7 +211,7 @@ class AddProperty extends Component {
 
                     <InputTextApplication 
                         onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
-                        iconLeft= { <FontAwesome name='euro' size={ 18 } color='#ff8f00' style={styles.searchIcon} /> }
+                        iconLeft= { <FontAwesome name='euro' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
                         onChangeText={(text) => this.setState({ price: text }) } 
                         value={ this.state.price }
                         keyboardType='numeric'
@@ -222,7 +222,7 @@ class AddProperty extends Component {
 
                     <InputTextApplication 
                         onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
-                        iconLeft= { <MaterialIcons name='place' size={ 18 } color='#ff8f00' style={styles.searchIcon} /> }
+                        iconLeft= { <MaterialIcons name='place' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
                         onChangeText={(text) => this.setState({ address: text }) } 
                         value={ this.state.address }
                         placeholder='Adresse'
@@ -238,7 +238,7 @@ class AddProperty extends Component {
                     />
 
                     <InputTextApplication 
-                        iconLeft= { <Ionicons style={ styles.searchIcon } size={18} name='ios-search' />  }
+                        iconLeft= { <Ionicons style={ styles.iconLeft } size={18} name='ios-search' />  }
                         onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                         onFocus={ () => this.setState({modalVisible:true}) }
                         value={ this.state.localisationResume }
@@ -297,7 +297,7 @@ styles = StyleSheet.create({
         flex: 1,
         paddingRight:8,
     },
-    searchIcon: {
+    iconLeft: {
         paddingRight:       8,
         paddingLeft:        16,
         color:              '#000',

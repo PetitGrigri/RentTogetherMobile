@@ -75,7 +75,6 @@ export default InputTextApplication;
 const inputTextStyle = StyleSheet.create({
     formInputContainer: {
         height:             40, 
-
         backgroundColor:    '#fff',
         borderRadius:       4,
         marginBottom:       5,

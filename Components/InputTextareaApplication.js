@@ -40,8 +40,8 @@ export default InputTextareaApplication;
 const inputTextStyle = StyleSheet.create({
     formInputContainer: {
         flex:               1,
-        height:             160,
         backgroundColor:    '#fff',
+        borderRadius:       4,
         marginBottom:       5,
         marginTop:          5,
         flexDirection:      'row',
@@ -49,8 +49,7 @@ const inputTextStyle = StyleSheet.create({
     }, 
     formInput:{
         flex:           1,
-        marginLeft:     8,
-        marginRight:    8,
+        padding:        8,
         fontFamily:     'open-sans-light',
         fontSize:       16,     
         color:          '#000',
