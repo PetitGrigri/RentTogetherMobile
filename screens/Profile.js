@@ -15,6 +15,7 @@ import {handleHideError, handlePatchConnectedUser } from '../actions/connection'
 import { ItemRow, ItemRowLocalisation, ItemRowPersonality, TitleHeader, ItemRowDescription } from '../Components/Profile';
 import { handleGetConnectedUserLocalisations } from '../actions/localisations';
 import TouchableIcon from '../Components/TouchableIcon';
+import { takeAPhoto}  from '../utils/photo';
 
 class Profile extends Component {
 
@@ -268,53 +269,16 @@ class Profile extends Component {
     }
 
     /**
-     * Fonction permettant à l'utilisateur de sélectionner une photo
+     * Fonction permettant à l'utilisateur de prendre une photo et de l'uploader
      */
     pickAPhoto = async () => {
-        // Demande de la permission camera
-        let cameraPermission = await Expo.Permissions.getAsync(Expo.Permissions.CAMERA)
-        if (cameraPermission.status !== 'granted') {
-            await Expo.Permissions.askAsync(Expo.Permissions.CAMERA)
+        // Réalisation et compression d'une photo
+        let uriPhoto = await takeAPhoto();
+
+        if (uriPhoto) {
+            //transmission de la photo 
+            this.props.handleUploadUserMedia(uriPhoto);
         }
-
-        // Demande de la permission camera (semble nécessaire pour iOS)
-        let cameraRollPermission= await Expo.Permissions.getAsync(Expo.Permissions.CAMERA_ROLL)
-        if (cameraRollPermission.status  !== 'granted') {
-            await Expo.Permissions.askAsync(Expo.Permissions.CAMERA_ROLL)
-        }
-        
-        console.log(cameraPermission, cameraRollPermission, (cameraPermission.status  !== "granted") || (cameraRollPermission.status  !== "granted"));
-
-        // Si on n'a pas de permission, on arrête là
-        if ((cameraPermission.status  !== "granted") || (cameraRollPermission.status  !== "granted")) {
-                // Message d'erreur en cas de refus
-                Alert.alert(
-                    'Erreur',
-                    "Autorisation refusée",
-                    [
-                        {text: 'OK'},
-                    ],
-                    { cancelable: true }
-                )
-            return;
-        }
-
-        // Si on a les permissions, on peu continuer à prendre une photo 
-        let result = await Expo.ImagePicker.launchCameraAsync({
-            allowsEditing: true,
-            aspect: [1, 1],
-        });
-
-        // Si l'utilisateur a annulé, on quitte
-        if (result.cancelled === true) {
-            return;
-        }
-
-        // Redimentionnement de la photo (et modificaiton de son type en jpg (plus léger pour le transport)
-        let resultResized = await Expo.ImageManipulator.manipulate( result.uri, [{ resize: { width: 1000 }}], { format: 'jpg', compress: 0.8} );
-
-        //transmission de la photo 
-        this.props.handleUploadUserMedia(resultResized.uri);
     }
 
 
@@ -383,7 +347,7 @@ const mapStateToProps = state => ({
     image:                              state.media.usersMedia[state.connection.user.userId] ? state.media.usersMedia[state.connection.user.userId] : null,
     user:                               state.connection.user,
     personality:                        state.connection.personality,
-    loadingUpload:                      state.media.userMediaUpaloadLoading,
+    loadingUpload:                      state.media.userMediaUploading,
     loadingGetPersonality:              state.connection.loadingGetPersonality,
     loadingPatchPersonality:            state.connection.loadingPatchPersonality,
     loadingPostPersonality:             state.connection.loadingPostPersonality,

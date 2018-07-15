@@ -32,6 +32,12 @@ export const
     BUILDING_PUT_SUCCESS  = 'BUILDING_PUT_SUCCESS', 
     BUILDING_PUT_ERROR    = 'BUILDING_PUT_ERROR',
 
+
+    // Actions destiné à l'upload des images d'un logement, 
+    BUILDING_POST_IMAGE_REQUEST    = 'BUILDING_POST_IMAGE_REQUEST',  
+    BUILDING_POST_IMAGE_SUCCESS    = 'BUILDING_POST_IMAGE_SUCCESS',  
+    BUILDING_POST_IMAGE_ERROR      = 'BUILDING_POST_IMAGE_ERROR'
+
     // Action destinée à cacher le message d'erreur
     BUILDING_HIDE_ERROR = 'BUILDING_HIDE_ERROR'
     ;
@@ -340,4 +346,87 @@ export const handleHideError = () => {
     return {
         type: BUILDING_HIDE_ERROR
     } 
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Méthode destinée à l'envoie d'un message
+ * @param {int} conversationId la coonversation dans laquelle on envoie un message
+ * @param {message} message le message que l'on souhaite envoyer
+ */
+export const handleUploadBuildingMedia = (imageURI, buildingId) => {
+    return function (dispatch, getState) {
+
+        // On dispatch le fait qu'on envoie un message
+        dispatch({
+            type: BUILDING_POST_IMAGE_REQUEST
+        })
+
+        //TODO REPRENDRE ICI INUTILE
+        //récupération del'ancienne uri de l'image 
+        let buildingOldImageURI = getState().media.locationsMedia[buildingId];
+
+        console.log('handleUploadBuildingMedia 1',buildingOldImageURI); 
+
+        // Utilisation de l'api pour envoyer un message
+        api.postBuildingImage(
+            getState().connection.user.token,
+            buildingId,
+            imageURI,
+            async (uploadedImageData) => { 
+                console.log('handleUploadBuildingMedia 2', uploadedImageData); 
+
+                // Sauvegarde du contenu de l'image que l'on vient de récupérer, et récupération de son URI
+
+                //TODO VOIR CE QU'ON FAIT DE CA
+                //let userImageURI =  await saveBuildingUpdatedMedia(buildingId, image)
+
+
+                // Dispatch de l'URI
+                dispatch(handleUploadBuildingMediaSuccess(buildingId, uploadedImageData)) 
+            },
+            (error) => { dispatch(handleUploadBuildingMediaError(error)) }
+        )
+    }
+}
+
+
+/**
+ * Méthode permettant d'informer que l'image a bien été uploadé
+ * @param {object} message 
+ */
+export const handleUploadBuildingMediaSuccess = (buildingId, imageData) => {
+    return async function (dispatch, getState) {
+
+
+        //retour de l'action
+        dispatch({
+            type:       BUILDING_POST_IMAGE_SUCCESS,
+            buildingId: buildingId,
+            imageData:  imageData,
+        });
+    }
+};
+
+/**
+ * Méthode permettant d'indiquer que l'image n'a pas pu être uploadé
+ * @param {string} error le message d'erreur
+ */
+export const handleUploadBuildingMediaError = (error) => {
+    return {
+        type:   BUILDING_POST_IMAGE_ERROR,
+        error:  error
+    }
 };

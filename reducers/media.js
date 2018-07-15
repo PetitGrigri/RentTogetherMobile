@@ -9,7 +9,8 @@ import {
 
     BUILDING_GET_IMAGE_REQUEST,
     BUILDING_GET_IMAGE_SUCCESS, 
-    BUILDING_GET_IMAGE_ERROR
+    BUILDING_GET_IMAGE_ERROR,
+
 } from '../actions/media'
 
 
@@ -23,7 +24,8 @@ const initialMediaState = {
     locationsMediaError:    [],
     locationsMedia:         {},
 
-    userMediaUpaloadLoading: false
+    userMediaUploading:     false,
+    buildingMediaUploading: false
 }
 
 
@@ -54,20 +56,20 @@ const media = (state = initialMediaState, action) => {
 
         case USER_POST_USER_IMAGE_REQUEST : 
             return Object.assign({}, state, {
-                MediaUpaloadLoading:    true,
+                userMediaUploading:    true,
             });
 
         case USER_POST_USER_IMAGE_SUCCESS : 
 
             return Object.assign({}, state, {
-                userMediaUpaloadLoading:    false,
+                userMediaUploading:    false,
                 usersMedia          : Object.assign({}, state.usersMedia, { [action.userId] : action.image })
 
             });
 
         case USER_POST_USER_IMAGE_ERROR : 
             return Object.assign({}, state, {
-                userMediaUpaloadLoading:    false,
+                userMediaUploading:    false,
                 error:                      action.error
                 
             });
@@ -94,6 +96,8 @@ const media = (state = initialMediaState, action) => {
                 locationsMediaLoading: state.locationsMediaLoading.filter(value => (value !== action.pictureId)),
                 locationsMediaError:   state.locationsMediaError.concat(action.pictureId)
             });
+
+
 
 
         //autres 

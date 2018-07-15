@@ -22,12 +22,11 @@ export default class TouchableIcon extends Component {
 
 
   render() {
-    let {loading, loadingSize, loadingColor, action, icon } = this.props;
-    
-    return loading
-        ?   <ActivityIndicator size={ loadingSize } color={ loadingColor }/> 
-        :   <TouchableOpacity onPress={ action }>
-                { icon }
+
+    return this.props.loading
+        ?   <ActivityIndicator size={ this.props.loadingSize } color={ this.props.loadingColor }/> 
+        :   <TouchableOpacity onPress={ this.props.action }>
+                { this.props.icon }
             </TouchableOpacity>
     }
 }

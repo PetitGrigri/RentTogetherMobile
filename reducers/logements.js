@@ -29,10 +29,15 @@ import {
     BUILDING_PUT_SUCCESS,
     BUILDING_PUT_ERROR,
 
+    // Actions destiné à l'upload des images d'un logement, 
+    BUILDING_POST_IMAGE_REQUEST,
+    BUILDING_POST_IMAGE_SUCCESS,
+    BUILDING_POST_IMAGE_ERROR,
 
     BUILDING_HIDE_ERROR
 
  } from '../actions/logements';
+import { empty } from '../utils/check';
 
 //le state initial
 const initialAppartementsState = {
@@ -42,6 +47,7 @@ const initialAppartementsState = {
     loadingPutBuilding:                 false,
     loadingPostPostHistory:             false,
     loadingBuildingFavorite:            false,
+    buildingMediaUploading:             false,
     appartementsPotentiels:             [],
     appartementsFavoris:                [],
     message_error:                      "",
@@ -205,6 +211,53 @@ const logements = (state = initialAppartementsState, action) => {
             return Object.assign({}, state, {
                 loadingPutBuilding :      false,
                 message_error:             action.message||"Erreur lors de la création de votre logement",
+            });
+
+
+
+
+
+
+        case BUILDING_POST_IMAGE_REQUEST : 
+            return Object.assign({}, state, {
+                buildingMediaUploading:    true,
+            });
+
+        case BUILDING_POST_IMAGE_SUCCESS : 
+            //TODO REPRENDRE ICI 
+            //TODO REPRENDRE ICI 
+            //TODO REPRENDRE ICI 
+            //TODO REPRENDRE ICI 
+            //TODO REPRENDRE ICI 
+            console.log('reprendre ICI : logement REDUCER');
+            console.log('reprendre ICI : logement REDUCER');
+            console.log('reprendre ICI : logement REDUCER');
+            console.log('reprendre ICI : logement REDUCER');
+            console.log('reprendre ICI : logement REDUCER');
+
+            return Object.assign({}, state, {
+                buildingMediaUploading:    false,
+
+                /*
+                appartementsPotentiels: state.appartementsPotentiels.map( location => {
+                    if (location.buildingId = action.buildingId) {
+                        return location;
+                    } else {
+                        Object.assign({}, location, {
+                            buildingPictureInformationApiDtos: empty(buildingPictureInformationApiDtos) 
+                                ?  [action.imageData] 
+                                :   buildingPictureInformationApiDtos.concat(action.imageData)
+                        });
+
+                    }
+                })*/
+
+            });
+
+        case BUILDING_POST_IMAGE_ERROR : 
+            return Object.assign({}, state, {
+                buildingMediaUploading:     false,
+                error:                      action.error
             });
 
 

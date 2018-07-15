@@ -1671,3 +1671,63 @@ export const putBuilding = function(token, building,  callBackOk, callBackError)
             callBackError(error.message);
         });
 }
+
+
+
+
+
+
+
+/**
+ * Fonction permettant d'uploader une image de logement
+ * 
+ * @param {string} token 
+ * @param {int} buildingId 
+ * @param {string} imageURI 
+ * @param {function} callBackOk 
+ * @param {function} callBackError 
+ */
+export const postBuildingImage = function(token, buildingId, imageURI, callBackOk, callBackError) {
+
+    console.log('postBuildingImage 1 ', token, buildingId, imageURI);
+    var formData = new FormData();
+    formData.append('buildingId', buildingId);
+    formData.append('file', {uri: imageURI , name: 'building.jpg', type: 'image/jpg'});
+
+    console.log('postBuildingImage 2 ');
+    // Le header contiendra le token d'authentification plus tard
+    var myHeaders = new Headers({
+        'Content-Type':     'multipart/form-data',
+        'Authorization':    'Bearer '+token
+    });
+
+    console.log('postBuildingImage 3');
+    //les paramètres de la requête
+    var options = {
+        method:  'POST',
+        headers: myHeaders,
+        mode:   'cors',
+        body:   formData
+    };
+    console.log('postBuildingImage 4 ', options);
+
+    fetch(url+ "/BuildingPictures", options)
+        .then(response => {
+            console.log('postBuildingImage 5 ', response);
+            if (response.ok === true) {
+                return response.json().catch(error => {
+                    throw Error("Erreur de l'API.");
+                });
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(message => {
+            console.log('postBuildingImage 6 ');
+            callBackOk(message);
+        })
+        .catch(error => {
+            console.log('postBuildingImage 7 ');
+            callBackError(error.message);
+        });
+}

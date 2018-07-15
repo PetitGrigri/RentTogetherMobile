@@ -6,11 +6,12 @@ import InputTextareaApplication from '../Components/InputTextareaApplication';
 import { MaterialIcons, Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { ModalLocalisation, LocationImage } from '../containers';
 import { connect } from 'react-redux';
-import { handleHideError, handlePutAppartement } from '../actions/logements';
+import { handleHideError, handlePutAppartement, handleUploadBuildingMedia } from '../actions/logements';
 import { empty } from '../utils/check';
 import Carousel from '../Components/Carousel';
 import TouchableIcon from '../Components/TouchableIcon';
 import { LinearGradient } from 'expo';
+import { takeAPhoto}  from '../utils/photo';
 
 class UpdateProperty extends Component {
 
@@ -147,6 +148,24 @@ class UpdateProperty extends Component {
         this.props.handlePutAppartement(building);
     }
 
+    /**
+     * Fonction permettant à l'utilisateur de prendre une photo et de l'uploader
+     */
+    pickAPhoto = async () => {
+        console.log('pickAPhoto');
+
+        // Réalisation et compression d'une photo
+        let uriPhoto = await takeAPhoto();
+
+        console.log('pickAPhoto', uriPhoto);
+        console.log(uriPhoto, this.state.buildingId);
+
+        if (uriPhoto) {
+            //transmission de la photo 
+            this.props.handleUploadBuildingMedia(uriPhoto, this.state.buildingId);
+        }
+    }
+
     render() {
 
         let buildingPictureInformationApiDtos = this.props.navigation.getParam('location').buildingPictureInformationApiDtos;
@@ -171,7 +190,7 @@ class UpdateProperty extends Component {
                             action={ this.pickAPhoto } 
                             icon={ <Ionicons color='#fff' name='ios-camera' size={32} /> } 
                             loadingColor='#fff' 
-                            loading={ false } />
+                            loading={ this.props.buildingMediaUploading } />
                     </LinearGradient>
 
                     <View style={ styles.imageHeader }>
@@ -322,12 +341,14 @@ class UpdateProperty extends Component {
 
 const mapToProps = state => ({
     loadingPutBuilding:     state.logements.loadingPutBuilding,
-    message_error:          state.logements.message_error
+    message_error:          state.logements.message_error,
+    buildingMediaUploading: state.logements.buildingMediaUploading,
 });
 
 const mapDispatchToProps = dispatch => ({
-    handlePutAppartement:   (building) => dispatch(handlePutAppartement(building)),
-    handleHideError:        () => dispatch(handleHideError())
+    handlePutAppartement:       (building) => dispatch(handlePutAppartement(building)),
+    handleHideError:            () => dispatch(handleHideError()),
+    handleUploadBuildingMedia:  (uri, buildingId) => dispatch(handleUploadBuildingMedia(uri, buildingId))
 });
   
 export default connect(
