@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import  { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import  { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator, Dimensions } from 'react-native';
 import Avatar from './Avatar';
 import { Ionicons, Entypo } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
@@ -7,6 +7,8 @@ import { UserImage } from '../containers';
 import { LinearGradient } from 'expo';
 import Carousel from '../Components/Carousel';
 import LocationImage from '../containers/LocationImage';
+
+const WINDOW_WIDTH = Dimensions.get('window').width;
 
 class LocationItem extends Component {
     static propTypes = {
@@ -64,9 +66,11 @@ export default LocationItem
 
 const styles= StyleSheet.create({
     propertyContainer: {
-        width:          '100%',
+        width:          WINDOW_WIDTH - 16,
         aspectRatio:     1.6,
-        padding:         8,
+        margin:         8,
+        elevation:      3,
+        backgroundColor:'#fff',
     },
     titlePropertContainer: {
         position:       'absolute',
