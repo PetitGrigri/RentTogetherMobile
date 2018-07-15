@@ -14,6 +14,7 @@ import { isset, empty } from '../utils/check';
 import {handleHideError, handlePatchConnectedUser } from '../actions/connection';
 import { ItemRow, ItemRowLocalisation, ItemRowPersonality, TitleHeader, ItemRowDescription } from '../Components/Profile';
 import { handleGetConnectedUserLocalisations } from '../actions/localisations';
+import TouchableIcon from '../Components/TouchableIcon';
 
 class Profile extends Component {
 
@@ -281,6 +282,7 @@ class Profile extends Component {
         if (cameraRollPermission.status  !== 'granted') {
             await Expo.Permissions.askAsync(Expo.Permissions.CAMERA_ROLL)
         }
+        
         console.log(cameraPermission, cameraRollPermission, (cameraPermission.status  !== "granted") || (cameraRollPermission.status  !== "granted"));
 
         // Si on n'a pas de permission, on arrête là
@@ -344,13 +346,11 @@ class Profile extends Component {
                         <TouchableOpacity onPress={ this.changeRole }>
                             <FontAwesome color='#fff' name='exchange' size={24} />
                         </TouchableOpacity>
-                        }
-                        { !this.props.loadingUpload 
-                            ?   <TouchableOpacity onPress={ this.pickAPhoto }>
-                                    <Ionicons color='#fff' name='ios-camera' size={32} />
-                                </TouchableOpacity>
-                            :   <ActivityIndicator size="small" color='#fff' />
-                        }
+                        <TouchableIcon 
+                            action={this.pickAPhoto } 
+                            loading= { this.props.loadingUpload } 
+                            icon={ <Ionicons color='#fff' name='ios-camera' size={32} /> } 
+                            loadingColor='#fff' />
                     </View>
 
                     <UserImage 

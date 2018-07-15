@@ -1,5 +1,5 @@
 import * as api from '../api/api.js';
-import { saveUserMedia, saveUserUpdatedMedia, deleteUserMediaIfExist, saveLocationMedia } from '../utils/fileSystem';
+import { saveUserMedia, saveUserUpdatedMedia, deleteMediaIfExist, saveLocationMedia } from '../utils/fileSystem';
 import { isset } from '../utils/check';
 
 //Types d'actions destinées à la connexion
@@ -152,18 +152,6 @@ export const handleGetLogementMediaError = (pictureId, error) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * Méthode destinée à l'envoie d'un message
  * @param {int} conversationId la coonversation dans laquelle on envoie un message
@@ -207,12 +195,12 @@ export const handleUploadUserMediaSuccess = (userId, userOldImageURI, userImageU
 
         // Suppression de l'ancienne image (si on en a bien une)
         if (isset(userOldImageURI)) {
-            await deleteUserMediaIfExist(userOldImageURI);
+            await deleteMediaIfExist(userOldImageURI);
         } 
 
         //retour de l'action
         dispatch({
-            type:       BUILDING_GET_BUILDING_IMAGE_SUCCESS,
+            type:       USER_POST_USER_IMAGE_SUCCESS,
             image:      userImageURI,
             userId:     userId,
         });
@@ -225,7 +213,7 @@ export const handleUploadUserMediaSuccess = (userId, userOldImageURI, userImageU
  */
 export const handleUploadUserMediaError = (error) => {
     return {
-        type:   BUILDING_GET_BUILDING_IMAGE_ERROR,
+        type:   USER_POST_USER_IMAGE_ERROR,
         error:  error
     }
 };

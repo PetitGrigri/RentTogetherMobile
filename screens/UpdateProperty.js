@@ -19,7 +19,6 @@ class UpdateProperty extends Component {
         super(props);
 
         let location = this.props.navigation.getParam('location');
-        console.log(location);
 
         this.state = {        
             buildingId:         location.buildingId,

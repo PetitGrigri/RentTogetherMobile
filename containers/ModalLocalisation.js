@@ -107,7 +107,6 @@ class ModalLocalisation extends Component {
                         refreshing={ this.props.loadingConversations }
                         onRefresh={() => this.handleRefresh() }
                         refreshing= { false }
-                        onEndReached={() => console.log('loadNext') }
                         ListHeaderComponent={ this.getSearchBar }
                     />
                 </View>
