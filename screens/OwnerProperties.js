@@ -12,6 +12,8 @@ import { handleGetAppartementsPotentiels } from '../actions/logements';
 import { connect } from 'react-redux';
 import { Ionicons} from '@expo/vector-icons';
 import LocationItem from '../Components/LocationItem';
+import NoMoreFlatList from '../Components/NoMoreFlatList';
+import { empty } from '../utils/check';
 
 class OwnerProperties extends Component {
 
@@ -76,17 +78,31 @@ class OwnerProperties extends Component {
     }
 
     render() {
-        return (
-            <FlatList
-                data={ this.props.properties }
+        let haveContent = !empty(this.props.properties);
 
-                keyExtractor={item => `${item.buildingId}`}
-                renderItem={(property) =>  this.getPropertyItem(property)}
-                refreshing={ this.props.loadingGetAppartementsPotentiels }
-                onRefresh={() => this.handleRefresh() }
-                style={ styles.container }
-            />
-        );
+        if (this.props.loadingGetAppartementsPotentiels || (!haveContent)) {
+            return (
+                <NoMoreFlatList 
+                    loading={ this.props.loadingGetAppartementsPotentiels }
+                    haveContent={haveContent}
+                    loadingText="Chargement de vos logements en cours..."
+                    nothingText="Vous n'avez pas encore ajouté de logements" 
+                />
+            );
+        } else {
+            return (
+                <FlatList
+                    data={ this.props.properties }
+
+                    keyExtractor={item => `${item.buildingId}`}
+                    renderItem={(property) =>  this.getPropertyItem(property)}
+                    refreshing={ this.props.loadingGetAppartementsPotentiels }
+                    onRefresh={() => this.handleRefresh() }
+                    style={ styles.container }
+                />
+            );
+            
+        }
     }
 }
 

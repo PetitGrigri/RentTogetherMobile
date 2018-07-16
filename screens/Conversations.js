@@ -13,6 +13,8 @@ import TabContent from '../Components/TabContent';
 import ConversationItem from '../containers/ConversationItem';
 import { connect } from 'react-redux';
 import { handleGetConversations } from '../actions/conversations';
+import { empty } from '../utils/check';
+import NoMoreFlatList from '../Components/NoMoreFlatList';
 
 
 class Conversations extends Component {
@@ -51,18 +53,34 @@ class Conversations extends Component {
     }
 
     render() {
-        return (
-            <TabContent>
-                <FlatList
-                    data={this.props.conversations}
-                    keyExtractor={item => `${item.conversationId}`}
-                    ItemSeparatorComponent={ () => <View style={ styles.separator } /> }
-                    renderItem={(conversation) =>  this.getConversationItem(conversation)}
-                    refreshing={ this.props.loadingConversations }
-                    onRefresh={() => this.handleRefresh() }
+        let haveContent = !empty(this.props.conversations);
+
+        if (this.props.loadingConversations || (!haveContent)) {
+            return (
+                <NoMoreFlatList 
+                    loading={ this.props.loadingConversations }
+                    haveContent={haveContent}
+                    loadingText="Chargement de vos messages en cours..."
+                    nothingText="Vous n'avez pas encore de messages" 
+                    searchAgainAction={ this.handleRefresh }
                 />
-            </TabContent>
-        );
+            );
+        } else {
+
+            return (
+                
+                <TabContent>
+                    <FlatList
+                        data={this.props.conversations}
+                        keyExtractor={item => `${item.conversationId}`}
+                        ItemSeparatorComponent={ () => <View style={ styles.separator } /> }
+                        renderItem={(conversation) =>  this.getConversationItem(conversation)}
+                        refreshing={ this.props.loadingConversations }
+                        onRefresh={ this.handleRefresh }
+                    />
+                </TabContent>
+            )
+        }
     }
 }
 

@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { empty } from '../utils/check';
 import { handleGetFavoriteLocations } from '../actions/logements';
 import { generateTitleConversation } from '../utils/conversations';
+import NoMoreFlatList from '../Components/NoMoreFlatList';
 
 class MatchLocations extends Component {
 
@@ -85,17 +86,31 @@ class MatchLocations extends Component {
 
 
     render() {
-        return (
-            <FlatList
-                refreshing={ this.props.loadingGetAppartementsFavoris }
-                onRefresh={() => this.handleRefresh() }
-                data={ this.props.appartementsFavoris }
-                keyExtractor={item => `${item.buildingId}`}
-                renderItem={ (matche) => this.getFavoriteLocationItem(matche) } 
-                style={styles.container}
+        let haveContent = !empty(this.props.appartementsFavoris);
 
-            />
-        );
+        if (this.props.loadingGetAppartementsFavoris || (!haveContent)) {
+            return (
+                <NoMoreFlatList 
+                    loading={ this.props.loadingGetAppartementsFavoris }
+                    haveContent={haveContent}
+                    loadingText="Chargement de vos appartements favoris en cours..."
+                    nothingText="Vous n'avez pas encore d'appartements favoris" 
+                    searchAgainAction={ this.handleRefresh }
+                />
+            );
+        } else {
+            return (
+                <FlatList
+                    refreshing={ this.props.loadingGetAppartementsFavoris }
+                    onRefresh={() => this.handleRefresh() }
+                    data={ this.props.appartementsFavoris }
+                    keyExtractor={item => `${item.buildingId}`}
+                    renderItem={ (matche) => this.getFavoriteLocationItem(matche) } 
+                    style={styles.container}
+
+                />
+            );
+        }
     }
 }
 

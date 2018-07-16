@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { empty } from '../utils/check';
 import { generateTitleConversation } from '../utils/conversations';
 import { handleGetLocatairesValides } from '../actions/matches';
+import NoMoreFlatList from '../Components/NoMoreFlatList';
 
 
 class MatchesRoomers extends Component {
@@ -102,18 +103,33 @@ class MatchesRoomers extends Component {
 
 
     render() {
-        return (
-            <FlatList
-                refreshing={ this.props.loadingGetLocatairesValides }
-                onRefresh={() => this.handleRefresh() }
-                data={ this.getData() }
-                keyExtractor={item => `${item.id}`}
-                renderItem={ (matche) => this.getMatcheItem(matche) } 
-                numColumns={ 2 }
-                style={styles.container}
 
-            />
-        );
+        let haveContent = !empty(this.props.locatairesValides);
+
+        if (this.props.loadingGetLocatairesValides || (!haveContent)) {
+            return (
+                <NoMoreFlatList 
+                    loading={ this.props.loadingGetLocatairesValides }
+                    haveContent={haveContent}
+                    loadingText="Chargement de vos matches en cours..."
+                    nothingText="Vous n'avez pas de matches" 
+                    searchAgainAction={ this.handleRefresh }
+                />
+            );
+        } else {
+            return (
+                <FlatList
+                    refreshing={ this.props.loadingGetLocatairesValides }
+                    onRefresh={() => this.handleRefresh() }
+                    data={ this.getData() }
+                    keyExtractor={item => `${item.id}`}
+                    renderItem={ (matche) => this.getMatcheItem(matche) } 
+                    numColumns={ 2 }
+                    style={styles.container}
+
+                />
+            );
+        }
     }
 }
 
