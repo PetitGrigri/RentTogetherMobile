@@ -145,8 +145,6 @@ class AddProperty extends Component {
     }
 
     checkForm = () => {
-       
-
         let checkForm = REQUIRED_VALUES.filter(value => empty(this.state[value]));
 
         //on ajoute les formulaires erronés

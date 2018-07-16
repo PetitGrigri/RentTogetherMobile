@@ -10,6 +10,9 @@ import { empty } from '../utils/check';
 import {handleHideError } from '../actions/connection';
 import { MaterialIcons, Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
 
+const REQUIRED_VALUES=["firstName", "lastName", "phoneNumber", "email"];
+
+
 class UpdateParam extends Component {
 
     constructor(props) {
@@ -20,6 +23,7 @@ class UpdateParam extends Component {
             lastName:   this.props.user.lastName,
             phoneNumber:this.props.user.phoneNumber,
             email:      this.props.user.email,
+            errorInput: [],
         }
     }
 
@@ -55,16 +59,53 @@ class UpdateParam extends Component {
 
     handlePatchUser = ()  => {
 
-        this.props.handlePatchConnectedUser({
-            email:          this.state.email,
-            firstName:      this.state.firstName,
-            lastName:       this.state.lastName,
-            phoneNumber:    this.state.phoneNumber,
-        });
+        if ((this.checkForm()) && (!this.props.loadingPatchUser)) {
+            // Demande de mise à jour de l'utilisateur
+            this.props.handlePatchConnectedUser({
+                email:          this.state.email,
+                firstName:      this.state.firstName,
+                lastName:       this.state.lastName,
+                phoneNumber:    this.state.phoneNumber,
+            });
+        } else {
+            Alert.alert(
+                'Attention',
+                "Vous n'avez pas saisi tout les champs nécessaires.",
+                [
+                    { text: 'OK' }
+                ],
+                { cancelable: false }
+            )
+        }
+    }
+
+    checkForm = () => {
+        let checkForm = REQUIRED_VALUES.filter(value => empty(this.state[value]));
+
+        //on ajoute les formulaires erronés
+        this.setState({errorInput: checkForm});
+
+        return (checkForm.length <= 0)
+    }
+
+    isInputError = (who) => {
+        return (this.state.errorInput.filter(name => name === who).length > 0)
+    }
+
+    updateValue = (who, val) => {
+        if (empty(val)) {
+            this.setState({
+                [who] :     val
+            });
+        } else {
+            this.setState({
+                [who] :     val,
+                errorInput: this.state.errorInput.filter(name => ((name !== who)))
+            })
+        }
     }
 
     render() {
-        
         return (
             <View>
                 <ScrollView scrollEnabled={false} keyboardShouldPersistTaps="handled">
@@ -90,25 +131,29 @@ class UpdateParam extends Component {
 
                                 <InputTextApplication 
                                     iconLeft= { <FontAwesome name='user' size={ 18 } style={styles.iconLeft}/> }
-                                    onChangeText={(text) => this.setState({ firstName:text }) } 
+                                    onChangeText={(text) => this.updateValue("firstName", text) } 
+                                    error={ this.isInputError("firstName") }
                                     value={ this.state.firstName }
                                     placeholder='Prénom'/>
 
                                 <InputTextApplication 
                                     iconLeft= { <FontAwesome name='user' size={ 18 } style={styles.iconLeft}/> }
-                                    onChangeText={(text) => this.setState({ lastName:text }) } 
+                                    onChangeText={(text) => this.updateValue("lastName", text) } 
+                                    error={ this.isInputError("lastName") }
                                     value={ this.state.lastName }
                                     placeholder='Nom'/>
                                     
                                 <InputTextApplication 
                                     iconLeft= { <FontAwesome style={ styles.iconLeft } size={18} name='phone' />  }
-                                    onChangeText={(text) => this.setState({ phoneNumber:text }) }
+                                    onChangeText={(text) => this.updateValue("phoneNumber", text) } 
+                                    error={ this.isInputError("phoneNumber") }
                                     value={ this.state.phoneNumber }
                                     placeholder='Téléphone'/>
 
                                 <InputTextApplication 
                                     iconLeft= { <Ionicons style={ styles.iconLeft } size={18} name='ios-mail-outline' />  }
-                                    onChangeText={(text) => this.setState({ email:text }) }
+                                    onChangeText={(text) => this.updateValue("email", text) } 
+                                    error={ this.isInputError("email") }
                                     value={ this.state.email }
                                     placeholder='Email'/>
 
