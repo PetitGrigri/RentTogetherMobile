@@ -32,7 +32,7 @@ class MessagesLogement extends Component {
     }
 
     handleRefresh = () => {
-        if (this.props.loadingPostMessage)
+        if (this.props.loadingMessages)
             return
 
         this.props.handleGetMessages(this.state.buildingId);
