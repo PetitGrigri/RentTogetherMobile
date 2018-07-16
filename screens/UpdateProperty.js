@@ -19,7 +19,7 @@ class UpdateProperty extends Component {
     constructor(props) {
         super(props);
 
-        let location = this.props.navigation.getParam('location');
+        let location = this.props.location;
 
         this.state = {        
             buildingId:         location.buildingId,
@@ -100,8 +100,6 @@ class UpdateProperty extends Component {
     }
 
     localisationSelected = (item) => {
-        console.log(item);
-
         this.setState({
             city:               item.libelle,
             city2:              item.libelle2,
@@ -152,13 +150,8 @@ class UpdateProperty extends Component {
      * Fonction permettant à l'utilisateur de prendre une photo et de l'uploader
      */
     pickAPhoto = async () => {
-        console.log('pickAPhoto');
-
         // Réalisation et compression d'une photo
         let uriPhoto = await takeAPhoto();
-
-        console.log('pickAPhoto', uriPhoto);
-        console.log(uriPhoto, this.state.buildingId);
 
         if (uriPhoto) {
             //transmission de la photo 
@@ -168,7 +161,7 @@ class UpdateProperty extends Component {
 
     render() {
 
-        let buildingPictureInformationApiDtos = this.props.navigation.getParam('location').buildingPictureInformationApiDtos;
+        let buildingPictureInformationApiDtos = this.props.location.buildingPictureInformationApiDtos;
         
         //les images sont contenus dans buildingPictureInformationApiDtos. Si buildingPictureInformationApiDtos est null (cela est lié à l'ajout d'un appartement dans redux, on retourne un tableau vide)
         let images =  buildingPictureInformationApiDtos? buildingPictureInformationApiDtos.map( picture => {
@@ -339,20 +332,21 @@ class UpdateProperty extends Component {
 
 
 
-const mapToProps = state => ({
+const mapStateToProps = (state, props) => ({
     loadingPutBuilding:     state.logements.loadingPutBuilding,
     message_error:          state.logements.message_error,
     buildingMediaUploading: state.logements.buildingMediaUploading,
+    location:               state.logements.appartementsPotentiels.filter(building => building.buildingId === props.navigation.getParam('buildingId'))[0]
 });
 
 const mapDispatchToProps = dispatch => ({
     handlePutAppartement:       (building) => dispatch(handlePutAppartement(building)),
     handleHideError:            () => dispatch(handleHideError()),
-    handleUploadBuildingMedia:  (uri, buildingId) => dispatch(handleUploadBuildingMedia(uri, buildingId))
+    handleUploadBuildingMedia:  (uri, buildingId) => dispatch(handleUploadBuildingMedia(uri, buildingId)),
 });
   
 export default connect(
-    mapToProps,
+    mapStateToProps,
     mapDispatchToProps
 )(UpdateProperty);
 

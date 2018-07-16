@@ -214,44 +214,26 @@ const logements = (state = initialAppartementsState, action) => {
             });
 
 
-
-
-
-
         case BUILDING_POST_IMAGE_REQUEST : 
             return Object.assign({}, state, {
                 buildingMediaUploading:    true,
             });
 
         case BUILDING_POST_IMAGE_SUCCESS : 
-            //TODO REPRENDRE ICI 
-            //TODO REPRENDRE ICI 
-            //TODO REPRENDRE ICI 
-            //TODO REPRENDRE ICI 
-            //TODO REPRENDRE ICI 
-            console.log('reprendre ICI : logement REDUCER');
-            console.log('reprendre ICI : logement REDUCER');
-            console.log('reprendre ICI : logement REDUCER');
-            console.log('reprendre ICI : logement REDUCER');
-            console.log('reprendre ICI : logement REDUCER');
-
+            // Mise à jour des images disponibles pour un appartement pour un building précis
             return Object.assign({}, state, {
-                buildingMediaUploading:    false,
-
-                /*
-                appartementsPotentiels: state.appartementsPotentiels.map( location => {
-                    if (location.buildingId = action.buildingId) {
-                        return location;
-                    } else {
-                        Object.assign({}, location, {
-                            buildingPictureInformationApiDtos: empty(buildingPictureInformationApiDtos) 
+                buildingMediaUploading:     false,
+                appartementsPotentiels:     state.appartementsPotentiels.map( location => {
+                    if (location.buildingId === action.buildingId) {
+                        return Object.assign({}, location, {
+                            buildingPictureInformationApiDtos: empty(location.buildingPictureInformationApiDtos) 
                                 ?  [action.imageData] 
-                                :   buildingPictureInformationApiDtos.concat(action.imageData)
+                                :   location.buildingPictureInformationApiDtos.concat(action.imageData)
                         });
-
+                    } else {
+                        return location;
                     }
-                })*/
-
+                })
             });
 
         case BUILDING_POST_IMAGE_ERROR : 

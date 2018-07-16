@@ -22,6 +22,16 @@ class Carousel extends Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        let imagesCount = this.props.images.length;
+
+        if (prevState.imagesCount != imagesCount) {
+            this.setState({
+                imagesCount: imagesCount
+            })
+        }
+    }
+    
     getCardWidth = (nativeEvent) => {
         this.setState({
             cardWidth:  nativeEvent.layout.width,
@@ -101,6 +111,7 @@ class Carousel extends Component {
            transform:   [{ translateX: this.state.translation }]
         }
     }
+
 
 
     render() {

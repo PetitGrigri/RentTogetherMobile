@@ -350,17 +350,6 @@ export const handleHideError = () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 /**
  * Méthode destinée à l'envoie d'un message
  * @param {int} conversationId la coonversation dans laquelle on envoie un message
@@ -374,26 +363,12 @@ export const handleUploadBuildingMedia = (imageURI, buildingId) => {
             type: BUILDING_POST_IMAGE_REQUEST
         })
 
-        //TODO REPRENDRE ICI INUTILE
-        //récupération del'ancienne uri de l'image 
-        let buildingOldImageURI = getState().media.locationsMedia[buildingId];
-
-        console.log('handleUploadBuildingMedia 1',buildingOldImageURI); 
-
         // Utilisation de l'api pour envoyer un message
         api.postBuildingImage(
             getState().connection.user.token,
             buildingId,
             imageURI,
             async (uploadedImageData) => { 
-                console.log('handleUploadBuildingMedia 2', uploadedImageData); 
-
-                // Sauvegarde du contenu de l'image que l'on vient de récupérer, et récupération de son URI
-
-                //TODO VOIR CE QU'ON FAIT DE CA
-                //let userImageURI =  await saveBuildingUpdatedMedia(buildingId, image)
-
-
                 // Dispatch de l'URI
                 dispatch(handleUploadBuildingMediaSuccess(buildingId, uploadedImageData)) 
             },

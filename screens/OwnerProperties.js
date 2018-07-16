@@ -64,7 +64,7 @@ class OwnerProperties extends Component {
     editLocation = (item) => {
         console.log(item);
         this.props.navigation.navigate('updateProperty', {
-            location:       item, 
+            buildingId:       item.buildingId, 
         });
     }
 
