@@ -1,7 +1,11 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import  { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import Avatar from './Avatar';
-import { Ionicons, Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import { UserImage } from '../containers';
 

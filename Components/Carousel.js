@@ -1,9 +1,10 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
-import { View, ImageBackground, StyleSheet, Image, PanResponder, Animated } from 'react-native';
-import Text from './Text';
-import PropTypes from 'prop-types';
-import RoomerTabNavigator from '../navigation/RoomerTabNavigator';
-
+import { View, StyleSheet, PanResponder, Animated } from 'react-native';
 
 class Carousel extends Component {
 

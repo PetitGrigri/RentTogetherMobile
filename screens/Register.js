@@ -1,5 +1,10 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
-import { Alert, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Animated, StyleSheet, Text, View, ImageBackground, Image, Dimensions, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { Alert, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Animated, StyleSheet, Text, View, ImageBackground, Dimensions, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { connect } from 'react-redux'
 import { handleCreateUser, handleHideError } from '../actions/utilisateurs'
 import InputText from '../Components/InputText';

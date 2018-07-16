@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, Text, View, ImageBackground, Image, Dimensions, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux'

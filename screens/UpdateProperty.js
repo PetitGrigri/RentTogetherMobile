@@ -1,5 +1,10 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
-import {  View, Text, ScrollView, Keyboard, StyleSheet, Alert, Image, ImageBackground, Switch } from 'react-native';
+import {  View, Text, ScrollView, Keyboard, StyleSheet, Alert, ImageBackground } from 'react-native';
 import ButtonSubmit from '../Components/ButtonSubmit';
 import InputTextApplication from '../Components/InputTextApplication';
 import InputTextareaApplication from '../Components/InputTextareaApplication';

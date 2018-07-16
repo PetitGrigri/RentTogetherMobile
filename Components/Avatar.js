@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import {View, Image, StyleSheet } from 'react-native'
 
@@ -6,7 +11,7 @@ class Avatar extends Component {
     render() {
         return (
             <View>
-                <Image style={ styles.avatar } source={require('../assets/tests/iron_man.jpg')}  />
+                <Image style={ styles.avatar } source={require('../assets/no_user.png')}  />
             </View>
         );
     }

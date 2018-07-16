@@ -1,4 +1,10 @@
-// Les données sensibles d'un utilisateur
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
+
+ // Les données sensibles d'un utilisateur
 const sensibleUserParameter = [
     "password", 
 ];

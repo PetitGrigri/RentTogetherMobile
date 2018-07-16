@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import { View, StyleSheet, PanResponder, Text } from 'react-native'
 import PropTypes from 'prop-types';
@@ -14,7 +19,7 @@ class Rating extends Component {
     }
     // Paramêtres par défaut
     static defaultProps = {
-        onChange:   (value) => console.log('rating change'),
+        onChange:   (value) => console.log('//TODO : configure Rating onchange'),
         reviews:    [],
         readonly:   false
     }

@@ -1,5 +1,10 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, ImageBackground } from 'react-native';
 import Text from '../Components/Text';
 import PropTypes from 'prop-types';
 import RatingCondensed from './RatingCondensed';
@@ -23,9 +28,9 @@ class LocationCard extends Component
 
     render() {
 
-        let images = this.props.buildingPictureInformationApiDtos.map( value => { 
+        let images = this.props.buildingPictureInformationApiDtos ? this.props.buildingPictureInformationApiDtos.map( value => { 
             return <LocationImage pictureId={ value.buildingPictureId } /> 
-        });
+        }) : [];
 
         return (
             <View style={ styles.card }>
@@ -36,8 +41,10 @@ class LocationCard extends Component
                             <Ionicons color='#fff' name='ios-chatbubbles' size={32} />
                         </TouchableOpacity>
                     </View>
-                    <Carousel images={ images }
-                    />
+                    { (images.length > 0)
+                        ? <Carousel images={ images }/>
+                        : <ImageBackground source={ require('../assets/no_building.png') } style={{ width: '100%', height: '100%'}}/>
+                    }
                     <View style={styles.cardBottomAfter}><View style={styles.cardBottomTop} /></View>
                 </View>
                 <View style={ styles.cardBottom }>

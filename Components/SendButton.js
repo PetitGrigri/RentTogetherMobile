@@ -1,5 +1,10 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
-import {  View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {  StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default class componentName extends Component {

@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import { 
     FlatList,
@@ -7,7 +12,6 @@ import {
     TouchableOpacity,
     ActivityIndicator
 } from 'react-native';
-import TabContent from '../Components/TabContent';
 import { connect } from 'react-redux';
 import ItemRowLocalisationSwipe from '../Components/Profile/ItemRowLocalisationSwipe';
 import ItemRowLocalisationAdd from '../Components/Profile/ItemRowLocalisationAdd';

@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React from 'react';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';

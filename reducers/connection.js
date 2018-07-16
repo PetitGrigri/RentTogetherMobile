@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import { 
     // Gestion de la connexion
     SIGN_IN_REQUEST, 

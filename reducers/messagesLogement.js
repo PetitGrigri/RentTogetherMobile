@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import { 
     MESSAGES_BUILDING_GET_REQUEST, 
     MESSAGES_BUILDING_GET_SUCCESS, 
@@ -10,8 +15,6 @@ import {
     MESSAGES_BUILDING_CLEAN_REQUEST
 
  } from '../actions/messagesLogement';
-
-import { isset } from '../utils/check';
 
 //le state initial
 const initialMessagesState = {

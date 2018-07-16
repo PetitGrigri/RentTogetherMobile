@@ -1,5 +1,10 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import Text from '../Components/Text';
 import TabContent from '../Components/TabContent';
 import LocationCard from '../Components/LocationCard';
@@ -22,7 +27,6 @@ class Locations extends Component {
     }
 
     handleNope = (card) => {
-        console.log(card);
         this.props.handleBuildingSeen(card.buildingId);
     }
 
@@ -54,7 +58,7 @@ class Locations extends Component {
 
     showMessages = (buildingId) => {
         let location = this.props.appartementsPotentiels.filter(location => location.buildingId == buildingId)[0];
-        console.log('todo', buildingId, location);
+
 
         this.props.navigation.navigate('messagesLogements', {
             title:      location.title, 
@@ -66,30 +70,32 @@ class Locations extends Component {
     render() {
         return (
             <TabContent>
-                <SwipeCards
-                    renderNoMoreCards={() => this.noMoreCard() }
-                    cards={ this.props.appartementsPotentiels }
-                    stack={false}
-                    renderCard={(appartement) => <LocationCard {...appartement} handleShowMessages={ (buildingId) => this.showMessages(buildingId) }/>}
-                    showYup={true}
-                    showNope={true}
-                    showMaybe={false}
-                    yupView={   <LinearGradient colors={['rgba(255,200,0,1)', 'rgba(255,200,0,0)']} style={ styles.yupNopeView} start={[1, 0]} end={[0, 0]}>
-                                    <MaterialIcons name='favorite-border' color='#fff'  size={40}/> 
-                                    <Text style={styles.whiteText} >Ca me plait !</Text>
-                                </LinearGradient> }
-                    noView={   <LinearGradient colors={['rgba(198,40,40,1)', 'rgba(198,40,40, 0)']} style={ styles.yupNopeView } start={[0, 0]} end={[1, 0]}>
-                                    <Entypo name='emoji-neutral' color='#fff'  size={40}/> 
-                                    <Text style={styles.whiteText} >Plus tard peut être</Text>
-                                </LinearGradient> }
-                    yupStyle={styles.yupContainer}
-                    nopeStyle={styles.nopeContainer}
-                    handleYup={this.handleYup}
-                    handleNope={this.handleNope}
-                    dragY={false}
-                    cardRemoved={ this.cardRemoved }
-                    onClickHandler={()=>{}}
-                /> 
+                <View style={ styles.container }>
+                    <SwipeCards
+                        renderNoMoreCards={() => this.noMoreCard() }
+                        cards={ this.props.appartementsPotentiels }
+                        stack={false}
+                        renderCard={(appartement) => <LocationCard {...appartement} handleShowMessages={ (buildingId) => this.showMessages(buildingId) }/>}
+                        showYup={true}
+                        showNope={true}
+                        showMaybe={false}
+                        yupView={   <LinearGradient colors={['rgba(255,200,0,1)', 'rgba(255,200,0,0)']} style={ styles.yupNopeView} start={[1, 0]} end={[0, 0]}>
+                                        <MaterialIcons name='favorite-border' color='#fff'  size={40}/> 
+                                        <Text style={styles.whiteText} >Ca me plait !</Text>
+                                    </LinearGradient> }
+                        noView={   <LinearGradient colors={['rgba(198,40,40,1)', 'rgba(198,40,40, 0)']} style={ styles.yupNopeView } start={[0, 0]} end={[1, 0]}>
+                                        <Entypo name='emoji-neutral' color='#fff'  size={40}/> 
+                                        <Text style={styles.whiteText} >Plus tard peut être</Text>
+                                    </LinearGradient> }
+                        yupStyle={styles.yupContainer}
+                        nopeStyle={styles.nopeContainer}
+                        handleYup={this.handleYup}
+                        handleNope={this.handleNope}
+                        dragY={false}
+                        cardRemoved={ this.cardRemoved }
+                        onClickHandler={()=>{}}
+                    />
+                </View>
             </TabContent>
         )
     }
@@ -114,6 +120,9 @@ export default connect(
 
 
 const styles = StyleSheet.create({
+    container: {
+        flex:       1
+    },
     yupContainer: {
         borderWidth:    0,
         height:         height*2,

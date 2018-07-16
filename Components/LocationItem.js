@@ -1,9 +1,12 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import  { View, StyleSheet, Text, TouchableOpacity, Image, Dimensions, ImageBackground } from 'react-native';
-import Avatar from './Avatar';
 import { Ionicons, Entypo } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
-import { UserImage } from '../containers';
 import { LinearGradient } from 'expo';
 import Carousel from '../Components/Carousel';
 import LocationImage from '../containers/LocationImage';

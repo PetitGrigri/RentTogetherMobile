@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import { combineReducers } from "redux";
 import connection from "./connection";
 import utilisateurs from "./utilisateurs";

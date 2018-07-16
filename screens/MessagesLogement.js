@@ -1,12 +1,14 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
-import { StatusBar, ScrollView, Platform, StyleSheet, FlatList, View, KeyboardAvoidingView, Keyboard, Dimensions } from 'react-native';
-import TabContent from '../Components/TabContent';
+import { StyleSheet, FlatList, View, Keyboard, Dimensions } from 'react-native';
 import Bubble from '../Components/Bubble';
 import { connect } from 'react-redux';
 import { handleGetMessages, handlePostMessage, handleCleanMessage } from '../actions/messagesLogement';
-import { PropTypes } from 'prop-types';
 import InputTextMessage from '../Components/InputTextMessage';
-import {empty, isset } from '../utils/check';
 
 class MessagesLogement extends Component {
 
@@ -29,9 +31,18 @@ class MessagesLogement extends Component {
         }
     }
 
-    componentDidMount = () => {
-        this.props.handleGetMessages(this.state.buildingId);
+    handleRefresh = () => {
+        if (this.props.loadingPostMessage)
+            return
 
+        this.props.handleGetMessages(this.state.buildingId);
+    }
+
+    componentWillMount = () => {
+        this.props.handleGetMessages(this.state.buildingId);
+    };
+    
+    componentDidMount = () => {
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow',  this.keyboardDidShow);
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide',  this.keyboardDidHide);
         this.keyboardWillShowListener  = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
@@ -101,8 +112,7 @@ class MessagesLogement extends Component {
                         data={this.props.messages}
                         keyExtractor={item => `${item.buildingMessageId}`}
                         renderItem={(message) =>  this.getMessageItem(message)}
-                        refreshing={false}
-                        onRefresh={() => console.log('refresh')}
+                        onRefresh={ this.handleRefresh }
                         refreshing={this.props.loadingMessages}
                         inverted
                     />

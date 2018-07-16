@@ -1,6 +1,11 @@
-import React, { Component } from 'react';
-import {  View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import {MaterialIcons } from '@expo/vector-icons';
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
+
+ import React, { Component } from 'react';
+import {  View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 export default class ItemRowLocalisation extends Component {

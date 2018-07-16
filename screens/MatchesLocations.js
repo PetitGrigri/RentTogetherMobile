@@ -1,5 +1,10 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
-import { View, StyleSheet,FlatList, Alert } from 'react-native';
+import { StyleSheet,FlatList, Alert } from 'react-native';
 import LocationItem from '../Components/LocationItem';
 import { handlePostConversation } from '../actions/conversations';
 import { connect } from 'react-redux';
@@ -62,15 +67,10 @@ class MatchLocations extends Component {
     }
 
     handleCreateConversation = (userId) => {
-
-        console.log('handleCreateConversation', [this.props.currentUser.userId, userId]);
-
         this.props.handlePostConversation([this.props.currentUser.userId, userId])
     }
 
     getFavoriteLocationItem = (favoriteLocation) => {
-        console.log('ITEM', favoriteLocation.item, favoriteLocation.item.ownerApiDto.userId);
-
         return <LocationItem 
             {...favoriteLocation.item} 
             showMessages = { () => this.showMessages(favoriteLocation.item) }

@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import { 
     REFERENTIAL_GET_CHARACTERISTICS_REQUEST, 
     REFERENTIAL_GET_CHARACTERISTICS_SUCCESS, 
@@ -5,8 +10,6 @@ import {
 
 
  } from '../actions/referentielCaracteristiques';
-
-import { isset } from '../utils/check';
 
 //le state initial
 const initialMessagesState = {

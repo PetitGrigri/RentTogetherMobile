@@ -1,12 +1,15 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
-import { StatusBar, ScrollView, Platform, StyleSheet, FlatList, View, KeyboardAvoidingView, Keyboard, Dimensions } from 'react-native';
-import TabContent from '../Components/TabContent';
+import { StyleSheet, FlatList, View, KeyboardAvoidingView, Keyboard, Dimensions } from 'react-native';
 import Bubble from '../Components/Bubble';
 import { connect } from 'react-redux';
 import { handleGetMessages, handlePostMessage, handleCleanMessage } from '../actions/messages';
 import { PropTypes } from 'prop-types';
 import InputTextMessage from '../Components/InputTextMessage';
-import {empty, isset } from '../utils/check';
 
 class Messages extends Component {
 
@@ -73,9 +76,6 @@ class Messages extends Component {
 
 
     getMessageItem = (message) => {
-        
-        //console.log(message.item.messageId);
-        //récupération de l'utilisateur qui a écrit le message
         let user = this.state.conversation.participants.filter(participant => {
                 return (message.item.userId === participant.userApiDto.userId)
             })[0].userApiDto;
@@ -94,6 +94,13 @@ class Messages extends Component {
         this.props.handlePostMessage(this.state.conversation.conversationId, message);
     }
 
+    handleRefresh = () => {
+        if (this.props.loadingPostMessage)
+            return
+            
+        this.props.handleGetMessages(this.state.conversation.conversationId);
+    }
+
     render() {
 
         return (
@@ -106,8 +113,7 @@ class Messages extends Component {
                         data={this.props.messages}
                         keyExtractor={item => `${item.messageId}`}
                         renderItem={(message) =>  this.getMessageItem(message)}
-                        refreshing={false}
-                        onRefresh={() => console.log('refresh')}
+                        onRefresh={ this.handleRefresh }
                         refreshing={this.props.loadingMessages}
                         inverted
                     />

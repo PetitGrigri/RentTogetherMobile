@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import { 
     //Types d'actions destinées à la récupération des conversations
     CONVERSATIONS_GET_REQUEST, 

@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 import Text from  '../Components/Text';
@@ -8,7 +13,7 @@ import { UserImage, UserImageBackground } from '../containers';
 import { handlePatchConnectedUser } from '../actions/connection';
 import { empty } from '../utils/check';
 import {handleHideError } from '../actions/connection';
-import { MaterialIcons, Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 
 const REQUIRED_VALUES=["firstName", "lastName", "phoneNumber", "email"];
 

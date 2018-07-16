@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text, ActivityIndicator } from 'react-native';
 

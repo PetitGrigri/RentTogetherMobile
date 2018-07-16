@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import { 
     USER_ADD_USER_REQUEST, 
     USER_ADD_USER_SUCCESS, 

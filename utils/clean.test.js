@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import { cleanUser, cleanUsersList } from "./clean";
 
 test('cleanUser : suppression des données sensibles', () => {

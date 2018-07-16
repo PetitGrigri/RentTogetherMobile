@@ -1,6 +1,10 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
-import { MaterialIcons} from '@expo/vector-icons';
 
 
 class InputTextApplication extends Component {

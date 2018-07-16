@@ -1,7 +1,11 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React from 'react';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
-
 import Roomers from '../screens/Roomers';
 import Locations from '../screens/Locations';
 import Profile from '../screens/Profile';

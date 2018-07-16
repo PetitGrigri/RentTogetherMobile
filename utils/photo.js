@@ -1,4 +1,10 @@
-import { Alert } from 'react-native';
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
+
+ import { Alert } from 'react-native';
 
 /**
  * Fonction permettant à l'utilisateur de sélectionner une photo

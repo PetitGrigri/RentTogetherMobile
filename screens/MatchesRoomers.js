@@ -1,5 +1,10 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
-import { View, StyleSheet,FlatList, Text } from 'react-native';
+import { View, StyleSheet,FlatList } from 'react-native';
 import RoomerMatchesItem from '../Components/RoomerMatchesItem';
 import { handlePostConversation } from '../actions/conversations';
 import { connect } from 'react-redux';

@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import * as api from '../api/api.js';
 import { saveUserMedia, saveUserUpdatedMedia, deleteMediaIfExist, saveLocationMedia } from '../utils/fileSystem';
 import { isset } from '../utils/check';

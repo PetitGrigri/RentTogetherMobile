@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import ItemRow from './ItemRow';
 import ItemRowLocalisation from './ItemRowLocalisation';
 import ItemRowPersonality from './ItemRowPersonality'

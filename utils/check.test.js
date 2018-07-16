@@ -1,4 +1,10 @@
-import { isset, empty } from "./check";
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
+
+ import { isset, empty } from "./check";
 
 /**
  * Tests de la fonction isset

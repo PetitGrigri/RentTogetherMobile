@@ -6,19 +6,28 @@ import OwnerApplicationNavigator from './OwnerApplicationNavigator';
 import { handleConnectWithPreviousToken } from '../actions/connection';
 import { TOKEN_NAME, USER_ID } from '../actions/connection';
 import { empty } from '../utils/check';
+import LoginWaiting from '../screens/LoginWaiting';
 
 class MainNavigator extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            loadingPromiseToken: true
+        }
+    }
     /**
      * Lorsque que l'on aura monté le composant, on va vérifier qu'il n'y a pas un token d'une connexion précédente.
      * Si c'est le cas, on tentera de se connecter avec
      */
     componentDidMount() {
-
         Promise.all([
             Expo.SecureStore.getItemAsync(TOKEN_NAME),
             Expo.SecureStore.getItemAsync(USER_ID)
         ]).then((values) => {
+            this.setState({
+                loadingPromiseToken: false
+            });
             let tokenValue =    values[0];
             let userId =        values[1];
 
@@ -36,11 +45,15 @@ class MainNavigator extends React.Component {
      *   - Le navigator principal de la navigation (ApplicationNavigator)
      */
     render() {
-        return this.props.isAuthenticated 
-            ? this.props.user.isOwner 
-                ?   <OwnerApplicationNavigator/>
-                :   <RoomerApplicationNavigator/>
-            : <LoginNavigator /> 
+        return (
+            this.props.isAuthenticated 
+                ? this.props.user.isOwner 
+                    ?   <OwnerApplicationNavigator/>
+                    :   <RoomerApplicationNavigator/>
+                :   (this.state.loadingPromiseToken || this.props.loadingSignInToken)
+                    ?   <LoginWaiting />
+                    :   <LoginNavigator /> 
+        );
     }
 }
 

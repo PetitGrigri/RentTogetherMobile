@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import * as api from '../api/api.js';
 
 //Types d'actions destinées à la connexion et à la modification de l'utilsateur connecté

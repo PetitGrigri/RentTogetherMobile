@@ -1,6 +1,12 @@
 
 
-const folderUserMedia = `${Expo.FileSystem.documentDirectory}users-media`;
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
+
+ const folderUserMedia = `${Expo.FileSystem.documentDirectory}users-media`;
 const folderLocationMedia = `${Expo.FileSystem.documentDirectory}locations-media`;
 
 /**
@@ -86,8 +92,7 @@ export const getCachedMedia = (fileUri, callback) => {
     Expo.FileSystem.readAsStringAsync(fileUri).then(content => {
         callback(content);
     }).catch(error => {
-        
-        console.log('//TODO TODO TODO TODOgetCachedMedia', error)
+        console.log(`Erreur lors de la récupération de ${fileUri}`, error);
     });
 }
 

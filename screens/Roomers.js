@@ -1,5 +1,10 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, Dimensions } from 'react-native';
 import TabContent from '../Components/TabContent';
 import RoomerCard from '../Components/RoomerCard';
 import SwipeCards from 'react-native-swipe-cards'

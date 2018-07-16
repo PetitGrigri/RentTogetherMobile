@@ -1,19 +1,15 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import { 
     FlatList,
-    View,
     StyleSheet,
-    Text,
-    TouchableOpacity,
-    Image
 } from 'react-native';
-import Carousel from '../Components/Carousel';
-import LocationImage from '../containers/LocationImage';
-import TabContent from '../Components/TabContent';
 import { handleGetAppartementsPotentiels } from '../actions/logements';
 import { connect } from 'react-redux';
-import NoMoreCard from '../Components/NoMoreCard';
-import { LinearGradient } from 'expo';
 import { Ionicons} from '@expo/vector-icons';
 import LocationItem from '../Components/LocationItem';
 
@@ -62,7 +58,6 @@ class OwnerProperties extends Component {
     }
 
     editLocation = (item) => {
-        console.log(item);
         this.props.navigation.navigate('updateProperty', {
             buildingId:       item.buildingId, 
         });

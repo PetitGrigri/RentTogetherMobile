@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import {  View, Text, ScrollView, Keyboard, StyleSheet, Alert } from 'react-native';
 import ButtonSubmit from '../Components/ButtonSubmit';

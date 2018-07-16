@@ -1,4 +1,12 @@
 /**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
+
+
+
+ /**
  * Fonction permettant de savoir si la variable passée en paramètre existe
  * @param {*} item 
  */

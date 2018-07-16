@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 import Text from  '../Components/Text';

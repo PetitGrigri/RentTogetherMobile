@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 import OwnerTabNavigator from './OwnerTabNavigator';
