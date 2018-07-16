@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {  View, Text, ActivityIndicator, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import { Entypo } from '@expo/vector-icons';
+import ButtonSubmit from '../Components/ButtonSubmit';
 
 export default class NoMoreCard extends Component {
 
@@ -21,6 +22,15 @@ export default class NoMoreCard extends Component {
                 :   <View style={ styles.containerNoMoreCards }>
                         <Text style={ styles.noMoreText }>{ this.props.nothingText }</Text>
                         <Entypo name='emoji-sad' color='#ff8f00'  size={40}/>
+                        { this.props.searchAgainAction 
+                            ?   <ButtonSubmit 
+                                    text="Chercher encore !"
+                                    style={{marginTop:40, padding: 20 }}
+                                    loading={ this.props.loadingGetLocatairesPotentiels }
+                                    onPress={ this.props.searchAgainAction }
+                                />
+                            : null
+                        }
                     </View>
         );
     }

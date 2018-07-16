@@ -239,7 +239,7 @@ const logements = (state = initialAppartementsState, action) => {
         case BUILDING_POST_IMAGE_ERROR : 
             return Object.assign({}, state, {
                 buildingMediaUploading:     false,
-                error:                      action.error
+                message_error:              action.error
             });
 
 

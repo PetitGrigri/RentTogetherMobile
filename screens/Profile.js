@@ -42,7 +42,7 @@ class Profile extends Component {
     
     componentDidUpdate = (prevProps, prevState) => {
 
-        // Si lors de la mise à jour du composant, on n'a plus de chargement de référentiel de charactéristiques 
+        // Si lors de la mise à jour du composant, on n'a plus de chargement de référentiel de caractéristiques 
         // et qu'à l'état précédent, l'un des deux était en chargement, alors on set le state des personality.
         if (!this.props.loadingGetPersonality && !this.props.loadingCharacteristicsReferential && 
             (prevProps.loadingGetPersonality || prevProps.loadingCharacteristicsReferential) )  {
@@ -58,7 +58,6 @@ class Profile extends Component {
 
         // Si l'on vient d'insérer la personalité d'un utilisateur alors on remet à jour le state pour qu'il prenne en compte les personalité enregistré (et leur id)
         if (prevProps.loadingPostPersonality && !this.props.loadingPostPersonality && (empty(this.props.message_error))) {
-
             Alert.alert(
                 '',
                 "Vos caractéristiques sont enregistrées",
@@ -72,8 +71,6 @@ class Profile extends Component {
                 ],
                 { cancelable: false }
             );   
-
-
         }
 
         // Si il y a eu une erreur lors de l'insertion de la personalité d'un utilisateur
@@ -91,7 +88,7 @@ class Profile extends Component {
             );   
         }
         
-        //OK
+        // Si tout s'est bien passé lors de la mise à jour des caractéristique
         if (prevProps.loadingPatchPersonality && !this.props.loadingPatchPersonality && (empty(this.props.message_error))) {
             Alert.alert(
                 '',
@@ -103,7 +100,7 @@ class Profile extends Component {
             );
         }
 
-        //OK
+        // Erreur lors de la mise à jour des caractéristiques
         if (prevProps.loadingPatchPersonality && !this.props.loadingPatchPersonality && (!empty(this.props.message_error))) {
             Alert.alert(
                 'Erreur',

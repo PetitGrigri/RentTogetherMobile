@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
 
 class InputTextareaApplication extends Component {
+    static propTypes =  {
+
+    }
+
+    // Paramêtres par défaut
+    static defaultProps = {
+        error:      false,
+        value:      ''
+    }
     constructor(props) {
         super(props);
 
@@ -20,7 +29,7 @@ class InputTextareaApplication extends Component {
     render() {
         let { onChangeText, value, iconLeft, ...textInputProps} = this.props;
         return (
-            <View style={inputTextStyle.formInputContainer}>
+            <View style={ [inputTextStyle.formInputContainer, (this.props.error? inputTextStyle.formInputContainerError: inputTextStyle.formInputContainerNormal) ]} >
                 { iconLeft ? iconLeft : null }
                 <TextInput
                     {...textInputProps }
@@ -28,6 +37,7 @@ class InputTextareaApplication extends Component {
                     underlineColorAndroid="transparent"
                     onChangeText={this.onChange}
                     value={ this.state.value }
+                    placeholderTextColor={ this.props.error ? '#c62828' : '#ccc'}
                     />
             </View>
         );
@@ -40,13 +50,18 @@ export default InputTextareaApplication;
 const inputTextStyle = StyleSheet.create({
     formInputContainer: {
         flex:               1,
-        backgroundColor:    '#fff',
         borderRadius:       4,
         marginBottom:       5,
         marginTop:          5,
         flexDirection:      'row',
         alignItems:         'center',
     }, 
+    formInputContainerError: {
+        backgroundColor: '#ef9a9a'
+    },
+    formInputContainerNormal: {
+        backgroundColor: '#fff'
+    },
     formInput:{
         flex:           1,
         padding:        8,

@@ -106,7 +106,7 @@ class Register extends Component {
         if (prevProps.loadingAdd && !this.props.loadingAdd && (empty(this.props.message_error))) {
             Alert.alert(
                 'Bienvenue',
-                "Votre compte utilisateur vient d'être crée. Vous pouvez maintenant vous connecter",
+                "Votre compte utilisateur vient d'être créé. Vous pouvez maintenant vous connecter",
                 [
                     { text: 'OK', onPress: () => this.props.navigation.navigate('login') }
                 ],

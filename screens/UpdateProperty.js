@@ -67,7 +67,18 @@ class UpdateProperty extends Component {
                 ],
                 { cancelable: true }
             );
-
+        }
+        
+        // Si l'on a une erreur lors de l'upload d'une image
+        if (prevProps.buildingMediaUploading && !this.props.buildingMediaUploading && (!empty(this.props.message_error))) {
+            Alert.alert(
+                'Erreur',
+                this.props.message_error,
+                [
+                    {text: 'OK', onPress: () => this.props.handleHideError()},
+                ],
+                { cancelable: true }
+            );
         }
     }
 
@@ -150,13 +161,28 @@ class UpdateProperty extends Component {
      * Fonction permettant à l'utilisateur de prendre une photo et de l'uploader
      */
     pickAPhoto = async () => {
-        // Réalisation et compression d'une photo
-        let uriPhoto = await takeAPhoto();
 
-        if (uriPhoto) {
-            //transmission de la photo 
-            this.props.handleUploadBuildingMedia(uriPhoto, this.state.buildingId);
+        let nbImages = (this.props.location.buildingPictureInformationApiDtos ||[]).length;
+
+        if (nbImages >= 10) {
+            Alert.alert(
+                'Avertissement',
+                "Il n'est pas possible d'avoir plus de 3 photos par appartement.",
+                [
+                  {text: 'OK'}
+                ],
+                { cancelable: true }
+              )
+        } else {
+            // Réalisation et compression d'une photo
+            let uriPhoto = await takeAPhoto();
+
+            if (uriPhoto) {
+                //transmission de la photo 
+                this.props.handleUploadBuildingMedia(uriPhoto, this.state.buildingId);
+            }
         }
+
     }
 
     render() {

@@ -1,3 +1,8 @@
+/**
+ * Application : Rent Together
+ * Auteur : Griselles Fabien
+ * Version 0.9
+ */
 import { empty } from '../utils/check.js';
 import * as config from '../config.js';
 import { urlWithParams } from '../utils/convert';
@@ -29,7 +34,7 @@ export const connectionAPI =  (login, password, callBackOk, callBackError) => {
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la connexion");
             }
         })
         .then(dataUser => {
@@ -78,7 +83,7 @@ export const createUtilisateur= function(user,  callBackOk, callBackError) {
                 });
                 //TODO ici ajouter utilisateur
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la récupétation d'un utilisateur");
             }
         })
         .then(dataAdministrators => {
@@ -121,7 +126,7 @@ export const getUtilisateurs = function(token, filter, callBackOk, callBackError
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la récupétation des utilisateurs");
             }
         })
         .then(dataUsers => {
@@ -168,7 +173,7 @@ export const getSingleUtilisateur = function(token, userId, callBackOk, callBack
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la récupétation de l'utilisateur");
             }
         })
         .then(dataUsers => {
@@ -207,7 +212,7 @@ export const deleteUser = function(id, token, callBackOk, callBackError) {
             if (response.ok  === true) {
                 callBackOk(id);
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la suppression de l'utilisateur");
             }
         })
         .catch(error => {
@@ -251,7 +256,7 @@ export const putUser = function(user, token, callBackOk, callBackError) {
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la mise à jour de vos données");
             }
         })
         .then(dataUser => {
@@ -305,7 +310,7 @@ export const patchUser = function(token, user, callBackOk, callBackError) {
                    throw Error("Erreur de l'API.");
                });
            } else {
-               throw Error(response.statusText);
+            return handleError(response, "Erreur lors de la mise à jour de vos données");
            }
        })
        .then(dataUser => callBackOk(dataUser))
@@ -315,6 +320,13 @@ export const patchUser = function(token, user, callBackOk, callBackError) {
 
 
 
+/**
+ * Fonction permettant de récupérer la photo d'un utilisateur
+ * @param {*} token 
+ * @param {*} userId 
+ * @param {*} callBackOk 
+ * @param {*} callBackError 
+ */
 export const getUserMedia = function(token, userId, callBackOk, callBackError) {
     // Le header contiendra le token d'authentification plus tard
    var myHeaders = new Headers({
@@ -388,7 +400,7 @@ export const getConversations = function(token, userId, filter, callBackOk, call
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la récupétation de vos conversations");
             }
         })
         .then(dataConversations => {
@@ -433,7 +445,7 @@ export const getMessages = function(token, conversationId, filter, callBackOk, c
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la des messages");
             }
         })
         .then(dataMessages => {
@@ -486,7 +498,7 @@ export const postMessage = function(token, userId, conversationId, message,  cal
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de l'ajout de votre message");
             }
         })
         .then(message => {
@@ -532,7 +544,7 @@ export const postUploadUserImage = function(token, userId, imageURI, callBackOk,
             if (response.ok === true) {
                 return response.blob();
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de l'envoie de votre photographie");
             }
         })
         .then(blob => {
@@ -582,7 +594,7 @@ export const getCharacteristicsReferential = function(token, callBackOk, callBac
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la récupération des caractéristiques");
             }
         })
         .then(dataCharacteristicsReferential => {
@@ -633,7 +645,7 @@ export const getPersonnalityUser = function(token, userId, callBackOk, callBackE
                 };
             // Erreur
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la récupétation de vos caractéristiques");
             }
         })
         .then(dataPersonality => {
@@ -687,7 +699,7 @@ export const patchPersonalityUser = function(token, personality, userId, callBac
                    throw Error("Erreur de l'API.");
                });
            } else {
-               throw Error(response.statusText);
+            return handleError(response, "Erreur lors de la mise à jour de vos caractéristiques");
            }
        })
        .then(dataPersonality => callBackOk(dataPersonality))
@@ -733,7 +745,7 @@ export const postPersonalityUser= function(token, personality, userId,  callBack
                 });
                 //TODO ici ajouter utilisateur
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors l'ajout de vos caractéristiques");
             }
         })
         .then(dataPersonality => {
@@ -777,7 +789,7 @@ export const getLocatairesPotentiels = function(token, userId, filter, callBackO
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la recherche de colocataires potentiels");
             }
         })
         .then(dataPotentialRoomers => {
@@ -824,7 +836,7 @@ export const getConnectedUserLocation = function(token, userId, callBackOk, call
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la récupération des vos localisations recherchées");
             }
         })
         .then(dataLocations => {
@@ -874,7 +886,7 @@ export const postConversation= function(token, callBackOk, callBackError) {
                 });
                 //TODO ici ajouter utilisateur
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la création d'une conversation");
             }
         })
         .then(dataConversation => {
@@ -931,7 +943,7 @@ export const postParticipantsConversation= function(token, conversationId, parti
                 });
                 //TODO ici ajouter utilisateur
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de l'ajout d'utilisateur à la conversation");
             }
         })
         .then( dataParticipants => {
@@ -948,7 +960,16 @@ export const postParticipantsConversation= function(token, conversationId, parti
 
 
 
-
+/**
+ * Fonction destinée la validation d'un utilisateur
+ * @param {*} token 
+ * @param {*} userId 
+ * @param {*} targetUserId 
+ * @param {*} matchId 
+ * @param {*} statusValidation 
+ * @param {*} callBackOk 
+ * @param {*} callBackError 
+ */
 export const postMatchValidation= function(token, userId, targetUserId, matchId, statusValidation, callBackOk, callBackError) {
 
     // Le header contiendra le token d'authentification plus tard
@@ -984,7 +1005,7 @@ export const postMatchValidation= function(token, userId, targetUserId, matchId,
                 });
                 //TODO ici ajouter utilisateur
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la validation d'un colocataire");
             }
         })
         .then(dataMatch => {
@@ -1035,7 +1056,7 @@ export const getLocatairesValides = function(token, userId, filter, callBackOk, 
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de vos matches");
             }
         })
         .then(dataPotentialRoomers => {
@@ -1092,7 +1113,7 @@ export const searchLocalisation = function(token, city, codePostal, callBackOk, 
                 });
                 //TODO ici ajouter utilisateur
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la recherche d'une localisation");
             }
         })
         .then(dataSearch => {
@@ -1149,7 +1170,7 @@ export const addConnectedUserTargetLocation = function(token, userId, localisati
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de l'ajout d'une nouvelle localisation");
             }
         })
         .then(dataLocalisation => {
@@ -1202,7 +1223,7 @@ export const deleteConnectedUserTargetLocation = function(token, targetLocation,
            if (response.ok  === true) {
                callBackOk();
            } else {
-               throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la suppression d'une de vos localisation recherchée");
            }
        })
        .catch(error => {
@@ -1214,6 +1235,13 @@ export const deleteConnectedUserTargetLocation = function(token, targetLocation,
 
 
 
+/**
+ * Fonction permettant de récupérer une liste d'appartements répondants aux critères de l'utilisateur
+ * @param {*} token 
+ * @param {*} userId 
+ * @param {*} callBackOk 
+ * @param {*} callBackError 
+ */
 export const handleGetAppartementsPotentiels = function(token, userId, callBackOk, callBackError) {
     // Le header contiendra le token d'authentification plus tard
     var myHeaders = new Headers({
@@ -1238,7 +1266,7 @@ export const handleGetAppartementsPotentiels = function(token, userId, callBackO
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la récupétation d'appartements");
             }
         })
         .then(dataPotentialRoomers => {
@@ -1275,7 +1303,7 @@ export const getLogementMedia = function(token, pictureId, callBackOk, callBackE
             if (response.ok === true) {
                 return response.blob();
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la récupétation d'une image de logement");
             }
         })
         .then(blob => {
@@ -1331,7 +1359,7 @@ export const getMessagesLogement = function(token, buildingId, filter, callBackO
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la récupération des messages du logement");
             }
         })
         .then(dataMessages => {
@@ -1387,7 +1415,7 @@ export const postMessageLogement = function(token, userId, buildingId, message, 
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de l'ajout d'un message");
             }
         })
         .then(message => {
@@ -1454,7 +1482,7 @@ export const postBuilding = function(token, userId, building,  callBackOk, callB
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la création d'un logement");
             }
         })
         .then(message => {
@@ -1508,7 +1536,7 @@ export const postBuildingHistory =  function(token, userId, buildingId, callBack
                 });
                 //TODO ici ajouter utilisateur
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur pour refuser un logement");
             }
         })
         .then(data => {
@@ -1554,8 +1582,6 @@ export const postBuildingFavorite =  function(token, userId, buildingId, callBac
 
     let urlBuildingFavorite= `${url}/FavoriteBuildings`;
 
-
-
     fetch(urlBuildingFavorite, options)
         .then(response => {
             if (response.ok === true) {
@@ -1564,7 +1590,7 @@ export const postBuildingFavorite =  function(token, userId, buildingId, callBac
                 });
                 //TODO ici ajouter utilisateur
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de l'ajout d'un appartement favoris");
             }
         })
         .then(data => {
@@ -1608,7 +1634,7 @@ export const getFavoriteLocations = function(token, userId, callBackOk, callBack
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la récupération de vos logements favoris");
             }
         })
         .then(dataPotentialRoomers => {
@@ -1661,7 +1687,7 @@ export const putBuilding = function(token, building,  callBackOk, callBackError)
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors de la mise à jour de votre location");
             }
         })
         .then(message => {
@@ -1689,19 +1715,16 @@ export const putBuilding = function(token, building,  callBackOk, callBackError)
  */
 export const postBuildingImage = function(token, buildingId, imageURI, callBackOk, callBackError) {
 
-    console.log('postBuildingImage 1 ', token, buildingId, imageURI);
     var formData = new FormData();
     formData.append('buildingId', buildingId);
     formData.append('file', {uri: imageURI , name: 'building.jpg', type: 'image/jpg'});
 
-    console.log('postBuildingImage 2 ');
     // Le header contiendra le token d'authentification plus tard
     var myHeaders = new Headers({
         'Content-Type':     'multipart/form-data',
         'Authorization':    'Bearer '+token
     });
 
-    console.log('postBuildingImage 3');
     //les paramètres de la requête
     var options = {
         method:  'POST',
@@ -1709,25 +1732,36 @@ export const postBuildingImage = function(token, buildingId, imageURI, callBackO
         mode:   'cors',
         body:   formData
     };
-    console.log('postBuildingImage 4 ', options);
 
     fetch(url+ "/BuildingPictures", options)
         .then(response => {
-            console.log('postBuildingImage 5 ', response);
             if (response.ok === true) {
                 return response.json().catch(error => {
                     throw Error("Erreur de l'API.");
                 });
             } else {
-                throw Error(response.statusText);
+                return handleError(response, "Erreur lors du transfert de votre image")
             }
         })
         .then(message => {
-            console.log('postBuildingImage 6 ');
             callBackOk(message);
         })
         .catch(error => {
-            console.log('postBuildingImage 7 ');
             callBackError(error.message);
         });
+}
+
+
+
+
+
+/**
+ * Fonction destinée à gérer la lecture du contenu d'une reponse d'erreur.
+ * @param {*} response 
+ * @param {*} defaultMessage 
+ */
+const handleError = (response, defaultMessage) => {
+    return response.text()
+        .then(text => { throw Error(text) })
+        .catch(error => { throw Error(error.message||defaultMessage) });
 }

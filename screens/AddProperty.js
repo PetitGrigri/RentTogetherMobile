@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import { handlePostAppartement, handleHideError } from '../actions/logements';
 import { empty } from '../utils/check';
 
+const REQUIRED_VALUES=["title", "description", "address", "nbRoom", "nbPiece", "nbRenters", "nbMaxRenters", "area", "price", "city", "localisationResume"];
+
 class AddProperty extends Component {
 
     constructor(props) {
@@ -30,11 +32,13 @@ class AddProperty extends Component {
             postalCode:         '',
             localisationResume: '',
             footerHeight:       0,
-            modalVisible:       false
+            modalVisible:       false,
+            errorInput:         [],
         }
         this.scrollView = React.createRef();
     }
 
+    
     componentDidUpdate = (prevProps, prevState) => {
         //si l'on a un message d'erreur qui est transmis pour la tentative de connexion, on affiche un message d'erreur
         if (prevProps.loadingPostBuilding && !this.props.loadingPostBuilding && (empty(this.props.message_error))) {
@@ -88,13 +92,12 @@ class AddProperty extends Component {
     }
 
     localisationSelected = (item) => {
-        console.log(item);
-
         this.setState({
             city:               item.libelle,
             city2:              item.libelle2,
             postalCode:         item.postalCodeId,
-            localisationResume: `${item.libelle} ${item.libelle2} (${item.postalCodeId})`
+            localisationResume: `${item.libelle} ${item.libelle2} (${item.postalCodeId})`,
+            errorInput:         this.state.errorInput.filter(name => (name !== "localisationResume"))
         });
 
         this.localisationClose();
@@ -125,9 +128,49 @@ class AddProperty extends Component {
             isRent:             0
         }
 
-        // Demande de création de l'appartement
-        this.props.handlePostAppartement(building);
+        if (this.checkForm()) {
+            // Demande de création de l'appartement
+            this.props.handlePostAppartement(building);
+        } else {
+            Alert.alert(
+                'Attention',
+                "Vous n'avez pas saisi tout les champs nécessaires.",
+                [
+                    { text: 'OK' }
+                ],
+                { cancelable: false }
+            )
+        }
     }
+
+    checkForm = () => {
+       
+
+        let checkForm = REQUIRED_VALUES.filter(value => empty(this.state[value]));
+
+        //on ajoute les formulaires erronés
+        this.setState({errorInput: checkForm});
+
+        return (checkForm.length <= 0)
+    }
+
+    isInputError = (who) => {
+        return (this.state.errorInput.filter(name => name === who).length > 0)
+    }
+
+    updateValue = (who, val) => {
+        if (empty(val)) {
+            this.setState({
+                [who] :     val
+            });
+        } else {
+            this.setState({
+                [who] :     val,
+                errorInput: this.state.errorInput.filter(name => ((name !== who)))
+            })
+        }
+    }
+
 
     render() {
 
@@ -147,7 +190,8 @@ class AddProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <MaterialIcons name='title' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
-                            onChangeText={(text) => this.setState({ title: text }) } 
+                            onChangeText={(text) => this.updateValue("title", text) } 
+                            error={ this.isInputError("title") }
                             value={ this.state.title }
                             keyboardType='default'
                             placeholder='Description courte'/>
@@ -155,7 +199,8 @@ class AddProperty extends Component {
                         <InputTextareaApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <Entypo name='text' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
-                            onChangeText={(text) => this.setState({ description: text }) } 
+                            onChangeText={(text) => this.updateValue("description", text) } 
+                            error={ this.isInputError("description") }
                             value={ this.state.description }
                             multiline={true}
                             numberOfLines={10}
@@ -168,7 +213,8 @@ class AddProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <FontAwesome name='bed' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
-                            onChangeText={(text) => this.setState({ nbRoom: text }) } 
+                            onChangeText={(text) => this.updateValue("nbRoom", text) } 
+                            error={ this.isInputError("nbRoom") }
                             value={ this.state.nbRoom }
                             keyboardType='numeric'
                             placeholder='Nombre chambre'
@@ -177,7 +223,8 @@ class AddProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <FontAwesome name='cube' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
-                            onChangeText={(text) => this.setState({ nbPiece: text }) } 
+                            onChangeText={(text) => this.updateValue("nbPiece", text) } 
+                            error={ this.isInputError("nbPiece") }
                             value={ this.state.nbPiece }
                             keyboardType='numeric'
                             placeholder='Nombre pièce'
@@ -187,7 +234,8 @@ class AddProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <FontAwesome name='user' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
-                            onChangeText={(text) => this.setState({ nbRenters: text }) } 
+                            onChangeText={(text) => this.updateValue("nbRenters", text) } 
+                            error={ this.isInputError("nbRenters") }
                             value={ this.state.nbRenters }
                             keyboardType='numeric'
                             placeholder='Nombre colocataires'
@@ -196,7 +244,8 @@ class AddProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <FontAwesome name='users' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
-                            onChangeText={(text) => this.setState({ nbMaxRenters: text }) } 
+                            onChangeText={(text) => this.updateValue("nbMaxRenters", text) } 
+                            error={ this.isInputError("nbMaxRenters") }
                             value={ this.state.nbMaxRenters }
                             keyboardType='numeric'
                             placeholder='Nombre de colocataires max'
@@ -205,7 +254,8 @@ class AddProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <Entypo name='resize-full-screen' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
-                            onChangeText={(text) => this.setState({ area: text }) } 
+                            onChangeText={(text) => this.updateValue("area", text) } 
+                            error={ this.isInputError("area") }
                             value={ this.state.area }
                             keyboardType='numeric'
                             placeholder='Surface (m2)'
@@ -214,7 +264,8 @@ class AddProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <FontAwesome name='euro' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
-                            onChangeText={(text) => this.setState({ price: text }) } 
+                            onChangeText={(text) => this.updateValue("price", text) } 
+                            error={ this.isInputError("price") }
                             value={ this.state.price }
                             keyboardType='numeric'
                             placeholder='Prix en euro / personne'
@@ -225,7 +276,8 @@ class AddProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <MaterialIcons name='place' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
-                            onChangeText={(text) => this.setState({ address: text }) } 
+                            onChangeText={(text) => this.updateValue("address", text) } 
+                            error={ this.isInputError("address") }
                             value={ this.state.address }
                             placeholder='Adresse'
                         />
@@ -243,6 +295,8 @@ class AddProperty extends Component {
                             iconLeft= { <Ionicons style={ styles.iconLeft } size={18} name='ios-search' />  }
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             onFocus={ () => this.setState({modalVisible:true}) }
+
+                            error={ this.isInputError("localisationResume") }
                             value={ this.state.localisationResume }
                             keyboardType='default'
                             placeholder='Ville'

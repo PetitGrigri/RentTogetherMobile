@@ -33,6 +33,7 @@ class LocationImage extends Component {
         if (prevProps.imagesLogements[this.props.pictureId] != this.props.imagesLogements[this.props.pictureId]) {
 
             getCachedMedia(this.props.imagesLogements[this.props.pictureId], (imageContent) => { 
+
                 this.setState({ 
                     locationImageContent: imageContent
                 });

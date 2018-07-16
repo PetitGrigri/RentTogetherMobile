@@ -32,7 +32,8 @@ export default ButtonSubmit;
 
 const inputButtonStyle = StyleSheet.create({
     text: {
-        color: '#fff'
+        color:      '#fff',
+        padding:    16
     },
     button: {
         height:             40, 

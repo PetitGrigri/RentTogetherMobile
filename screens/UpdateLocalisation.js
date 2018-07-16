@@ -108,7 +108,6 @@ class UpdateLocalisations extends Component {
                 ItemSeparatorComponent={ () => <View style={ styles.separator } /> }
                 renderItem={(localisation) =>  this.getLocalisationItem(localisation)}
                 refreshing={ this.props.loadingConversations }
-                onRefresh={() => this.handleRefresh() }
                 refreshing= { false }
                 ListHeaderComponent={ this.getSearchBar }
             />

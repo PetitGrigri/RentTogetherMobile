@@ -4,11 +4,21 @@ import { MaterialIcons} from '@expo/vector-icons';
 
 
 class InputTextApplication extends Component {
+    static propTypes =  {
+
+    }
+
+    // Paramêtres par défaut
+    static defaultProps = {
+        error:      false,
+        value:      ''
+    }
+
     constructor(props) {
         super(props);
 
         this.state={
-            value: this.props.value || '',
+            value: this.props.value,
             height: undefined,
             width:  undefined,
             x:      undefined,
@@ -53,7 +63,7 @@ class InputTextApplication extends Component {
             }
         }
         return (
-            <View style={inputTextStyle.formInputContainer} onLayout={ (event) => this.getEvent(event.nativeEvent) } >
+            <View style={ [inputTextStyle.formInputContainer, (this.props.error? inputTextStyle.formInputContainerError: inputTextStyle.formInputContainerNormal) ]} onLayout={ (event) => this.getEvent(event.nativeEvent) } >
                 { iconLeft ? iconLeft : null }
                 <TextInput
                     {...textInputProps }
@@ -62,6 +72,7 @@ class InputTextApplication extends Component {
                     onFocus={ () => customOnFocus() }
                     onChangeText={this.onChange}
                     value={ this.state.value }
+                    placeholderTextColor={ this.props.error ? '#c62828' : '#ccc'}
                     />
             </View>
         );
@@ -75,12 +86,17 @@ export default InputTextApplication;
 const inputTextStyle = StyleSheet.create({
     formInputContainer: {
         height:             40, 
-        backgroundColor:    '#fff',
         borderRadius:       4,
         marginBottom:       5,
         marginTop:          5,
         flexDirection:      'row',
         alignItems:         'center',
+    },
+    formInputContainerError: {
+        backgroundColor:        '#ef9a9a',
+    },
+    formInputContainerNormal: {
+        backgroundColor: '#fff'
     },
     formInput:{
         flex:           1,

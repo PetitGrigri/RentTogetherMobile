@@ -31,14 +31,18 @@ class Locations extends Component {
         this.props.handleGetAppartementsPotentiels();
     }
 
+    searchAgain = () => {
+        this.props.handleGetAppartementsPotentiels();
+    }
 
     // Méthode utilisée pour le rendu 
     noMoreCard = () => {
         return <NoMoreCard 
             loading={ this.props.loadingGetAppartementsPotentiels } 
             loadingText="Chargement de logements interessants en cours..."
-            nothingText="Nous n'avons pas trouvé d'appartements vous correspondant" />
-
+            nothingText="Nous n'avons pas trouvé d'appartements vous correspondant" 
+            searchAgainAction={ this.searchAgain }
+            />
     }
 
     // Quand il n'y a plus de locataires potentiels, on lance une nouvelle recherche

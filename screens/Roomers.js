@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { handleGetLocatairesPotentiels, handlePostMatchLocataire } from '../actions/matches'
 import { LinearGradient } from 'expo';
 import { Entypo } from '@expo/vector-icons';
+import NoMoreCard from '../Components/NoMoreCard';
 
 const {height, width} = Dimensions.get('window');
 
@@ -24,6 +25,9 @@ class Roomers extends Component {
         this.props.handleGetLocatairesPotentiels();
     }
 
+    searchAgain = () => {
+        this.props.handleGetLocatairesPotentiels();
+    }
     // Quand il n'y a plus de locataires potentiels, on lance une nouvelle recherche
     cardRemoved = (index) => {
         if (index >= (this.props.locatairesPotentiels.length -1)) {
@@ -33,18 +37,12 @@ class Roomers extends Component {
 
     // Méthode utilisée pour le rendu 
     noMoreCard = () => {
-        if (this.props.loadingGetLocatairesPotentiels) {
-            return  <View style={ styles.containerNoMoreCards }>
-                        <Text style={ styles.noMoreText }>Recherche de nouveaux locataires en cours...</Text>
-                        <ActivityIndicator color='#ff8f00' size='large' />
-                    </View>
-       } else {
-            return  <View style={ styles.containerNoMoreCards }>
-                        <Text style={ styles.noMoreText }>Nous n'avons pas trouvé de locataires vous correspondant</Text>
-                        <Entypo name='emoji-sad' color='#ff8f00'  size={40}/>
-                    </View>
-        }   
-
+        return <NoMoreCard 
+            loading={ this.props.loadingGetLocatairesPotentiels } 
+            loadingText="Recherche de nouveaux locataires en cours..."
+            nothingText="Nous n'avons pas trouvé de locataires vous correspondant"
+            searchAgainAction={ this.searchAgain }
+            />
     }
 
     render() {
