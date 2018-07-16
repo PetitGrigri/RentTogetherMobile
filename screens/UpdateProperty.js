@@ -136,7 +136,7 @@ class UpdateProperty extends Component {
 
     updateIsRent(value) {
         this.setState({
-            isRent:     value ? 1 : 0
+            isRent:     value ? 0 : 1
         })
     }
 
@@ -389,9 +389,9 @@ class UpdateProperty extends Component {
                             <Text style={styles.textSwitch}>Logement disponible</Text>
                             <Switch
                                 onValueChange = { value => this.updateIsRent(value) }
-                                value = { this.state.isRent ? true : false } 
+                                value = { this.state.isRent ? false : true } 
                                 tintColor='#ccc'
-                                thumbTintColor={ this.state.isRent ? '#ff8f00' : '#eee'}
+                                thumbTintColor={ this.state.isRent ? '#eee':  '#ff8f00' }
                                 onTintColor='#ffc985'    
                             />
                         </View>
