@@ -13,6 +13,8 @@ import TouchableIcon from '../Components/TouchableIcon';
 import { LinearGradient } from 'expo';
 import { takeAPhoto}  from '../utils/photo';
 
+const REQUIRED_VALUES=["title", "description", "address", "nbRoom", "nbPiece", "nbRenters", "nbMaxRenters", "area", "price", "city", "localisationResume"];
+
 class UpdateProperty extends Component {
 
     
@@ -38,7 +40,7 @@ class UpdateProperty extends Component {
             city2:              location.city2||'',
             postalCode:         location.postalCode||'',
             localisationResume: `${location.city||''} ${location.city2||''} (${location.postalCode||''})`||'',
-
+            errorInput:         [],
             footerHeight:       0,
             modalVisible:       false
         }
@@ -153,8 +155,21 @@ class UpdateProperty extends Component {
             isRent:             this.state.isRent,
         }
 
-        // Demande de MàJ de l'appartement
-        this.props.handlePutAppartement(building);
+        if ((this.checkForm()) && (!this.props.loadingPutBuilding)) {
+            // Demande de MàJ de l'appartement
+            this.props.handlePutAppartement(building);
+        } else {
+            Alert.alert(
+                'Attention',
+                "Vous n'avez pas saisi tout les champs nécessaires.",
+                [
+                    { text: 'OK' }
+                ],
+                { cancelable: false }
+            )
+        }
+
+        
     }
 
     /**
@@ -164,7 +179,7 @@ class UpdateProperty extends Component {
 
         let nbImages = (this.props.location.buildingPictureInformationApiDtos ||[]).length;
 
-        if (nbImages >= 10) {
+        if (nbImages >= 3) {
             Alert.alert(
                 'Avertissement',
                 "Il n'est pas possible d'avoir plus de 3 photos par appartement.",
@@ -183,6 +198,32 @@ class UpdateProperty extends Component {
             }
         }
 
+    }
+
+    checkForm = () => {
+        let checkForm = REQUIRED_VALUES.filter(value => empty(this.state[value]));
+
+        //on ajoute les formulaires erronés
+        this.setState({errorInput: checkForm});
+
+        return (checkForm.length <= 0)
+    }
+
+    isInputError = (who) => {
+        return (this.state.errorInput.filter(name => name === who).length > 0)
+    }
+
+    updateValue = (who, val) => {
+        if (empty(val)) {
+            this.setState({
+                [who] :     val
+            });
+        } else {
+            this.setState({
+                [who] :     val,
+                errorInput: this.state.errorInput.filter(name => ((name !== who)))
+            })
+        }
     }
 
     render() {
@@ -227,7 +268,8 @@ class UpdateProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <MaterialIcons name='title' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
-                            onChangeText={(text) => this.setState({ title: text }) } 
+                            onChangeText={(text) => this.updateValue("title", text) } 
+                            error={ this.isInputError("title") }
                             value={ this.state.title }
                             keyboardType='default'
                             placeholder='Description courte'/>
@@ -235,20 +277,22 @@ class UpdateProperty extends Component {
                         <InputTextareaApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <Entypo name='text' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
-                            onChangeText={(text) => this.setState({ description: text }) } 
+                            onChangeText={(text) => this.updateValue("description", text) } 
+                            error={ this.isInputError("description") }
                             value={ this.state.description }
                             multiline={true}
                             numberOfLines={10}
                             keyboardType='default'
                             placeholder='Description longue'
                         />
-                    
+
                         <Text h2 style={styles.titleProfile}>Caractéristiques</Text>
 
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <FontAwesome name='bed' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
-                            onChangeText={(text) => this.setState({ nbRoom: text }) } 
+                            onChangeText={(text) => this.updateValue("nbRoom", text) } 
+                            error={ this.isInputError("nbRoom") }
                             value={ this.state.nbRoom }
                             keyboardType='numeric'
                             placeholder='Nombre chambre'
@@ -257,7 +301,8 @@ class UpdateProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <FontAwesome name='cube' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
-                            onChangeText={(text) => this.setState({ nbPiece: text }) } 
+                            onChangeText={(text) => this.updateValue("nbPiece", text) } 
+                            error={ this.isInputError("nbPiece") }
                             value={ this.state.nbPiece }
                             keyboardType='numeric'
                             placeholder='Nombre pièce'
@@ -267,7 +312,8 @@ class UpdateProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <FontAwesome name='user' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
-                            onChangeText={(text) => this.setState({ nbRenters: text }) } 
+                            onChangeText={(text) => this.updateValue("nbRenters", text) } 
+                            error={ this.isInputError("nbRenters") }
                             value={ this.state.nbRenters }
                             keyboardType='numeric'
                             placeholder='Nombre colocataires'
@@ -276,7 +322,8 @@ class UpdateProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <FontAwesome name='users' size={ 18 } color='#ff8f00' style={styles.iconLeft}/> }
-                            onChangeText={(text) => this.setState({ nbMaxRenters: text }) } 
+                            onChangeText={(text) => this.updateValue("nbMaxRenters", text) } 
+                            error={ this.isInputError("nbMaxRenters") }
                             value={ this.state.nbMaxRenters }
                             keyboardType='numeric'
                             placeholder='Nombre de colocataires max'
@@ -285,7 +332,8 @@ class UpdateProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <Entypo name='resize-full-screen' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
-                            onChangeText={(text) => this.setState({ area: text }) } 
+                            onChangeText={(text) => this.updateValue("area", text) } 
+                            error={ this.isInputError("area") }
                             value={ this.state.area }
                             keyboardType='numeric'
                             placeholder='Surface (m2)'
@@ -294,7 +342,8 @@ class UpdateProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <FontAwesome name='euro' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
-                            onChangeText={(text) => this.setState({ price: text }) } 
+                            onChangeText={(text) => this.updateValue("price", text) } 
+                            error={ this.isInputError("price") }
                             value={ this.state.price }
                             keyboardType='numeric'
                             placeholder='Prix en euro / personne'
@@ -305,7 +354,8 @@ class UpdateProperty extends Component {
                         <InputTextApplication 
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             iconLeft= { <MaterialIcons name='place' size={ 18 } color='#ff8f00' style={styles.iconLeft} /> }
-                            onChangeText={(text) => this.setState({ address: text }) } 
+                            onChangeText={(text) => this.updateValue("address", text) } 
+                            error={ this.isInputError("address") }
                             value={ this.state.address }
                             placeholder='Adresse'
                         />
@@ -323,22 +373,12 @@ class UpdateProperty extends Component {
                             iconLeft= { <Ionicons style={ styles.iconLeft } size={18} name='ios-search' />  }
                             onScrollTo={ (yPosition) => this.scrollTo(yPosition) }
                             onFocus={ () => this.setState({modalVisible:true}) }
+
+                            error={ this.isInputError("localisationResume") }
                             value={ this.state.localisationResume }
                             keyboardType='default'
                             placeholder='Ville'
                         />
-
-                        <View style={styles.containerSwitch} > 
-                            <Text style={styles.textSwitch}>Logement disponible</Text>
-                            <Switch
-                                onValueChange = { value => this.updateIsRent(value) }
-                                value = { this.state.isRent ? true : false } 
-                                tintColor='#ccc'
-                                thumbTintColor={ this.state.isRent ? '#ff8f00' : '#eee'}
-                                onTintColor='#ffc985'
-                                
-                                />
-                        </View>
 
                         <ButtonSubmit 
                             text="Modifier cet appartement"

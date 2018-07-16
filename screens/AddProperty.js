@@ -128,7 +128,8 @@ class AddProperty extends Component {
             isRent:             0
         }
 
-        if (this.checkForm()) {
+
+        if ((this.checkForm()) && (!this.props.loadingPostBuilding)) {
             // Demande de création de l'appartement
             this.props.handlePostAppartement(building);
         } else {
