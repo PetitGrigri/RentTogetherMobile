@@ -4,7 +4,7 @@
  * Version 0.9
  */
 import React, { Component } from 'react';
-import {  View, Text, ScrollView, Keyboard, StyleSheet, Alert, ImageBackground } from 'react-native';
+import {  View, Text, ScrollView, Keyboard, StyleSheet, Alert, ImageBackground, Switch } from 'react-native';
 import ButtonSubmit from '../Components/ButtonSubmit';
 import InputTextApplication from '../Components/InputTextApplication';
 import InputTextareaApplication from '../Components/InputTextareaApplication';
@@ -384,6 +384,17 @@ class UpdateProperty extends Component {
                             keyboardType='default'
                             placeholder='Ville'
                         />
+
+                        <View style={styles.containerSwitch} > 
+                            <Text style={styles.textSwitch}>Logement disponible</Text>
+                            <Switch
+                                onValueChange = { value => this.updateIsRent(value) }
+                                value = { this.state.isRent ? true : false } 
+                                tintColor='#ccc'
+                                thumbTintColor={ this.state.isRent ? '#ff8f00' : '#eee'}
+                                onTintColor='#ffc985'    
+                            />
+                        </View>
 
                         <ButtonSubmit 
                             text="Modifier cet appartement"
