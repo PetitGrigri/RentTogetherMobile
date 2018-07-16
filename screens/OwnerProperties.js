@@ -109,7 +109,6 @@ export default connect(
 const styles = StyleSheet.create({
     container: {
         flex:           1,
-        padding:        8
     },
     propertyContainer: {
         aspectRatio:     1.8,
